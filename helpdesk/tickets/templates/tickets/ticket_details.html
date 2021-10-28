@@ -10,7 +10,7 @@
         <div class="badge badge-warning">Completed</div>
         <div class="badge badge-info">Completed</div>
         <p>&nbsp;</p>
-        <p>{{item['category']}} :: {{item['subcategory']}}</p>
+       
 
         <ul class="rm-list-borders rm-list-borders-scroll list-group list-group-flush  ">
             <li class="list-group-item override-dropdown "  style=" z-index: 5000;">
@@ -70,7 +70,19 @@
 
 
         <ul class="list-group list-group-flush">
+            <li class="p-0 list-group-item">
+                <div class="grid-menu grid-menu-2col">
             
+                    <div class="no-gutters row">
+                        <div class="col-sm-2">
+                            <div class="widget-content-ticketinfo">Category</div>
+                        </div>
+                        <div class="col-sm-10">
+                            <div class="widget-content-ticketinfo">{{item['category']}} :: {{item['subcategory']}}</div>
+                        </div>
+                    </div>
+                </div>
+            </li>
             <li class="p-0 list-group-item">
                 <div class="grid-menu grid-menu-2col">
                     
@@ -84,6 +96,7 @@
                     </div>
                     </div>
                     </li>
+
                     <li class="p-0 list-group-item">
                     <div class="no-gutters row">
                         <div class="col-sm-2">
@@ -113,89 +126,50 @@
                             <div class="widget-content-ticketinfo">{{item['attachments']}}</div>
                         </div>
                     </div>
-                </div>
             </li>
-            <li class="list-group-item">
+            <li class="p-0 list-group-item">
                 <div class="no-gutters row">
-                    <div class="col-sm-12">
+                    <div class="col-sm-2">
+                        <div class="widget-content-ticketinfo">Details: </div>
+                    </div>
+                    <div class="col-sm-10">
                         <div class="widget-content-ticketinfo">{{item['description']}}</div>
                     </div>
-            
                 </div>
             </li>
 
         </ul>
 
-        <p>&nbsp;</p>
 
 
+        <div class="">
+        <div class="container ">                 
+        
+            <div class="rightbox">
+                <div class="rb-container">
+                    <ul class="rb">
+                        {% for update in updates %}
+                        <li class="rb-item" ng-repeat="itembx">
+                            <div class="timestamp">
+                                {{update['update_date'].strftime('%m/%d/%Y')}}
+                                {{update['update_date'].strftime('%I:%M')}}
+                                <br>
+                                {{update['user']}}
+                            </div>
+                            <div class="item-title">{{update['update_description']}}</div>
+        
+                        </li>
+                        {% endfor %}
+                        
+        
+                    </ul>
+        
+                </div>
+            </div>
+        </div>
+        </div>
 
-        <!-- <div class="border mb-3 card card-body border-info">
-            <h5 class="card-title">Info Card Shadow</h5>
-            {{item['description']}}
-            <table class="mb-0 table table-borderless">
-
-                <tbody>
-                    <tr>
-                        <td>Customer: </td>
-                        <td>{{item['customer']}}</td>
-                    </tr>
-                    <tr>
-                        <td>Assembly: </td>
-                        <td>{{item['assembly']}}</td>
-                    </tr>
-                    <tr>
-                        <td>Part Number: </td>
-                        <td>{{item['part_number']}}</td>
-                    </tr>
-                    <tr>
-                        <td>Attachments: </td>
-                        <td>{{item['attachments']}}</td>
-                    </tr>
-                </tbody>
-            </table>
-
-        </div> -->
-
-
-
-
-
-        <h4>Updates</h4>
-
-        <table class="mb-0 table table-sm">
-
-            <tbody>
-                <tr>
-                    <td>Update status to be x, reassigned to Blah </td>
-                    <td>
-                        <div>blah</div>
-                        <div>blah</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Update status to be x, reassigned to Blah </td>
-                    <td>
-                        <div>blah</div>
-                        <div>blah</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Update status to be x, reassigned to Blah </td>
-                    <td>
-                        <div>blah</div>
-                        <div>blah</div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Update status to be x, reassigned to Blah </td>
-                    <td>
-                        <div>blah</div>
-                        <div>blah</div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+       
 
 
 

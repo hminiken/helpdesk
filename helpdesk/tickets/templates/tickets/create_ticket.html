@@ -1,0 +1,121 @@
+{% extends "tickets/base.html" %}
+
+{% block content %}
+
+<div class="app-main">
+    
+    
+    
+    <div class="app-main__outer">
+        <div class="app-main__inner">
+            
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="main-card mb-3 card">
+                        <div class="card-body">
+                            <h5 class="card-title">Controls Types</h5>
+                            <form class="" action="/tickets/create_ticket" method="post">
+                                
+                                <div class="grid-menu grid-menu-2col">
+                                    <div class="form-row">
+                                        <div class="col-sm-6">
+                                            <div class="position-relative form-group">
+                                                <label for="exampleEmail" class="">Customer</label>
+                                                <input name="email" id="exampleEmail" type="email" class="form-control">
+                                            </div>
+                                        </div>      
+                                        <div class="col-sm-6">
+                                            <div class="position-relative form-group">
+                                                <label for="exampleEmail" class="">Assembly</label>
+                                                <input name="email" id="exampleEmail" type="email" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-sm-6">
+                                            <div class="position-relative form-group">
+                                                <label for="exampleEmail" class="">Part Number</label>
+                                                <input name="email" id="exampleEmail" type="email" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                           
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="col-sm-6">
+                                        <div class="position-relative form-group"><label for="exampleSelect" class="">Select Category</label><select
+                                            name="select" id="exampleSelect" class="form-control">
+                                            <option>AML/AVL</option>
+                                            <option>ECO</option>
+                                            <option>BOM</option>
+                                            <option>BTP</option>
+                                            <option>Routing</option>
+                                            <option>Work Order</option>
+                                            <option>Item Card</option>
+                                            <option>Rework</option>
+                                            <option>Customer</option>
+                                        </select></div>
+                                    </div>
+                                    
+                                    <div class="col-sm-6">
+                                        <div class="position-relative form-group"><label for="exampleSelect" class="">Select Subcategory</label><select name="select"
+                                            id="exampleSelect" class="form-control">
+                                            <option>Add Alternate</option>
+                                            <option>Modify ECO</option>
+                                            <option>Add Attrition</option>
+                                            <option>Panel Review</option>
+                                            <option>Routing Missing</option>
+                                            <option>Status Update</option>
+                                            <option>Create SUP</option>
+                                            <option>Create Instruction</option>
+                                            <option>Customer Visit</option>
+                                            <option>Delete AML</option>
+                                            <option>Update Usage</option>
+                                        </select></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="position-relative form-group"><label for="exampleText" class="">Description/Details</label><textarea
+                                   style="height: 150px;" name="text" id="exampleText" class="form-control"></textarea>
+                                </div>
+                                   
+                                        <button id="submit_new_ticket" class="mt-1 btn btn-primary">Submit</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="main-card mb-3 card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Instructions</h4>
+                                    <h5 class="card-subtitle">Customer</h5>
+                                    <p>asdf</p>
+                                    <h5 class="card-subtitle">Assembly</h5>
+                                    <p>asdf</p>
+                                    <h5 class="card-subtitle">Part Number</h5>
+                                    <p></p>
+                                    <h5 class="card-subtitle">Link to Attachments</h5>
+                                    <p></p>
+                                    <h5 class="card-subtitle">Category</h5>
+                                    <p></p>
+                                    <h5 class="card-subtitle">Subcategory</h5>
+                                    <p></p>
+                                    <h5 class="card-subtitle">Description/Details</h5>
+                                    <p></p>
+                                    
+                                    
+                                    
+                                </div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            {% endblock %}

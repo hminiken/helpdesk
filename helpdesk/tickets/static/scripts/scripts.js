@@ -25,6 +25,16 @@ $(document).ready(function () {
 });
 
 
+// Filter table
+    $(document).on('keyup', '#table_search_input', function () {
+    // $('#table_search_input').on('keyup', function () {
+        var value = $(this).val().toLowerCase();
+        $("#ticket_table_all tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+
+
     $("div.ticket-details-div").on("click", "button.assign_user_li", function () {
         // $("#assign_user_dropdown").css({ height: "auto" });
         var id = $(this).attr('id');
@@ -74,7 +84,32 @@ $(document).ready(function () {
 
     });
 
+
+
+    // submit_new_ticket
+    // $(document).on('click', '#submit_new_ticket', function () {
     
+    // });
+
+    // this is the id of the form
+    $("#submit_new_ticket").submit(function (e) {
+
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+
+        var form = $(this);
+        var url = form.attr('action');
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: form.serialize(), // serializes the form's elements.
+            success: function (data) {
+                alert(data); // show response from the php script.
+            }
+        });
+
+
+    });
 
 
 });

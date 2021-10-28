@@ -18,10 +18,22 @@
                     <div class="main-card mb-3 card" >
                         <div class="card-body">
                             <div class="row">                                
-                                <div class="col-sm-12 col-md-6">
-                                    <div id="example_filter" class="dataTables_filter"><label>Search:<input type="search"
-                                        class="form-control form-control-sm" placeholder="" aria-controls="example"></label></div>
+                                <div class="col-md-10">
+                                    <div  class="dataTables_filter">
+                                        <label>Search:
+                                        <input id="table_search_input" type="search"
+                                        class="form-control form-control-sm" placeholder="" aria-controls="example">
+                                    </label>
                                     </div>
+                                </div>
+                                
+                                <div class="col-md-2">
+                                   <a  href="{{ url_for('tickets_bp.new_ticket') }}"> <button class="mb-2 mr-2 btn btn-primary">New Ticket
+                                    </button>
+                                    </a>
+                                    </div>
+                                </div>
+
                                 </div>
                                 <div  class="scroll-area-lg">
                                     <div class="scrollbar-container ps--active-y ps">
@@ -47,8 +59,14 @@
                                                     <td>{{ item['category']}}</td>
                                                     <td class="text-truncate" style="max-width: 150px;">{{ item['description']}}</td>
                                                     <!-- <td><div class="badge badge-warning">Completed</div></td> -->
-                                                    <td>{{ item['date_created']}}</td>
+                                                    <td>{{ item['date_created'].strftime('%m/%d/%Y')}}</td>
                                                     <td>{{ item['assigned_to']}}</td>
+                                                    <td style="display: none;">{{ item['customer']}}</td>
+                                                    <td style="display: none;">{{ item['created_by']}}</td>
+                                                    <td style="display: none;">{{ item['description']}}</td>
+                                                    <td style="display: none;">{{ item['subcategory']}}</td>
+                                                    <td style="display: none;">{{ item['assembly']}}</td>
+                                                    <td style="display: none;">{{ item['part_number']}}</td>
                                                 </tr>
                                                 
                                                 {% endfor %}                                
