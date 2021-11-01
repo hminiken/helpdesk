@@ -4,55 +4,55 @@
         <div class="card-header-title" id="current_ticket_id" ticket_id="{{item['ticket_id']}}">
             <i class="fa fa-server">  </i> Ticket #{{item['ticket_id']}}
         </div>
-
+        
     </div>
     <div class="card-body">
         <div class="badge badge-warning">Completed</div>
         <div class="badge badge-info">Completed</div>
-        <p>&nbsp;</p>
-       
-
+        
+        
         <ul class="rm-list-borders rm-list-borders-scroll list-group list-group-flush  ">
             <li class="list-group-item override-dropdown "  style=" z-index: 5000;">
                 <div class="widget-content p-0 ">
                     <div class="widget-content-wrapper ">
                         <div class="widget-content-left">
                             <div class="widget-content-wrapper">
-
+                                
                                 <div class="widget-content-left mr-3">
                                     <img width="42" height="42" class="rounded-circle"
-                                        src="static/images/profileImg1552.jpg" alt="">
+                                    src="{{ url_for('users_bp.static',filename='images/avatars/profileImg1552.jpg')}}" alt="">
                                 </div>
                                 <div class="widget-content-left">
                                     <div class="widget-heading">Assigned To:</div>
                                     <div class="widget-subheading opacity-9">
                                         <div class="dropdown d-inline-block show" style="overflow: visible !important; ">
                                             <button id="assign_user_button" aria-haspopup="true" aria-expanded="true" data-toggle="dropdown"
-                                                class="mb-2 mr-2 dropdown-toggle btn btn-outline-link">
-                                                {{item['assigned_to']}}
-                                            </button>
-                                            <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu hide section"
-                                                x-placement="bottom-start" >
-                                                <!--<div  class="scroll-area-sm"> -->
-                                                    <!-- <div id="assign_user_dropdown" class="scrollbar-container ps ps--active-y"> -->
-                                                        {% for user in users %}
-                                                        <button id="{{user['user_id']}}" type="button" tabindex="0" class="dropdown-item assign_user_li">{{user['fname']}} {{user['lname']}}</button>
-                                                        {% endfor %}
-                                                    </div>
-                                                <!-- </div>
+                                            class="mb-2 mr-2 dropdown-toggle btn btn-outline-link">
+                                            {{item['assigned_to']}}
+                                        </button>
+                                        <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu hide section"
+                                        x-placement="bottom-start" >
+                                        <!--<div  class="scroll-area-sm"> -->
+                                            <!-- <div id="assign_user_dropdown" class="scrollbar-container ps ps--active-y"> -->
+                                                {% for user in users %}
+                                                <button id="{{user['user_id']}}" type="button" tabindex="0" class="dropdown-item assign_user_li">{{user['fname']}} {{user['lname']}}</button>
+                                                {% endfor %}
+                                            </div>
+                                            <!-- </div>
                                             </div> -->
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
+                        
                         <div class="widget-content-right">
                             <div class="widget-content-wrapper">
-
+                                
                                 <div class="widget-content-left mr-3">
                                     <img width="42" height="42" class="rounded-circle"
-                                        src="static/images/profileImg1956.png" alt="">
+                                    src="{{ url_for('users_bp.static',filename='images/avatars/profileImg1956.png')}}" alt="">
+                                    
                                 </div>
                                 <div class="widget-content-left">
                                     <div class="widget-heading">Created By:</div>
@@ -64,20 +64,20 @@
                 </div>
             </li>
         </ul>
-
-
-
-
-
+        
+        
+        
+        
+        
         <ul class="list-group list-group-flush">
             <li class="p-0 list-group-item">
                 <div class="grid-menu grid-menu-2col">
-            
+                    
                     <div class="no-gutters row">
-                        <div class="col-sm-2">
+                        <div class="col-sm-3">
                             <div class="widget-content-ticketinfo">Category</div>
                         </div>
-                        <div class="col-sm-10">
+                        <div class="col-sm-9">
                             <div class="widget-content-ticketinfo">{{item['category']}} :: {{item['subcategory']}}</div>
                         </div>
                     </div>
@@ -87,94 +87,101 @@
                 <div class="grid-menu grid-menu-2col">
                     
                     <div class="no-gutters row">
-                        <div class="col-sm-2">
+                        <div class="col-sm-3">
                             <div class="widget-content-ticketinfo">Customer</div>
                         </div>
-                        <div class="col-sm-10">
+                        <div class="col-sm-9">
                             <div class="widget-content-ticketinfo">{{item['customer']}}</div>
                         </div>
                     </div>
+                </div>
+            </li>
+            
+            <li class="p-0 list-group-item">
+                <div class="no-gutters row">
+                    <div class="col-sm-3">
+                        <div class="widget-content-ticketinfo">Assembly: </div>
                     </div>
-                    </li>
-
-                    <li class="p-0 list-group-item">
-                    <div class="no-gutters row">
-                        <div class="col-sm-2">
-                            <div class="widget-content-ticketinfo">Assembly: </div>
-                        </div>
-                        <div class="col-sm-10">
-                            <div class="widget-content-ticketinfo">{{item['assembly']}}</div>
-                        </div>
+                    <div class="col-sm-9">
+                        <div class="widget-content-ticketinfo">{{item['assembly']}}</div>
                     </div>
-                    </li>
-                    <li class="p-0 list-group-item">
-                    <div class="no-gutters row">
-                        <div class="col-sm-2">
-                            <div class="widget-content-ticketinfo">Part Number: </div>
-                        </div>
-                        <div class="col-sm-10">
-                            <div class="widget-content-ticketinfo">{{item['part_number']}}</div>
-                        </div>
-                    </div>
-                    </li>
-                    <li class="p-0 list-group-item">
-                    <div class="no-gutters row">
-                        <div class="col-sm-2">
-                            <div class="widget-content-ticketinfo">Attachments: </div>
-                        </div>
-                        <div class="col-sm-10">
-                            <div class="widget-content-ticketinfo">{{item['attachments']}}</div>
-                        </div>
-                    </div>
+                </div>
             </li>
             <li class="p-0 list-group-item">
                 <div class="no-gutters row">
-                    <div class="col-sm-2">
+                    <div class="col-sm-3">
+                        <div class="widget-content-ticketinfo">Part Number: </div>
+                    </div>
+                    <div class="col-sm-9">
+                        <div class="widget-content-ticketinfo">{{item['part_number']}}</div>
+                    </div>
+                </div>
+            </li>
+            <li class="p-0 list-group-item">
+                <div class="no-gutters row">
+                    <div class="col-sm-3">
+                        <div class="widget-content-ticketinfo">Attachments:</div>
+                    </div>
+                    <div class="col-sm-9">
+                        <div class="widget-content-ticketinfo">{{item['attachments']}}</div>
+                    </div>
+                </div>
+            </li>
+            <li class="p-0 list-group-item">
+                <div class="no-gutters row">
+                    <div class="col-sm-3">
                         <div class="widget-content-ticketinfo">Details: </div>
                     </div>
-                    <div class="col-sm-10">
+                    <div class="col-sm-9">
                         <div class="widget-content-ticketinfo">{{item['description']}}</div>
                     </div>
                 </div>
             </li>
-
+            
         </ul>
 
-
-
+        <!-- Submit a comment, have to reroute and load this section again -->
+        <p>&nbsp;</p>
+        <form class="" action="/tickets/create_ticket" method="post">
+            <div class="position-relative form-group"><label for="exampleText" class="">Status Update</label>
+                <textarea style="height: 50px;" name="details_input" id="details_input" class="form-control"></textarea>
+            </div>
+            <button id="submit_new_ticket" class="mt-1 btn btn-primary">Submit</button>
+            
+        </form>
         <div class="">
-        <div class="container ">                 
-        
-            <div class="rightbox">
-                <div class="rb-container">
-                    <ul class="rb">
-                        {% for update in updates %}
-                        <li class="rb-item" ng-repeat="itembx">
-                            <div class="timestamp">
-                                {{update['update_date'].strftime('%m/%d/%Y')}}
-                                {{update['update_date'].strftime('%I:%M')}}
-                                <br>
-                                {{update['user']}}
-                            </div>
-                            <div class="item-title">{{update['update_description']}}</div>
-        
-                        </li>
-                        {% endfor %}
+            <div class="container ">                 
+                
+                <div class="rightbox">
+                    <div class="rb-container">
+                        <ul class="rb">
+                            {% for update in updates %}
+                            <li class="rb-item" ng-repeat="itembx">
+                                <div class="timestamp">
+                                    {{update['update_date'].strftime('%m/%d/%Y')}}
+                                    {{update['update_date'].strftime('%I:%M')}}
+                                    <br>
+                                    {{update['user']}}
+                                </div>
+                                <div class="item-title">{{update['update_description']}}</div>
+                                
+                            </li>
+                            {% endfor %}
+                            
+                            
+                        </ul>
                         
-        
-                    </ul>
-        
+                    </div>
                 </div>
             </div>
         </div>
-        </div>
-
-       
-
-
-
-
-
+        
+        
+        
+        
+        
+        
+        
     </div>
     <div class="d-block text-right card-footer">
         <!-- <a href="javascript:void(0);" class="btn-wide btn-shadow btn btn-danger">Delete</a> -->

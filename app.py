@@ -2,6 +2,7 @@ from flask import Flask
 
 from database import mysql
 from helpdesk.tickets.tickets import tickets_bp
+from helpdesk.users.users import users_bp
 
 app = Flask(__name__)
 
@@ -14,6 +15,10 @@ mysql.init_app(app)
 
 # Register blueprint
 app.register_blueprint(tickets_bp, url_prefix="/tickets")
+app.register_blueprint(users_bp, url_prefix="/user")
+
+#manage sessions
+
 
 @app.route('/')
 def index():

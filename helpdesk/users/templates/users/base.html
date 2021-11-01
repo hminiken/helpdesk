@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Qualitel Toolkit</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <!--[if lte IE 8]><script src="js/html5shiv.js"></script><![endif]-->
+
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+
+
+    <script src="https://kit.fontawesome.com/5f4d9b05df.js" crossorigin="anonymous"></script>
+
+
+    <link rel="icon" href="/static/images/iconLogo.ico">
+
+<link rel="shortcut icon" href="{{ url_for('static', filename='images/iconLogo.ico') }}">
+
+<script type="text/javascript" src="{{ url_for('static',filename='scripts/jquery.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='scripts/ArchitectUISMTDash.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='scripts/init.js') }}"></script>
+<script  type="text/javascript" src="{{ url_for('.static',filename='scripts/script.js') }}">
+</script>
+
+
+
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/skel.css') }}">
+</link>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style-xlarge.css') }}">
+</link>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/font-awesome.min.css') }}">
+</link>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/icons.css') }}">
+</link>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/ArchitectUI.css') }}"></link>
+<link rel="stylesheet" type="text/css" href="{{ url_for('.static',filename='styles/style.css') }}"></link>
+
+
+</head>
+<!-- Header -->
+<div class="app-header header-shadow">
+    <div class="app-header__logo">
+        <img class="logo-rc" height="42" src="/static/images/QualitelLogo.png">
+        
+    </div>
+
+
+    <div class="app-header__content">
+        <div class="app-header-left">
+            <ul class="header-menu nav">
+                <li class="nav-item">
+                    <a href="javascript:void(0);" class="nav-link">
+                        <i class="nav-link-icon fa fa-database"> </i>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="btn-group nav-item">
+                    <a href="javascript:void(0);" class="nav-link">
+                        <i class="nav-link-icon fa fa-edit"></i>
+                        Tickets
+                    </a>
+                </li>
+                <li class="dropdown nav-item">
+                    <a href="javascript:void(0);" class="nav-link">
+                        <i class="nav-link-icon far fa-id-card"></i>
+                        My Tickets
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+        <div class="app-header-right">
+
+
+            <div class="header-btn-lg pr-0">
+                <div class="widget-content p-0">
+                    <div class="widget-content-wrapper">
+                        <div class="widget-content-left">
+
+                        </div>
+                        <div class="widget-content-left  ml-3 header-user-info">
+                            <div class="widget-heading"> Alina Mclourd </div>
+                            <div class="widget-subheading"> VP People Manager </div>
+                        </div>
+                        <div class="widget-content-right header-user-info ml-3">
+                            <button type="button" class="btn-shadow p-1 btn btn-primary btn-sm show-toastr-example">
+                                <i class="fa text-white fa-calendar pr-1 pl-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="header-btn-lg">
+                <button type="button" class="hamburger hamburger--elastic open-right-drawer">
+
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<body>{% block content %}{% endblock %}</body>
+
+
+
+</html>

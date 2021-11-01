@@ -99,10 +99,19 @@ $(document).ready(function () {
         var form = $(this);
         var url = form.attr('action');
 
+        alert(url);
+
         $.ajax({
             type: "POST",
             url: url,
-            data: form.serialize(), // serializes the form's elements.
+            // data: form.serialize(), // serializes the form's elements.
+            data: {
+                cust: $('#cust_input').val(),
+                assy: $('#assy_input').val(),
+                pn: $('#pn_input').val(),
+                cat: $('#cat_select').val(),
+                subcat: $('#subcat_select').val()
+            },
             success: function (data) {
                 alert(data); // show response from the php script.
             }
@@ -114,36 +123,3 @@ $(document).ready(function () {
 
 });
 
-
-
-// $('#show_task_{{npi['RequestId']}}').unbind().click(function () {
-
-//     // var is_shown  = $('#show_task_{{npi['RequestId']}}').data('task_is_shown');
-//     var is_shown = $(this).attr('task_is_shown');
-//     console.log(is_shown);
-//     if (is_shown === "false") {
-//         $('#show_task_{{npi['RequestId']}}').attr("task_is_shown", "true");
-//         console.log({{ npi['RequestId']}});
-// text = 'Hello'
-// $.ajax({
-//     url: "/npi_tasks",
-//     type: "get",
-//     data: { jsdata: is_shown, req_id: '{{ npi['RequestId']}}'},
-//     // dataType: 'json',
-//     success: function (response) {
-//         $("#place_for_suggestions_{{npi['RequestId']}}").html(response);
-//     },
-//     error: function (xhr) {
-//         //Do Something to handle error
-//     }
-// });
-
-//                 }
-//                 else {
-//     $('#show_task_{{npi['RequestId']}}').attr("task_is_shown", "false");
-//     $("#place_for_suggestions_{{npi['RequestId']}}").text("");
-// }
-
-
-//                 //Stuff
-//             });

@@ -21,13 +21,13 @@
                                         <div class="col-sm-6">
                                             <div class="position-relative form-group">
                                                 <label for="exampleEmail" class="">Customer</label>
-                                                <input name="email" id="exampleEmail" type="email" class="form-control">
+                                                <input name="cust_input" id="cust_input" type="text" class="form-control">
                                             </div>
                                         </div>      
                                         <div class="col-sm-6">
                                             <div class="position-relative form-group">
                                                 <label for="exampleEmail" class="">Assembly</label>
-                                                <input name="email" id="exampleEmail" type="email" class="form-control">
+                                                <input name="assy_input" id="assy_input" type="text" class="form-control">
                                             </div>
                                         </div>
                                     </div>
@@ -35,11 +35,11 @@
                                         <div class="col-sm-6">
                                             <div class="position-relative form-group">
                                                 <label for="exampleEmail" class="">Part Number</label>
-                                                <input name="email" id="exampleEmail" type="email" class="form-control">
+                                                <input name="pn_input" id="pn_input" type="text" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
-                                           
+                                        
                                         </div>
                                     </div>
                                     
@@ -47,8 +47,10 @@
                                 
                                 <div class="form-row">
                                     <div class="col-sm-6">
-                                        <div class="position-relative form-group"><label for="exampleSelect" class="">Select Category</label><select
-                                            name="select" id="exampleSelect" class="form-control">
+                                        <div class="position-relative form-group">
+                                            <label for="exampleSelect" class="">Select Category</label>
+                                            <select
+                                            name="cat_select" id="cat_select" class="form-control">
                                             <option>AML/AVL</option>
                                             <option>ECO</option>
                                             <option>BOM</option>
@@ -58,12 +60,15 @@
                                             <option>Item Card</option>
                                             <option>Rework</option>
                                             <option>Customer</option>
-                                        </select></div>
+                                        </select>
+                                    </div>
                                     </div>
                                     
                                     <div class="col-sm-6">
-                                        <div class="position-relative form-group"><label for="exampleSelect" class="">Select Subcategory</label><select name="select"
-                                            id="exampleSelect" class="form-control">
+                                        <div class="position-relative form-group">
+                                            <label for="exampleSelect" class="">Select Subcategory</label>
+                                            <select name="subcat_select"
+                                            id="subcat_select" class="form-control">
                                             <option>Add Alternate</option>
                                             <option>Modify ECO</option>
                                             <option>Add Attrition</option>
@@ -75,13 +80,21 @@
                                             <option>Customer Visit</option>
                                             <option>Delete AML</option>
                                             <option>Update Usage</option>
-                                        </select></div>
+                                        </select>
+                                    </div>
                                     </div>
                                 </div>
+
+                                <div class="position-relative form-check">
+                                    <input name="priority_check" id="priority_check" type="checkbox" class="form-check-input">
+                                    <label for="exampleCheck" class="form-check-label">Priority</label>
+                                </div>
+                                <p></p>
                                 
                                 <div class="position-relative form-group"><label for="exampleText" class="">Description/Details</label><textarea
-                                   style="height: 150px;" name="text" id="exampleText" class="form-control"></textarea>
+                                   style="height: 150px;" name="details_input" id="details_input" class="form-control"></textarea>
                                 </div>
+                                
                                    
                                         <button id="submit_new_ticket" class="mt-1 btn btn-primary">Submit</button>
                                     </form>

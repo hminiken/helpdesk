@@ -1,12 +1,13 @@
 
 from database import mysql
+import os
 
 
 def get_tickets():
     conn = mysql.connect()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * from tickets")
+    cursor.execute("SELECT * from tickets ORDER BY ticket_id DESC")
     data = cursor.fetchall()
 
     ticket_list = []
@@ -114,7 +115,6 @@ def update_assigned_user(uid, ticket_id):
         , %s,NOW())
     '''
 
-
     cursor.execute(update_qry, (uid, uid, uid, ticket_id))
     conn.commit()
 
@@ -143,14 +143,47 @@ def get_ticket_updates(ticket_id):
 
     return update_list
 
-def create_ticket():
 
+def insert_ticket_data(details, cust, assy, pn, cat, subcat, priority, created_by):
+    conn = mysql.connect()
+    cursor = conn.cursor()
+
+    #insert ticket into tickets database
+    sql_qry = '''
+    INSERT INTO helpdesk.tickets 
+    (priority, description, created_by, date_created, assigned_to, 
+    customer, assembly, part_number,  category, subcategory) 
+    VALUES (%s, %s,  %s, NOW(), %s, %s, %s, %s, %s, %s);
+    '''
+
+    # By default tickets are unassigned
+    assigned_to = "Unassigned"
+
+    # If checkbox is checked, insert 1 for priority, else 0 
+    if priority == 'on':
+        priority_bool = 1
+    else:
+        priority_bool = 0
+        
+    cursor.execute(sql_qry, (priority_bool, details, created_by, assigned_to,
+                    cust, assy, pn, cat, subcat))
+    conn.commit()
+
+    # get the id of the request just made and insert filepath
+    new_id = cursor.lastrowid
+    file_path = "Z:/03. Engineering/Uncontrolled/HelpDeskTickets/" + str(new_id)
 
     sql_qry = '''
-    INSERT INTO tickets
-    ()
-    INSERT INTO helpdesk.tickets 
-    (priority, description, created_by, date_created, assigned_to, customer, assembly, part_number, 
-    category, subcategory, attachments) 
-    VALUES (%s, %s,  %s, NOW(), %s, %s, %s, %s, %s, %s, %s);
-    '''
+    UPDATE helpdesk.tickets 
+    SET attachments =  %s
+    WHERE
+    ticket_id = %s   '''
+
+    cursor.execute(sql_qry, (file_path, new_id))
+    conn.commit()
+
+    # Make the path in QMS and open
+    os.mkdir(file_path)    
+    os.startfile(file_path)
+
+    return

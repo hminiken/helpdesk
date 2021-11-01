@@ -14,26 +14,23 @@
     <script src="https://kit.fontawesome.com/5f4d9b05df.js" crossorigin="anonymous"></script>
 
 
-    <link rel="shortcut icon" href="{{ url_for('.static', filename='images/favicon.ico') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/iconLogo.ico') }}">
 
-    <script type="text/javascript" src="{{ url_for('.static',filename='scripts/jquery.min.js') }}"></script>
-    <!-- <script type="text/javascript" src="{{ url_for('.static',filename='scripts/skel.min.js') }}"></script> -->
-    <!-- <script type="text/javascript" src="{{ url_for('.static',filename='scripts/skel-layers.min.js') }}"></script> -->
-    <script type="text/javascript" src="{{ url_for('.static',filename='scripts/ArchitectUISMTDash.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('.static',filename='scripts/init.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='scripts/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='scripts/ArchitectUISMTDash.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='scripts/init.js') }}"></script>
 
-    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('.static',filename='styles/style.css') }}">    </link> -->
-    <link rel="stylesheet" type="text/css" href="{{ url_for('.static',filename='styles/skel.css') }}">    </link>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('.static',filename='styles/style-xlarge.css') }}">    </link>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('.static',filename='styles/font-awesome.min.css') }}">    </link>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('.static',filename='styles/icons.css') }}"></link>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('.static',filename='styles/ArchitectUI.css') }}">    </link>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/skel.css') }}">    </link>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style-xlarge.css') }}">    </link>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/font-awesome.min.css') }}">    </link>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/icons.css') }}"></link>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/ArchitectUI.css') }}">    </link>
 
   </head>
 <!-- Header -->
 <div class="app-header header-shadow">
     <div class="app-header__logo">
-            <img class="logo-rc" height="42" src="static/images/QualitelLogo.png">
+        <img class="logo-rc" height="42" src="/static/images/QualitelLogo.png">
     </div>
     
     

@@ -17,8 +17,12 @@
                 <div class="col-lg-7">
                     <div class="main-card mb-3 card" >
                         <div class="card-body">
-                            <div class="row">                                
-                                <div class="col-md-10">
+                            <div class="row">     
+                                <div class="col-md-5">
+            <h3>Total Open Tickets: {{tickets|length}}</h3>
+
+                                </div>                           
+                                <div class="col-md-5">
                                     <div  class="dataTables_filter">
                                         <label>Search:
                                         <input id="table_search_input" type="search"
@@ -76,11 +80,12 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    
                     
                     
                     <div id="ticket_detailed_info" class="col-lg-5 ticket-details-div">
                         <!-- Load the ticket data here -->
+                    </div>
                     </div>
                 </div>
                 
