@@ -1,4 +1,5 @@
 from flask import Flask, Blueprint, render_template, request, redirect, url_for
+from helpdesk.tickets.models import TicketCommentForm
 
 from helpdesk.tickets.ticket_utils import get_ticket_details, get_ticket_updates, get_tickets, get_user_data, get_user_name, insert_ticket_data, update_assigned_user
 
@@ -32,6 +33,16 @@ def ticket_details():
 
     # Get the update history for this ticket
     updates = get_ticket_updates(ticket_id)
+
+    form = TicketCommentForm()
+    if form.validate_on_submit():
+        user = Users(user_id=form.user_id.data, email=form.email.data,
+                     fname=form.fname.data, lname=form.lname.data, FK_role_id=form.permission.data,)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Congratulations, you are now a registered user!')
+        return redirect(url_for('users_bp.user'))
 
     return render_template('tickets/ticket_details.html', 
                             details=details,
