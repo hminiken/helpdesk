@@ -1,3 +1,4 @@
+import random
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from database import mysql
@@ -28,15 +29,18 @@ def add_new_user(email, emp_id, fname, lname, role_id):
     conn = mysql.connect()
     cursor = conn.cursor()
 
+    default_imgs = ['default1.png', 'default2.png',
+                    'default3.png', 'default4.png', 'default5.png']
 
+    imgString = random.choice(default_imgs)
 
     # TO DO: Verify with IT that all emails are unique...
     qry = '''
-    INSERT INTO users (user_id, FK_role_id, fname, lname, email, password)
-    VALUES (%s, %s, %s, %s, %s, %s)
+    INSERT INTO users (user_id, FK_role_id, fname, lname, email, password, user_img)
+    VALUES (%s, %s, %s, %s, %s, %s, %s)
     '''
 
-    cursor.execute(qry, (emp_id, role_id, fname, lname, email, userPassword))
+    cursor.execute(qry, (emp_id, role_id, fname, lname, email, userPassword, imgString))
     conn.commit()
 
 

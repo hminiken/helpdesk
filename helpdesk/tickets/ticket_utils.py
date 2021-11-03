@@ -1,13 +1,19 @@
 
 from database import mysql
 import os
-
+from flask_login import current_user
 
 def get_tickets():
     conn = mysql.connect()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * from tickets ORDER BY ticket_id DESC")
+
+    qry = '''SELECT *, 
+    (Select CONCAT(fname, ' ', lname) from users where user_id=created_by ) AS created, 
+    (Select CONCAT(fname, ' ', lname) from users where user_id=assigned_to ) AS assigned  
+    from tickets ORDER BY ticket_id DESC
+    '''
+    cursor.execute(qry)
     data = cursor.fetchall()
 
     ticket_list = []
@@ -24,7 +30,17 @@ def get_ticket_details(ticket_id):
     conn = mysql.connect()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * from tickets where ticket_id=" + ticket_id)
+    qry = '''
+        Select *, 
+        (Select CONCAT(fname, ' ', lname) from users where user_id=created_by ) AS created, 
+        (Select CONCAT(fname, ' ', lname) from users where user_id=assigned_to ) AS assigned, 
+        (Select user_img from users where user_id=assigned_to ) AS user_assigned_img, 
+        (Select user_img from users where user_id=created_by ) AS user_created_img, 
+        (Select CONCAT(fname, ' ', lname) from users where user_id=closed_by ) AS closed 
+        from tickets where ticket_id=%s
+    '''
+
+    cursor.execute(qry, (ticket_id))
     data = cursor.fetchall()
 
     ticket_list = []
@@ -96,13 +112,11 @@ def update_assigned_user(uid, ticket_id):
 
     update_qry = '''
         UPDATE tickets 
-        SET assigned_to = CONCAT(
-        (SELECT fname FROM users WHERE user_id = %s),  ' ', 
-        (SELECT lname FROM users WHERE user_id = %s))
+        SET assigned_to = %s
         WHERE ticket_id = %s
     '''
 
-    cursor.execute(update_qry, (uid, uid, ticket_id))
+    cursor.execute(update_qry, (uid, int(ticket_id)))
     conn.commit()
 
     # Add to status update
@@ -111,11 +125,15 @@ def update_assigned_user(uid, ticket_id):
         (update_user, update_description, FK_ticket_id, update_date)
         VALUES (%s,  CONCAT('Assigned to ', 
         (SELECT fname FROM users WHERE user_id = %s),  ' ', 
-        (SELECT lname FROM users WHERE user_id = %s), ' by Hillary Miniken')
-        , %s,NOW())
+        (SELECT lname FROM users WHERE user_id = %s), ' by ',
+        
+        CONCAT( (SELECT fname FROM users WHERE user_id = %s),  ' ', 
+        (SELECT lname FROM users WHERE user_id = %s)))        
+        , %s, NOW())
     '''
 
-    cursor.execute(update_qry, (uid, uid, uid, ticket_id))
+    cursor.execute(update_qry, (current_user.user_id, uid,
+                   uid,  current_user.user_id,  current_user.user_id, int(ticket_id)))
     conn.commit()
 
     return

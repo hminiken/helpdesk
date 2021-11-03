@@ -1,5 +1,9 @@
 from flask import Flask, Blueprint, render_template, request, redirect, url_for
-from helpdesk.tickets.models import TicketCommentForm
+from flask.helpers import flash
+from helpdesk.tickets.models import TicketCommentForm,  TicketUpdates
+from app import db
+from flask_login import current_user
+import json
 
 from helpdesk.tickets.ticket_utils import get_ticket_details, get_ticket_updates, get_tickets, get_user_data, get_user_name, insert_ticket_data, update_assigned_user
 
@@ -11,7 +15,9 @@ tickets_bp = Blueprint('tickets_bp', __name__,
 '''
 Show tickets home route. Loads a table of tickets
 '''
-@tickets_bp.route("/")
+
+
+@tickets_bp.route("/", methods=['GET', 'POST'])
 def show_tickets():    
     tickets = get_tickets()
     return render_template('tickets/index.html', tickets=tickets)
@@ -20,10 +26,20 @@ def show_tickets():
 '''
 Route to display ticket details in side window for clicked table row
 '''
-@tickets_bp.route('/ticket_details', methods=['GET'])
+@tickets_bp.route('/ticket_details', methods=['GET', 'POST'])
 def ticket_details():
     
     ticket_id = request.args.get('ticket_id')
+    if ticket_id is None:
+        ticket_id = request.form.get('ticket_id')
+       
+    form = TicketCommentForm()
+    if form.validate_on_submit():
+        user = TicketUpdates(FK_ticket_id=int(ticket_id), update_user=int(current_user.user_id),
+                             update_description=form.comment.data)
+        db.session.add(user)
+        db.session.commit()
+        form.comment.data = ""
 
     # Get data about specific ticket by id
     details = get_ticket_details(ticket_id)
@@ -34,20 +50,11 @@ def ticket_details():
     # Get the update history for this ticket
     updates = get_ticket_updates(ticket_id)
 
-    form = TicketCommentForm()
-    if form.validate_on_submit():
-        user = Users(user_id=form.user_id.data, email=form.email.data,
-                     fname=form.fname.data, lname=form.lname.data, FK_role_id=form.permission.data,)
-        user.set_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        flash('Congratulations, you are now a registered user!')
-        return redirect(url_for('users_bp.user'))
 
     return render_template('tickets/ticket_details.html', 
                             details=details,
                             users=users,
-                           updates=updates)
+                           updates=updates, form=form)
 
 
 '''

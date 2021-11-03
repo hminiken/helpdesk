@@ -41,23 +41,23 @@ switchers.forEach(item => {
 
 
     //code to get login info
-    $("#submit_user_login").submit(function (e) {
+    // $("#submit_user_login").submit(function (e) {
 
-        e.preventDefault(); // avoid to execute the actual submit of the form.
+    //     e.preventDefault(); // avoid to execute the actual submit of the form.
 
-        var form = $(this);
-        var url = form.attr('action');
-        $.ajax({
-            type: "POST",
-            url: url,
-            // data: form.serialize(), // serializes the form's elements.
-            data: {
+    //     var form = $(this);
+    //     var url = form.attr('action');
+    //     $.ajax({
+    //         type: "POST",
+    //         url: url,
+    //         // data: form.serialize(), // serializes the form's elements.
+    //         data: {
 
-            },
-            success: function (data) {
-                alert(data); // show response from the php script.
-            }
-        });
-    });
+    //         },
+    //         success: function (data) {
+    //             alert(data); // show response from the php script.
+    //         }
+    //     });
+    // });
 
 });

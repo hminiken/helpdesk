@@ -4,7 +4,7 @@
 
     <script type="text/javascript" src="{{ url_for('.static',filename='scripts/scripts.js') }}"></script>
 
-
+<script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
 <div class="app-main" >
     
     
@@ -19,29 +19,29 @@
                         <div class="card-body">
                             <div class="row">     
                                 <div class="col-md-5">
-            <h3>Total Open Tickets: {{tickets|length}}</h3>
-
-                                </div>                           
-                                <div class="col-md-5">
-                                    <div  class="dataTables_filter">
-                                        <label>Search:
-                                        <input id="table_search_input" type="search"
-                                        class="form-control form-control-sm" placeholder="" aria-controls="example">
-                                    </label>
+                                    <h4>Total Open Tickets: {{tickets|length}}</h4>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="{{ url_for('tickets_bp.new_ticket') }}"> <button class="mb-2 mr-2 btn btn-primary">New Ticket
+                                        </button>
+                                    </a>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="">
+                                        <div  class="dataTables_filter">  
+                                            <input id="table_search_input" type="search"
+                                            class="form-control form-control-sm" placeholder="Search" aria-controls="example">
+                                        </div>
                                     </div>
                                 </div>
                                 
-                                <div class="col-md-2">
-                                   <a  href="{{ url_for('tickets_bp.new_ticket') }}"> <button class="mb-2 mr-2 btn btn-primary">New Ticket
-                                    </button>
-                                    </a>
-                                    </div>
-                                </div>
+                               
+                            </div>
 
                                 </div>
                                 <div  class="scroll-area-lg">
                                     <div class="scrollbar-container ps--active-y ps">
-                                        <table class="mb-0 table table-hover" id="ticket_table_all">
+                                        <table class="mb-0 table table-hover sortable" id="ticket_table_all">
                                             <thead>
                                                 <tr>
                                                     <th><i class="fa fa-fire"></i></th>
@@ -64,9 +64,9 @@
                                                     <td class="text-truncate" style="max-width: 150px;">{{ item['description']}}</td>
                                                     <!-- <td><div class="badge badge-warning">Completed</div></td> -->
                                                     <td>{{ item['date_created'].strftime('%m/%d/%Y')}}</td>
-                                                    <td>{{ item['assigned_to']}}</td>
+                                                    <td>{{ item['assigned']}}</td>
                                                     <td style="display: none;">{{ item['customer']}}</td>
-                                                    <td style="display: none;">{{ item['created_by']}}</td>
+                                                    <td style="display: none;">{{ item['created']}}</td>
                                                     <td style="display: none;">{{ item['description']}}</td>
                                                     <td style="display: none;">{{ item['subcategory']}}</td>
                                                     <td style="display: none;">{{ item['assembly']}}</td>

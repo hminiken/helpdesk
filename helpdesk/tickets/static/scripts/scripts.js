@@ -22,7 +22,92 @@ $(document).ready(function () {
     });
 
 
-});
+    });
+
+
+
+    // $("#submit_ticket_status").submit(function (e) {
+
+    //     e.preventDefault(); // avoid to execute the actual submit of the form.
+
+    //     var form = $(this);
+    //     var url = form.attr('action');
+    //     id = $("#current_ticket_id").attr('ticket_id');
+    //     console.log("ID: " + id);
+
+    //     alert(url);
+
+    //     $.ajax({
+    //         type: "POST",
+    //         url: url,
+    //         // data: form.serialize(), // serializes the form's elements.
+    //         data: {
+    //             cust: $('#details_input').val(),
+    //             ticket_id: id,
+    //         },
+    //         success: function (data) {
+    //             alert(data); // show response from the php script.
+    //         }
+    //     });
+
+
+    // });
+
+
+    // $("#submit_ticket_status").submit(function (e) {
+    $(document).on("click", "#submit_ticket_status", function (e) {
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+
+        var form = $(this);
+        var url = form.attr('action');
+
+
+
+        id = $("#current_ticket_id").attr('ticket_id');
+        console.log("SUBMIT " + id);
+
+
+        const fields = {
+            csrf_token: {
+                input: document.getElementById('csrf_token'),
+                error: document.getElementById('csrf_token-error')
+            },
+            comment: {
+                input: document.getElementById('comment'),
+            },
+            ticket_ID: {
+                input: document.getElementById('ticket_id'),
+            }
+        }
+
+
+
+        console.log(fields.comment.input.value);
+
+        $.ajax({
+            type: "POST",
+            url: '/tickets/ticket_details',
+            data: {
+                csrf_token: fields.csrf_token.input.value,
+                comment: fields.comment.input.value,
+                ticket_id: fields.ticket_ID.input.value
+            },
+                
+                 
+            success: function (response) {
+                // console.log(response)
+                $("#ticket_detailed_info").html("");
+                $("#ticket_detailed_info").html(response);
+
+            },
+            error: function (error) {
+                console.log("ERROR");
+                console.log(error);
+            },
+        });
+
+
+    });
 
 
 // Filter table
@@ -67,6 +152,7 @@ $(document).ready(function () {
                         var self = window.location.href;
                         console.log("Loading '#ticket_table_all' from " + self);
                         $('#ticket_table_all').load(self + ' #ticket_table_all');
+                        // $('#all_ticket_updates').load(self + ' #all_ticket_updates');
 
                     },
                     error: function (xhr) {
@@ -119,6 +205,9 @@ $(document).ready(function () {
 
 
     });
+
+
+   
 
 
 });

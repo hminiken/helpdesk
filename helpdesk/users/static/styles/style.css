@@ -1,3 +1,9 @@
+
+.form-wrapper.is-active .form [type='submit']{
+	background-color: #a7e245;
+	color: #fbfdff;
+}
+
 .container {
 	margin-top: 5%;
 }
@@ -166,7 +172,7 @@
 .form {
 	overflow: hidden;
 	min-width: 360px;
-	margin-top: 50px;
+	margin-top: 5%;
 	padding: 30px 25px;
     border-radius: 5px;
 	transform-origin: top;
@@ -276,7 +282,7 @@
 }
 
 .input-block {
-	margin-bottom: 20px;
+	margin-bottom: 2%;
 }
 
 .input-block label {

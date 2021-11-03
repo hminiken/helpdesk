@@ -1,0 +1,49 @@
+
+.ticket-detail-card {
+     overflow-y: scroll;
+    max-height: 85vh;
+ }
+
+
+.ticket-detail-card::-webkit-scrollbar {
+  width: 10px;
+}
+
+.ticket-detail-card::-webkit-scrollbar-track {
+  background-color: #e4e4e4;
+  border-radius: 100px;
+}
+
+.ticket-detail-card::-webkit-scrollbar-thumb {
+  border-radius: 100px;
+  border: 6px solid rgba(0, 0, 0, 0.18);
+  border-left: 0;
+  border-right: 0;
+  background-color: #d8d8d8;
+}
+
+.scroller {
+  overflow-y: scroll;
+  scrollbar-color: #d8d8d8 #e4e4e4 ;
+  scrollbar-width: thin;
+}
+
+.scroll {
+  width: 20%;
+  height: 100px;
+  border: 1px solid grey;
+  overflow: scroll;
+  display: inline-block;
+}
+.scroll-color-auto {
+  scrollbar-color: auto;
+}
+.scroll-color-dark {
+  scrollbar-color: dark;
+}
+.scroll-color-light {
+  scrollbar-color: light;
+}
+.scroll-color-colors {
+  scrollbar-color: orange lightyellow;
+}

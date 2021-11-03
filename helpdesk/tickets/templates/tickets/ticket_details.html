@@ -1,5 +1,8 @@
 {% for item in details %}
-<div class="mb-3 card ticket-detail-card">
+
+
+
+<div class="mb-3 card ticket-detail-card scroller">
     <div class="card-header">
         <div class="card-header-title" id="current_ticket_id" ticket_id="{{item['ticket_id']}}">
             <i class="fa fa-server">  </i> Ticket #{{item['ticket_id']}}
@@ -7,7 +10,7 @@
         
     </div>
     <div class="card-body">
-        <div class="badge badge-warning">Completed</div>
+        <div class="badge badge-warning">Past Due</div>
         <div class="badge badge-info">Completed</div>
         
         
@@ -20,7 +23,7 @@
                                 
                                 <div class="widget-content-left mr-3">
                                     <img width="42" height="42" class="rounded-circle"
-                                    src="{{ url_for('users_bp.static',filename='images/avatars/profileImg1552.jpg')}}" alt="">
+                                    src="{{ url_for('users_bp.static',filename='images/avatars/') }}{{ item['user_assigned_img']}}" alt="">
                                 </div>
                                 <div class="widget-content-left">
                                     <div class="widget-heading">Assigned To:</div>
@@ -28,7 +31,7 @@
                                         <div class="dropdown d-inline-block show" style="overflow: visible !important; ">
                                             <button id="assign_user_button" aria-haspopup="true" aria-expanded="true" data-toggle="dropdown"
                                             class="mb-2 mr-2 dropdown-toggle btn btn-outline-link">
-                                            {{item['assigned_to']}}
+                                            {{item['assigned']}}
                                         </button>
                                         <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu hide section"
                                         x-placement="bottom-start" >
@@ -51,12 +54,12 @@
                                 
                                 <div class="widget-content-left mr-3">
                                     <img width="42" height="42" class="rounded-circle"
-                                    src="{{ url_for('users_bp.static',filename='images/avatars/profileImg1956.png')}}" alt="">
+                                    src="{{ url_for('users_bp.static',filename='images/avatars/')}}{{item['user_created_img']}}" alt="">
                                     
                                 </div>
                                 <div class="widget-content-left">
                                     <div class="widget-heading">Created By:</div>
-                                    <div class="widget-subheading opacity-9">{{item['created_by']}}</div>
+                                    <div class="widget-subheading opacity-9">{{item['created']}}</div>
                                 </div>
                             </div>
                         </div>
@@ -142,15 +145,50 @@
 
         <!-- Submit a comment, have to reroute and load this section again -->
         <p>&nbsp;</p>
-        <form class="" action="/tickets/create_ticket" method="post">
-            <div class="position-relative form-group"><label for="exampleText" class="">Status Update</label>
-                <textarea style="height: 50px;" name="details_input" id="details_input" class="form-control"></textarea>
+        <!-- <form class="" action="/tickets/ticket_details/{{item['ticket_id']}}" method="post"> -->
+        <form class="" action="/tickets/ticket_details" method="post" id="ticket_comment_form">
+            {{ form.hidden_tag() }}
+            <div class="position-relative form-group">
+                <!-- <label for="exampleText" class="">Status Update</label>
+                <textarea style="height: 50px;" name="details_input" id="details_input" class="form-control"></textarea> -->
+                <div class="input-block">
+                    {{ form.comment.label }}
+                    {{ form.comment(class="form-control") }}
+                </div>
+                <div style="display: none;">
+                {{ form.ticket_id(readonly="readonly", value=item['ticket_id']) }}
+                </div>
             </div>
-            <button id="submit_new_ticket" class="mt-1 btn btn-primary">Submit</button>
-            
+            <div  id="ticket_comment">
+            <button id="submit_ticket_status" class="mt-1 btn btn-primary">Submit</button>
+            {% if form.errors %}
+            {{ form.errors }}
+            {% endif %}
+            </div>
         </form>
+
+
+        <!-- <form action="/tickets/ticket_details/{{item['ticket_id']}}" class="form form-login" method="post">
+            {{ form.hidden_tag() }}
+            <fieldset>
+                <div class="input-block">
+                    <label for="login-email">E-mail</label>
+                                <input name="login-email" id="login-email" type="email" required>
+                    {{ form.comment.label }}
+                    {{ form.comment(class="form-control") }}
+                </div>
+                
+            </fieldset>
+          
+
+            <div class="input-block green-submit">
+            </div>
+        </form> -->
+
+
+
         <div class="">
-            <div class="container ">                 
+            <div class="container " id="all_ticket_updates">                 
                 
                 <div class="rightbox">
                     <div class="rb-container">

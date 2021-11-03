@@ -19,12 +19,12 @@
                                 <div class="menu-header-content btn-pane-right">
                                     <div class="avatar-icon-wrapper mr-3 avatar-icon-xl btn-hover-shine">
                                         <div class="">
-                                            <img class="profile-avatar" src="{{ url_for('users_bp.static',filename='images/avatars/profileImg1552.jpg')}}" alt="Avatar 5">
+                                            <img class="profile-avatar" src="{{ url_for('users_bp.static',filename='images/avatars/')}}{{ current_user.user_img }}" alt="Avatar 5">
                                         </div>
                                     </div>
                                     <div class="menu-header-btn-pane ">
-                                        <h5 class="menu-header-title">Ruben Tillman</h5>
-                                        <h6 class="menu-header-subtitle">Etiam sit amet orci eget</h6>
+                                        <h5 class="menu-header-title">{{current_user.fname}} {{current_user.lname}}</h5>
+                                        <h6 class="menu-header-subtitle">{{current_user.email}}</h6>
                                     </div>
                                    
                                 </div>

@@ -11,7 +11,8 @@
                 Login
                 <span class="underline"></span>
             </button>
-            <form action="/user/log_user_in" class="form form-login" method="post">
+            <!-- <form action="/user/log_user_in" class="form form-login" method="post"> -->
+            <form  class="form form-login" method="post">
                 {{ form.hidden_tag() }}
                 <fieldset>
                     <legend>Please, enter your email and password for login.</legend>
@@ -19,19 +20,27 @@
                         <!-- <label for="login-email">E-mail</label>
                         <input name="login-email" id="login-email" type="email" required> -->
                         {{ form.username.label }}
+                        {{ form.username(size=32) }}
                     </div>
                     <div class="input-block">
-                        <label for="login-password">Password</label>
-                        <input name="login-password" id="login-password" type="password" required>
+                        <!-- <label for="login-password">Password</label>
+                        <input name="login-password" id="login-password" type="password" required> -->
+                        {{ form.password.label }}
+                        {{ form.password(size=32) }}
                     </div>
                     <div class="input-block">
-                        <label class="checkbox">
+                        <!-- <label class="checkbox">
                             <input type="checkbox">
                             Remember me
-                        </label>
+                        </label> -->
+                        
                     </div>
+                    <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
                 </fieldset>
-                <button id="submit_user_login" type="submit" class="btn-login">{{ form.submit() }}</button>
+                <!-- <button id="submit_user_login" type="submit" class="btn-login">SUBMIT</button> -->
+                <div class="input-block green-submit">
+                <p>{{ form.submit()}}</p>
+                </div>
             </form>
         </div>
 
