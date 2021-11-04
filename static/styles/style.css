@@ -10,6 +10,34 @@
 
 
 
+.ticket-detail-card {
+     overflow-y: scroll;
+    max-height: 85vh;
+ }
+
+
+.ticket-detail-card::-webkit-scrollbar {
+  width: 10px;
+}
+
+.ticket-detail-card::-webkit-scrollbar-track {
+  background-color: #e4e4e4;
+  border-radius: 100px;
+}
+
+.ticket-detail-card::-webkit-scrollbar-thumb {
+  border-radius: 100px;
+  border: 6px solid rgba(0, 0, 0, 0.18);
+  border-left: 0;
+  border-right: 0;
+  background-color: #d8d8d8;
+}
+
+.scroller {
+  overflow-y: scroll;
+  scrollbar-color: #d8d8d8 #e4e4e4 ;
+  scrollbar-width: thin;
+}
 
 .section {
   max-height: 250px;
@@ -109,10 +137,14 @@
     background:rgb(0, 6, 83)
     }
 
+	.app-header {
+		background-color: white !important;
+	}
+
 /* Basic */
 
 	body {
-		background: #fff;
+		background: rgb(228, 228, 228) !important;
 	}
 
 	body, input, select, textarea {

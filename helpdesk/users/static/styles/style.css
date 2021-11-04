@@ -1,4 +1,24 @@
 
+
+.profile-grid-menu {
+    display: block;
+    border: 0;
+    min-width: 100%;
+}
+
+.profile-grid-menu:hover i {
+	color:#fff;
+}
+.btn-icon-wrapper {
+	display: block;
+}
+
+
+/* .font-icon-wrapper:hover {
+    background: #f8f9fa;
+    color: #3f6ad8
+} */
+
 .form-wrapper.is-active .form [type='submit']{
 	background-color: #a7e245;
 	color: #fbfdff;

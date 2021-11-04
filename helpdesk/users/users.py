@@ -18,6 +18,7 @@ users_bp = Blueprint('users_bp', __name__,
 @login_required
 @users_bp.route("/")
 def user():
+    # Get user ticket data
     return render_template('users/profile.html')
 
 

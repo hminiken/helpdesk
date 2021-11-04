@@ -17,27 +17,23 @@
 
     <link rel="icon" href="/static/images/iconLogo.ico">
 
-<link rel="shortcut icon" href="{{ url_for('static', filename='images/iconLogo.ico') }}">
+    <!-- <link rel="shortcut icon" href="{{ url_for('static', filename='images/iconLogo.ico') }}"> -->
 
-<script type="text/javascript" src="{{ url_for('static',filename='scripts/jquery.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static',filename='scripts/ArchitectUISMTDash.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static',filename='scripts/init.js') }}"></script>
-<script  type="text/javascript" src="{{ url_for('.static',filename='scripts/script.js') }}">
-</script>
+    <script type="text/javascript" src="{{ url_for('static',filename='scripts/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='scripts/ArchitectUISMTDash.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='scripts/init.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('.static',filename='scripts/script.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
 
-<link rel="stylesheet" type="text/css" href="{{ url_for('.static',filename='styles/style.css') }}"></link>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/skel.css') }}">
-</link>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style-xlarge.css') }}">
-</link>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/font-awesome.min.css') }}">
-</link>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/icons.css') }}">
-</link>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/ArchitectUI.css') }}"></link>
-<link rel="stylesheet" type="text/css" href="{{ url_for('.static',filename='styles/style.css') }}"></link>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style.css') }}"></link>
+    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/skel.css') }}"></link>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style-xlarge.css') }}"></link>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/font-awesome.min.css') }}"></link>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/icons.css') }}"></link> -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/ArchitectUI.css') }}"></link>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('.static',filename='styles/style.css') }}"></link>
 
 
 </head>
@@ -45,7 +41,7 @@
 <div class="app-header header-shadow">
     <div class="app-header__logo">
         <img class="logo-rc" height="42" src="/static/images/QualitelLogo.png">
-        
+
     </div>
 
 
@@ -53,7 +49,7 @@
         <div class="app-header-left">
             <ul class="header-menu nav">
                 <li class="nav-item">
-                    <a href="javascript:void(0);" class="nav-link">
+                    <a href="{{ url_for('dashboard_bp.dashboard') }}" class="nav-link">
                         <i class="nav-link-icon fa fa-database"> </i>
                         Dashboard
                     </a>
@@ -78,48 +74,65 @@
 
             <div class="header-btn-lg pr-0">
                 <div class="widget-content p-0">
-                    
+
 
                     <div class="widget-content-wrapper">
-                        
+
                         <div class="widget-content-left">
 
 
-                            {% if current_user.is_anonymous %}
+                            <!-- {% if current_user.is_anonymous %}
                             
                             {% else %}
                             <a href="{{ url_for('users_bp.user') }}" class="nav-link">
                                 <img style="max-height: 42px;" class="rounded-circle"
                                     src="{{ url_for('users_bp.static',filename='images/avatars/')}}{{ current_user.user_img }}">
                             </a>
-                            {% endif %}
+                            {% endif %} -->
 
-                            
+
+                            {% if current_user.is_anonymous %}
+                            <a href="{{ url_for('users_bp.login') }}" class="nav-link">Login</a>
+
+                            {% else %}
+
+                            <div class="btn-group show">
+                                <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" class="p-0 btn">
+                                    <img class="rounded-circle"
+                                        src="{{ url_for('users_bp.static',filename='images/avatars/')}}{{ current_user.user_img }}"
+                                        alt="" width="42">
+                                    <i class="fa fa-angle-down ml-2 opacity-8"></i>
+                                </a>
+                                <div tabindex="-1" role="menu" aria-hidden="true"
+                                    class="dropdown-menu dropdown-menu-right scroller " x-placement="bottom-end"
+                                    style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-805px, 44px, 0px);">
+                                    <h6 tabindex="-1" class="dropdown-header">Activity</h6>
+                                    <button type="button" tabindex="0" class="dropdown-item">Actions</button>
+                                    <div tabindex="-1" class="dropdown-divider"></div>
+                                    <h6 tabindex="-1" class="dropdown-header">My Account</h6>
+                                    <button type="button" tabindex="0" class="dropdown-item">User Account</button>
+                                    <a href="{{ url_for('users_bp.logout') }}" class="nav-link">
+                                        <button type="button" tabindex="0" class="dropdown-item">Log Out</button>
+                                    </a>
+                                </div>
+                            </div>
+                            {% endif%}
+
+
                         </div>
                         <div class="widget-content-left  ml-3 header-user-info">
-                            <div class="widget-heading"> {{ current_user.fname }} {{ current_user.lname }} </div>
-                            <div class="widget-subheading"> {{ current_user.email }} </div>
+                            <a href="{{url_for('users_bp.user')}}" class="p-0 btn">
+
+                                <div class="widget-heading"> {{ current_user.fname }} {{ current_user.lname }} </div>
+                                <div class="widget-subheading"> {{ current_user.email }} </div>
+                            </a>
                         </div>
-                        <div class="widget-content-right header-user-info ml-3">
-                            <button type="button" class="btn-shadow p-1 btn btn-primary btn-sm show-toastr-example">
-                                <i class="fa text-white fa-calendar pr-1 pl-1"></i>
-                            </button>
-                        </div>
+
                     </div>
                 </div>
             </div>
-            <div class="header-btn-lg">
-                <button type="button" class="hamburger hamburger--elastic open-right-drawer">
 
-                </button>
-            </div>
-            <div class="widget-content-wrapper">
-                {% if current_user.is_anonymous %}
-                <a href="{{ url_for('users_bp.login') }}" class="nav-link">Login</a>
-                {% else %}
-                <a href="{{ url_for('users_bp.logout') }}" class="nav-link">Logout</a>
-                {% endif %}
-            </div>
+
         </div>
     </div>
 </div>
