@@ -11,7 +11,10 @@ def get_tickets():
     qry = '''SELECT *, 
     (Select CONCAT(fname, ' ', lname) from users where user_id=created_by ) AS created, 
     (Select CONCAT(fname, ' ', lname) from users where user_id=assigned_to ) AS assigned  
-    from tickets ORDER BY ticket_id DESC
+    from tickets 
+    WHERE closed_by IS NULL
+    ORDER BY ticket_id DESC
+
     '''
     cursor.execute(qry)
     data = cursor.fetchall()
