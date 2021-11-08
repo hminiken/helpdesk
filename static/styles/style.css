@@ -9,6 +9,14 @@
 */
 
 
+.active {
+	border-bottom: 2px solid rgb(207, 207, 207);
+}
+
+.active a {
+	font-weight: bolder;
+}
+
 
 .ticket-detail-card {
      overflow-y: scroll;

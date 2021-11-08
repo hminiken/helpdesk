@@ -1,4 +1,5 @@
 
+from pymysql import NULL
 from database import mysql
 import os
 from flask_login import current_user
@@ -7,12 +8,64 @@ def get_tickets():
     conn = mysql.connect()
     cursor = conn.cursor()
 
+    qry = '''SELECT *, 
+    (Select CONCAT(fname, ' ', lname) from users where user_id=created_by ) AS created, 
+    (Select CONCAT(fname, ' ', lname) from users where user_id=assigned_to ) AS assigned  ,
+    (SELECT 
+	(SELECT status_name FROM status_list WHERE status_id = FK_status_id) as status_name 
+	FROM ticket_status 
+	WHERE FK_ticket_id=ticket_id And FK_status_id=4) as ticket_status
+    from tickets 
+    ORDER BY ticket_id DESC
+
+    '''
+
+    # WHERE closed_by IS NULL
+
+    cursor.execute(qry)
+    data = cursor.fetchall()
+
+    ticket_list = []
+
+    columns = [column[0] for column in cursor.description]
+
+    for row in data:
+        ticket_list.append(dict(zip(columns, row)))
+
+    return ticket_list
+
+
+def get_closed_tickets():
+    conn = mysql.connect()
+    cursor = conn.cursor()
 
     qry = '''SELECT *, 
     (Select CONCAT(fname, ' ', lname) from users where user_id=created_by ) AS created, 
     (Select CONCAT(fname, ' ', lname) from users where user_id=assigned_to ) AS assigned  
     from tickets 
-    WHERE closed_by IS NULL
+    WHERE closed_by IS NOT NULL
+    ORDER BY ticket_id DESC
+
+    '''
+    cursor.execute(qry)
+    data = cursor.fetchall()
+
+    ticket_list = []
+
+    columns = [column[0] for column in cursor.description]
+
+    for row in data:
+        ticket_list.append(dict(zip(columns, row)))
+
+    return ticket_list
+
+def get_open_tickets():
+    conn = mysql.connect()
+    cursor = conn.cursor()
+
+    qry = '''SELECT COUNT(ticket_id) as count
+    from tickets 
+    WHERE closed_by IS NOT NULL
     ORDER BY ticket_id DESC
 
     '''
@@ -56,7 +109,7 @@ def get_ticket_details(ticket_id):
     return ticket_list
 
 
-def get_ticket_updtes(ticket_id):
+def get_ticket_updates(ticket_id):
     conn = mysql.connect()
     cursor = conn.cursor()
 
@@ -74,11 +127,58 @@ def get_ticket_updtes(ticket_id):
     return ticket_list
 
 
+def get_ticket_status(ticket_id):
+    conn = mysql.connect()
+    cursor = conn.cursor()
+
+    sql = '''
+    SELECT 
+    (SELECT status_id FROM status_list WHERE status_id = FK_status_id) as status_id, 
+    (SELECT status_badge FROM status_list WHERE status_id = FK_status_id) as status_badge, 
+    (SELECT status_name FROM status_list WHERE status_id = FK_status_id) as status_name 
+    FROM ticket_status 
+    WHERE FK_ticket_id = %s;
+    '''
+
+    cursor.execute(sql, (ticket_id))
+    data = cursor.fetchall()
+
+    user_list = []
+
+    columns = [column[0] for column in cursor.description]
+
+    for row in data:
+        user_list.append(dict(zip(columns, row)))
+
+    return user_list
+
+
 def get_user_data():
     conn = mysql.connect()
     cursor = conn.cursor()
 
     cursor.execute("SELECT * from users ORDER BY fname")
+    data = cursor.fetchall()
+
+    user_list = []
+
+    columns = [column[0] for column in cursor.description]
+
+    for row in data:
+        user_list.append(dict(zip(columns, row)))
+
+    return user_list
+
+def get_status_options():
+
+    conn = mysql.connect()
+    cursor = conn.cursor()
+
+    sql = '''
+    SELECT status_id, status_name, status_badge FROM status_list;
+    '''
+
+    cursor.execute(sql)
     data = cursor.fetchall()
 
     user_list = []
@@ -165,7 +265,7 @@ def get_ticket_updates(ticket_id):
     return update_list
 
 
-def insert_ticket_data(details, cust, assy, pn, cat, subcat, priority, created_by):
+def insert_ticket_data(details, cust, assy, pn, cat, subcat, priority, wo):
     conn = mysql.connect()
     cursor = conn.cursor()
 
@@ -173,12 +273,13 @@ def insert_ticket_data(details, cust, assy, pn, cat, subcat, priority, created_b
     sql_qry = '''
     INSERT INTO helpdesk.tickets 
     (priority, description, created_by, date_created, assigned_to, 
-    customer, assembly, part_number,  category, subcategory) 
-    VALUES (%s, %s,  %s, NOW(), %s, %s, %s, %s, %s, %s);
+    customer, assembly, part_number, work_order, category, subcategory) 
+    VALUES (%s, %s,  %s, NOW(), %s, %s, %s, %s, %s, %s, %s);
     '''
 
     # By default tickets are unassigned
-    assigned_to = "Unassigned"
+    assigned_to = None
+    created_by = current_user.user_id
 
     # If checkbox is checked, insert 1 for priority, else 0 
     if priority == 'on':
@@ -187,7 +288,7 @@ def insert_ticket_data(details, cust, assy, pn, cat, subcat, priority, created_b
         priority_bool = 0
         
     cursor.execute(sql_qry, (priority_bool, details, created_by, assigned_to,
-                    cust, assy, pn, cat, subcat))
+                    cust, assy, pn, wo, cat, subcat))
     conn.commit()
 
     # get the id of the request just made and insert filepath
@@ -206,5 +307,84 @@ def insert_ticket_data(details, cust, assy, pn, cat, subcat, priority, created_b
     # Make the path in QMS and open
     os.mkdir(file_path)    
     os.startfile(file_path)
+
+    return
+
+
+def update_ticket_status(status_id, ticket_id):
+
+    conn = mysql.connect()
+    cursor = conn.cursor()
+
+    uid = current_user.id
+
+    update_desc = current_user.fname + " " + current_user.lname + " set the status to "
+
+       # Add to status update
+    update_qry = '''
+        INSERT INTO ticket_updates 
+        (update_user, update_description, FK_ticket_id, update_date)
+        VALUES (%s, CONCAT(%s, 
+        (SELECT status_name FROM status_list WHERE status_id = %s)),
+        %s, NOW())
+        '''
+
+    cursor.execute(update_qry, (current_user.user_id, update_desc, status_id, ticket_id))
+    conn.commit()
+
+
+    # add new status to the top
+    update_qry = '''
+        INSERT INTO ticket_status 
+        (FK_ticket_id, FK_status_id) 
+        VALUES (%s, %s);
+    '''
+
+    cursor.execute(update_qry, (ticket_id, status_id))
+    conn.commit()
+
+    return
+
+
+def close_ticket(ticket_id):
+    conn = mysql.connect()
+    cursor = conn.cursor()
+
+    update_qry = '''
+        UPDATE tickets 
+        SET closed_by = %s, date_closed = NOW()
+        WHERE ticket_id = %s
+    '''
+
+    cursor.execute(update_qry, (current_user.user_id, int(ticket_id)))
+    conn.commit()
+
+
+def remove_status(status_id, ticket_id):
+    conn = mysql.connect()
+    cursor = conn.cursor()
+
+    update_qry = '''
+        DELETE FROM ticket_status 
+        WHERE FK_ticket_id = %s AND  FK_status_id = %s
+    '''
+
+    cursor.execute(update_qry, (ticket_id, status_id))
+    conn.commit()
+
+
+    update_desc = current_user.fname + " " + current_user.lname + " removed the status "
+
+       # Add to status update
+    update_qry = '''
+        INSERT INTO ticket_updates 
+        (update_user, update_description, FK_ticket_id, update_date)
+        VALUES (%s, CONCAT(%s, 
+        (SELECT status_name FROM status_list WHERE status_id = %s)),
+        %s, NOW())
+        '''
+
+    cursor.execute(update_qry, (current_user.user_id, update_desc, status_id, ticket_id))
+    conn.commit()
 
     return

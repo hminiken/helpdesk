@@ -1,3 +1,4 @@
+from os import stat
 from flask import Flask, Blueprint, render_template, request, redirect, url_for
 from flask.helpers import flash
 from helpdesk.tickets.models import TicketCommentForm,  TicketUpdates
@@ -5,7 +6,7 @@ from app import db
 from flask_login import current_user
 import json
 
-from helpdesk.tickets.ticket_utils import get_ticket_details, get_ticket_updates, get_tickets, get_user_data, get_user_name, insert_ticket_data, update_assigned_user
+from helpdesk.tickets.ticket_utils import close_ticket, get_closed_tickets, get_open_tickets, get_status_options, get_ticket_details, get_ticket_status, get_ticket_updates, get_tickets, get_user_data, get_user_name, insert_ticket_data, remove_status, update_assigned_user, update_ticket_status
 
 tickets_bp = Blueprint('tickets_bp', __name__, 
                         template_folder='templates', 
@@ -20,7 +21,32 @@ Show tickets home route. Loads a table of tickets
 @tickets_bp.route("/", methods=['GET', 'POST'])
 def show_tickets():    
     tickets = get_tickets()
-    return render_template('tickets/index.html', tickets=tickets)
+    open_count = get_open_tickets()
+
+    return render_template('tickets/index.html', tickets=tickets,
+                           open_count=open_count)
+
+
+@tickets_bp.route("/filtered", methods=['GET', 'POST'])
+def show_filtered_tickets():
+
+    open_tickets = request.form.get('open')
+    closed_tickets = request.form.get('closed')
+
+    # if open == 'true':
+    #     tickets = get_tickets()
+
+    # if closed == 'true':
+    #     closed = get_closed_tickets()
+    #     tickets.append(closed)
+
+    return redirect(url_for('tickets_bp.show_tickets', open=open_tickets, closed=closed_tickets))
+
+    # tickets = []
+
+
+
+    # return render_template('tickets/index.html', tickets=tickets)
 
 
 '''
@@ -49,12 +75,16 @@ def ticket_details():
 
     # Get the update history for this ticket
     updates = get_ticket_updates(ticket_id)
+    status_options = get_status_options()
+    ticket_status = get_ticket_status(ticket_id)
 
 
     return render_template('tickets/ticket_details.html', 
                             details=details,
                             users=users,
-                           updates=updates, form=form)
+                           updates=updates, form=form, 
+                           status_options=status_options,
+                           ticket_status=ticket_status)
 
 
 '''
@@ -76,6 +106,42 @@ def user_details():
 
 
 '''
+Route to update the assigned user in the database, 
+then refresh the display on return
+'''
+
+
+@tickets_bp.route('/assign_status', methods=['GET'])
+def assign_statu():
+
+    # Get User Name from DB to update page
+    status_id = request.args.get('status_id')
+    ticket_id = request.args.get('ticket_id')
+
+    status = get_ticket_status(ticket_id)
+    
+    status_exists = False
+    for item in status:
+        if item['status_id'] == int(status_id):
+            status_exists = True
+
+    if status_exists == False:
+        # Only update db if status doesn't already exist
+        update_ticket_status(status_id, ticket_id)
+        if int(status_id) == 4 or int(status_id) == 5:
+            #close ticket
+            close_ticket(ticket_id)
+    else:
+        #remove that status
+        remove_status(status_id, ticket_id)
+
+
+    # Return the ticket id, used to update the ticket details html
+    return ticket_id
+
+
+
+'''
 Route for new ticket form page
 '''
 @tickets_bp.route("/new_ticket")
@@ -94,16 +160,14 @@ def create_ticket():
     cust = request.form.get('cust_input')
     assy = request.form.get('assy_input')
     pn = request.form.get('pn_input')
+    wo = request.form.get('wo_input')
     cat = request.form.get('cat_select')
     subcat = request.form.get('subcat_select')
     priority = request.form.get('priority_check')
     details = request.form.get('details_input')
 
-    # TO DO: Change to currently logged in user
-    created_by = "Hillary Miniken"
-
     # Insert new ticket into database, create the file path
     insert_ticket_data(details, cust, assy, pn, cat,
-                       subcat, priority, created_by)
+                       subcat, priority, wo)
 
     return redirect(url_for('tickets_bp.show_tickets'))

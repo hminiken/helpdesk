@@ -47,13 +47,13 @@
     <div class="app-header__content">
         <div class="app-header-left">
             <ul class="header-menu nav">
-                <li class="nav-item">
+                <li class="nav-item {% block nav_dashboard %}{% endblock %}">
                     <a href="{{ url_for('dashboard_bp.dashboard') }}" class="nav-link">
                         <i class="nav-link-icon fa fa-database"> </i>
                         Dashboard
                     </a>
                 </li>
-                <li class="btn-group nav-item">
+                <li class="btn-group nav-item {% block nav_tickets %}{% endblock %}">
                     <a href="{{ url_for('tickets_bp.show_tickets') }}" class="nav-link">
                         <i class="nav-link-icon fa fa-edit"></i>
                         Tickets

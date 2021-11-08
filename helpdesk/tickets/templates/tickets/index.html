@@ -17,25 +17,63 @@
                 <div class="col-lg-7">
                     <div class="main-card mb-3 card" >
                         <div class="card-body">
-                            <div class="row">     
+                            <div class="row">
                                 <div class="col-md-5">
-                                    <h4>Total Open Tickets: {{tickets|length}}</h4>
-                                </div>
-                                <div class="col-md-3">
-                                    <a href="{{ url_for('tickets_bp.new_ticket') }}"> <button class="mb-2 mr-2 btn btn-primary">New Ticket
-                                        </button>
-                                    </a>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="">
-                                        <div  class="dataTables_filter">  
-                                            <input id="table_search_input" type="search"
-                                            class="form-control form-control-sm" placeholder="Search" aria-controls="example">
+                                    <div class="row ">
+                                        <div class="col-md-12">
+                                            <h5>Total Open Tickets: {{open_count[0]['count']}}</h5>
+                                        </div>
+                                    </div>
+                                    <div class="row subsequent-row">
+                                        <div class="col-md-12">
+                            
+                                            <a href="{{ url_for('tickets_bp.new_ticket') }}"> <button class="mb-2 mr-2 btn btn-primary">New Ticket
+                                                </button>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
-                                
-                               
+                                <div class="col-md-2">
+                            
+                                </div>
+                                <div class="col-md-5">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="dataTables_filter">
+                                                <input id="table_search_input" type="search" class="form-control form-control-sm"
+                                                    placeholder="Search" aria-controls="example">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row subsequent-row">
+                                        <div class="col-md-12">
+                           
+                                            <div class="position-relative form-group">
+                                                <div>
+                                                    <div class="custom-radio custom-control custom-control-inline">
+                                                        <input type="radio" id="show_open_tickets" name="customRadio" class="custom-control-input" >
+                                                        <label class="custom-control-label" for="show_open_tickets">Open</label>
+                                                    </div>
+                                                    <div class="custom-radio custom-control custom-control-inline">
+                                                        <input type="radio" id="show_closed_tickets" name="customRadio"
+                                                            class="custom-control-input">
+                                                        <label class="custom-control-label" for="show_closed_tickets">Closed</label>
+                                                    </div>
+                                                    <div class="custom-radio custom-control custom-control-inline">
+                                                        <input type="radio" id="show_all_tickets" name="customRadio" class="custom-control-input" checked="True">
+                                                        <label class="custom-control-label" for="show_all_tickets">All</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                            
+                            
+                            
+                                        </div>
+                                    </div>
+                            
+                            
+                                </div>
+                            
                             </div>
 
                                 </div>
@@ -71,6 +109,8 @@
                                                     <td style="display: none;">{{ item['subcategory']}}</td>
                                                     <td style="display: none;">{{ item['assembly']}}</td>
                                                     <td style="display: none;">{{ item['part_number']}}</td>
+                                            <td style="display: none;" class="is_open">{{ item['ticket_status']}}</td>
+
                                                 </tr>
                                                 
                                                 {% endfor %}                                

@@ -9,13 +9,44 @@
         </div>
         
     </div>
-    <div class="card-body">
-        <div class="badge badge-warning">Past Due</div>
-        <div class="badge badge-info">Completed</div>
+    <div class="card-body" >
+        <div class="widget-content p-0 ">
+        <div class="widget-content-wrapper "  style=" z-index: 5000;">
+        <div class="widget-content-left">
+            {% for status in ticket_status %}
+            <div class="badge badge-{{status['status_badge']}}">{{status['status_name']}}</div>
+            {% endfor %}
+            <!-- <div class="badge badge-alternate">Hold</div>
+            <div class="badge badge-danger">Unassigned</div>
+            <div class="badge badge-info">Closed</div>
+            <div class="badge badge-success">Solved</div> -->
+        </div>
+
+
+
+        <div class="widget-content-right ">
+                <div class="dropdown d-inline-block show" style="overflow: visible !important; ">
+                    <button id="assign_user_button" aria-haspopup="true" aria-expanded="true" data-toggle="dropdown"
+                        class="mb-2 mr-2 dropdown-toggle btn btn-outline-link">
+                        Status
+                    </button>
+                    <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu hide section"
+                        x-placement="bottom-start">
+                        {% for option in status_options %}
+                        <button id="{{option['status_id']}}" class="dropdown-item assign_status_li">
+                        <div class="badge badge-{{option['status_badge']}}">{{option['status_name']}}</div>
+                        {% endfor %}
+
+                        
+                    </div>
+            </div>
+        </div>
+        </div>
+        </div>
         
         
         <ul class="rm-list-borders rm-list-borders-scroll list-group list-group-flush  ">
-            <li class="list-group-item override-dropdown "  style=" z-index: 5000;">
+            <li class="list-group-item "  style=" z-index: 4000;">
                 <div class="widget-content p-0 ">
                     <div class="widget-content-wrapper ">
                         <div class="widget-content-left">
@@ -32,17 +63,13 @@
                                             <button id="assign_user_button" aria-haspopup="true" aria-expanded="true" data-toggle="dropdown"
                                             class="mb-2 mr-2 dropdown-toggle btn btn-outline-link">
                                             {{item['assigned']}}
-                                        </button>
-                                        <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu hide section"
-                                        x-placement="bottom-start" >
-                                        <!--<div  class="scroll-area-sm"> -->
-                                            <!-- <div id="assign_user_dropdown" class="scrollbar-container ps ps--active-y"> -->
+                                            </button>
+                                            <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu hide section"
+                                                x-placement="bottom-start" >
                                                 {% for user in users %}
                                                 <button id="{{user['user_id']}}" type="button" tabindex="0" class="dropdown-item assign_user_li">{{user['fname']}} {{user['lname']}}</button>
                                                 {% endfor %}
                                             </div>
-                                            <!-- </div>
-                                            </div> -->
                                         </div>
                                     </div>
                                 </div>
@@ -123,6 +150,16 @@
             <li class="p-0 list-group-item">
                 <div class="no-gutters row">
                     <div class="col-sm-3">
+                        <div class="widget-content-ticketinfo">Work Order: </div>
+                    </div>
+                    <div class="col-sm-9">
+                        <div class="widget-content-ticketinfo">{{item['work_order']}}</div>
+                    </div>
+                </div>
+            </li>
+            <li class="p-0 list-group-item">
+                <div class="no-gutters row">
+                    <div class="col-sm-3">
                         <div class="widget-content-ticketinfo">Attachments:</div>
                     </div>
                     <div class="col-sm-9">
@@ -140,7 +177,7 @@
                     </div>
                 </div>
             </li>
-            
+
         </ul>
 
         <!-- Submit a comment, have to reroute and load this section again -->
