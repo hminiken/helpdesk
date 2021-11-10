@@ -2,10 +2,11 @@
 
 {% block content %}
 
-<div class="app-main">
-    
-    
-    
+<body>
+
+<script type="text/javascript" src="{{ url_for('.static',filename='scripts/scripts.js') }}"></script>
+
+<div class="app-main">    
     <div class="app-main__outer">
         <div class="app-main__inner">
             
@@ -13,35 +14,46 @@
                 <div class="col-md-8">
                     <div class="main-card mb-3 card">
                         <div class="card-body">
-                            <h5 class="card-title">Controls Types</h5>
-                            <form class="" action="/tickets/create_ticket" method="post">
-                                
+                            <div class="row">
+
+                            <h5 class="card-title">Create a New Ticket</h5>
+                            
+                            </div>
+                            <form class="" action="/tickets/new_ticket" method="post">
+                                {{ form.hidden_tag() }}
                                 <div class="grid-menu grid-menu-2col">
                                     <div class="form-row">
                                         <div class="col-sm-6">
-                                            <div class="position-relative form-group">
-                                                <label for="exampleEmail" class="">Customer</label>
-                                                <input name="cust_input" id="cust_input" type="text" class="form-control">
-                                            </div>
+                                        <div class="position-relative form-group">
+                                            {{ form.customer.label }}
+                                            {{ form.customer(class='form-control') }}<br>                                        
+                                        </div>
                                         </div>      
                                         <div class="col-sm-6">
                                             <div class="position-relative form-group">
-                                                <label for="exampleEmail" class="">Assembly</label>
+                                                <!-- <label for="exampleEmail" class="">Assembly</label>
                                                 <input name="assy_input" id="assy_input" type="text" class="form-control">
+                                            </div> -->
+                                                {{ form.assembly.label }}
+                                                {{ form.assembly}}<br>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-row">
                                         <div class="col-sm-6">
                                             <div class="position-relative form-group">
-                                                <label for="exampleEmail" class="">Part Number(s)</label>
-                                                <input name="pn_input" id="pn_input" type="text" class="form-control">
+                                                <!-- <label for="exampleEmail" class="">Part Number(s)</label>
+                                                <input name="pn_input" id="pn_input" type="text" class="form-control"> -->
+                                                    {{ form.partnumber.label }}
+                                                    {{ form.partnumber}}<br>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="position-relative form-group">
-                                                <label for="exampleEmail" class="">Work Order(s)</label>
-                                                <input name="wo_input" id="wo_input" type="text" class="form-control">
+                                                <!-- <label for="exampleEmail" class="">Work Order(s)</label>
+                                                <input name="wo_input" id="wo_input" type="text" class="form-control"> -->
+                                                    {{ form.workorder.label }}
+                                                    {{ form.workorder}}<br>
                                             </div>
                                         </div>
                                     </div>
@@ -51,62 +63,54 @@
                                 <div class="form-row">
                                     <div class="col-sm-6">
                                         <div class="position-relative form-group">
-                                            <label for="exampleSelect" class="">Select Category</label>
-                                            <select
-                                            name="cat_select" id="cat_select" class="form-control">
-                                            <option>AML/AVL</option>
-                                            <option>ECO</option>
-                                            <option>BOM</option>
-                                            <option>BTP</option>
-                                            <option>Routing</option>
-                                            <option>Work Order</option>
-                                            <option>Item Card</option>
-                                            <option>Rework</option>
-                                            <option>Customer</option>
-                                        </select>
+                                            <div class="position-relative form-group">
+                                                {{ form.category.label }}
+                                                {{ form.category(class='form-control') }}<br>
+                                            </div>
                                     </div>
                                     </div>
                                     
                                     <div class="col-sm-6">
                                         <div class="position-relative form-group">
-                                            <label for="exampleSelect" class="">Select Subcategory</label>
-                                            <select name="subcat_select"
-                                            id="subcat_select" class="form-control">
-                                            <option>Add Alternate</option>
-                                            <option>Modify ECO</option>
-                                            <option>Add Attrition</option>
-                                            <option>Panel Review</option>
-                                            <option>Routing Missing</option>
-                                            <option>Status Update</option>
-                                            <option>Create SUP</option>
-                                            <option>Create Instruction</option>
-                                            <option>Customer Visit</option>
-                                            <option>Delete AML</option>
-                                            <option>Update Usage</option>
-                                        </select>
+                                            <div class="position-relative form-group">
+                                                {{ form.subcat.label }}
+                                                {{ form.subcat(class='form-control') }}<br>
+                                            </div>
                                     </div>
                                     </div>
                                 </div>
-
-                                <div class="position-relative form-check">
-                                    <input name="priority_check" id="priority_check" type="checkbox" class="form-check-input">
-                                    <label for="exampleCheck" class="form-check-label">Priority</label>
-                                </div>
-                                <p></p>
+                               
+                                <p>{{ form.priority() }} {{ form.priority.label }}</p>
                                 
                                 <div class="position-relative form-group"><label for="exampleText" class="">Description/Details</label><textarea
                                    style="height: 150px;" name="details_input" id="details_input" class="form-control"></textarea>
                                 </div>
                                 
                                    
-                                        <button id="submit_new_ticket" class="mt-1 btn btn-primary">Submit</button>
+                                        <!-- <button id="submit_new_ticket" class="mt-1 btn btn-primary">Submit</button> -->
+                                        <div class="input-block green-submit">
+                                            <p>{{ form.submit()}}</p>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="col-md-4">
+
                             <div class="main-card mb-3 card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Open Tickets</h4>
+                                    
+                                    <div id="current_open_ticket_list">
+
+                                    </div>
+                                    </div>
+                                </div>
+
+
+
+                            <!-- <div class="main-card mb-3 card">
                                 <div class="card-body">
                                     <h4 class="card-title">Instructions</h4>
                                     <h5 class="card-subtitle">Customer</h5>
@@ -126,12 +130,49 @@
                                     
                                     
                                     
-                                </div></div>
+                                </div>
+                            </div> -->
+                            </div>
+
+
+                    <!-- <div class="modal fade bd-example-modal-lg show" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+                        style="display: block; margin-top: 5%;" aria-modal="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas
+                                        eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+                                    <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue
+                                        laoreet rutrum faucibus dolor auctor.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                </div>
                             </div>
                         </div>
+                    </div> -->
                     </div>
+
+
+                        </div>
+
+                        
+                    </div>
+
+
+
+
+
                 </div>
                 
             </div>
+            </body>
             
             {% endblock %}

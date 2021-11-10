@@ -1,3 +1,34 @@
+.avatar-wrapper.mt-2.avatar-wrapper-overlap {
+	margin-left: 5%;
+	margin-bottom: 1%;
+}
+
+.avatar-wrapper-overlap .avatar-icon-wrapper img:hover{
+  z-index: 10;
+}
+
+.avatar-icon-sm img{
+  max-width: 40px;
+}
+
+.avatar-icon img{
+  border-radius: 50%;  
+}
+
+.avatar-wrapper-overlap .avatar-icon-wrapper.avatar-icon-sm 
+{
+  margin-left: -14px;
+}
+
+.avatar-wrapper-overlap .avatar-icon-wrapper {
+  z-index: 5;
+}
+
+.avatar-icon-wrapper {
+  display: inline-block;
+  margin-right: 0.1rem;
+  position: relative;
+}
 
 
 .profile-grid-menu {

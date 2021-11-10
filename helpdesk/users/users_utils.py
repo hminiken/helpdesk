@@ -1,5 +1,6 @@
 import random
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import current_user
 
 from database import mysql
 
@@ -53,6 +54,80 @@ def get_user_login_info(email):
 
     qry = "SELECT * FROM users where email = %s"
     cursor.execute(qry, (email))
+    data = cursor.fetchall()
+
+    ticket_list = []
+
+    columns = [column[0] for column in cursor.description]
+
+    for row in data:
+        ticket_list.append(dict(zip(columns, row)))
+
+    return ticket_list
+
+
+def get_my_watched_tickets():
+
+
+    conn = mysql.connect()
+    cursor = conn.cursor()
+
+    qry = '''
+    SELECT * FROM tickets WHERE ticket_id IN 
+   (SELECT FK_ticket_id FROM helpdesk.ticket_watching where FK_user_id=%s)
+   '''
+
+    cursor.execute(qry, (current_user.user_id))
+    data = cursor.fetchall()
+
+    ticket_list = []
+
+    columns = [column[0] for column in cursor.description]
+
+    for row in data:
+        ticket_list.append(dict(zip(columns, row)))
+
+    return ticket_list
+
+
+def get_my_watched_tickets_updates():
+
+    conn = mysql.connect()
+    cursor = conn.cursor()
+
+    qry = '''
+    SELECT *,
+    (SELECT description FROM helpdesk.tickets WHERE ticket_id=FK_ticket_id) as ticket_description,
+    (SELECT category FROM helpdesk.tickets WHERE ticket_id=FK_ticket_id) as category,
+    (SELECT subcategory FROM helpdesk.tickets WHERE ticket_id=FK_ticket_id) as subcategory
+    FROM helpdesk.ticket_updates where update_user=%s
+   '''
+
+    cursor.execute(qry, (current_user.user_id))
+    data = cursor.fetchall()
+
+    ticket_list = []
+
+    columns = [column[0] for column in cursor.description]
+
+    for row in data:
+        ticket_list.append(dict(zip(columns, row)))
+
+    return ticket_list
+
+
+def get_my_assigned_tickets():
+
+    conn = mysql.connect()
+    cursor = conn.cursor()
+
+    qry = '''
+        select * 
+    from tickets
+    where assigned_to=%s;
+   '''
+
+    cursor.execute(qry, (current_user.user_id))
     data = cursor.fetchall()
 
     ticket_list = []

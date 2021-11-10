@@ -15,9 +15,13 @@ app.config.from_object(Config)
 
 app.config['SESSION_COOKIE_SECURE'] = False
 
+app.app_context().push()
 db.init_app(app)
-login.init_app(app)
 
+with app.app_context():
+    db.create_all()
+    
+login.init_app(app)
 
 
 

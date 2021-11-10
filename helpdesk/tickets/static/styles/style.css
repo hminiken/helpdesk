@@ -1,3 +1,36 @@
+
+.collapse.show {
+  margin-left: 5%;
+}
+
+.avatar-wrapper-overlap .avatar-icon-wrapper img:hover{
+  z-index: 10;
+}
+
+.avatar-icon-sm img{
+  max-width: 40px;
+}
+
+.avatar-icon img{
+  border-radius: 50%;  
+}
+
+.avatar-wrapper-overlap .avatar-icon-wrapper.avatar-icon-sm 
+{
+  margin-left: -14px;
+}
+
+.avatar-wrapper-overlap .avatar-icon-wrapper {
+  z-index: 5;
+}
+
+.avatar-icon-wrapper {
+  display: inline-block;
+  margin-right: 0.1rem;
+  position: relative;
+}
+
+
 table tbody tr:nth-child(2n+1) {
   background-color: #fff;
 }

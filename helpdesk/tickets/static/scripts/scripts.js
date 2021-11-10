@@ -1,5 +1,5 @@
-
 $(document).ready(function () {
+
 
     $(document).on('click', 'tr.ticket_table', function () {
         var id = $(this).attr('id');
@@ -15,7 +15,6 @@ $(document).ready(function () {
                 // $("#ticket_detailed_info").load(location.href + " #ticket_detailed_info>*", "");
                 // $("#ticket_detailed_info").load(" #ticket_detailed_info");
                 $("#ticket_detailed_info").html(response);
-                console.log(response);
 
             },
             error: function (xhr) {
@@ -220,6 +219,44 @@ $(document).ready(function () {
     });
 
 
+    $("div.ticket-details-div").on("click", "button.assign_watcher_li", function () {
+        var id = $(this).attr('id');
+        console.log(id);
+        var current_ticket = $("#current_ticket_id").attr('ticket_id');
+
+        $.ajax({
+            url: "/tickets/assign_watcher",
+            type: "get",
+            data: { user_id: id, ticket_id: current_ticket },
+            // dataType: 'json',
+            success: function (response) {
+                $.ajax({
+                    url: "/tickets/ticket_details",
+                    type: "get",
+                    data: { ticket_id: current_ticket },
+                    // dataType: 'json',
+                    success: function (response) {
+                        $("#ticket_detailed_info").html(response);
+
+                        //Refresh the ticket table
+                        var self = window.location.href;
+                        $('#ticket_table_all').load(self + ' #ticket_table_all');
+
+                    },
+                    error: function (xhr) {
+                        //Do Something to handle error
+                    }
+                });
+
+            },
+            error: function (xhr) {
+                //Do Something to handle error
+            }
+        });
+
+    });
+
+
 
 
 
@@ -307,6 +344,107 @@ $(document).ready(function () {
     });
 
 
+    $('body').on('click', 'div.watcher-icon', function () {
+        var id = $(this).attr('id');
+        console.log(id);
+        // $("#ticket_detailed_info").html("");
+        // $.ajax({
+        //     url: "/tickets/ticket_details",
+        //     type: "get",
+        //     data: { ticket_id: id },
+        //     // dataType: 'json',
+        //     success: function (response) {
+        //         // location.reload();
+        //         // $("#ticket_detailed_info").load(location.href + " #ticket_detailed_info>*", "");
+        //         // $("#ticket_detailed_info").load(" #ticket_detailed_info");
+        //         $("#ticket_detailed_info").html(response);
+        //         console.log(response);
+
+        //     },
+        //     error: function (xhr) {
+        //         //Do Something to handle error
+        //     }
+        // });
+
+
+    });
+
+
+
+    ////////////////////////// CREATE TICKET //////////////////////////////
+    let cust_select = document.getElementById('customer');
+
+    cust_select.onchange = function () {
+        cust = customer.value;
+        console.log(cust);
+
+
+        $.ajax({
+            type: "GET",
+            url: '/tickets/already_created',
+            data: {
+                // csrf_token: fields.csrf_token.input.value,
+                cust: cust
+                // ticket_id: fields.ticket_ID.input.value
+            },
+            success: function (response) {
+                console.log(response)
+                $("#current_open_ticket_list").html("");
+                $("#current_open_ticket_list").html(response);
+
+            },
+            error: function (error) {
+                console.log("ERROR");
+                console.log(error);
+            },
+        });
+
+
+    }
+
+
+
+    document.getElementById('category').onchange = function () {
+        cust = category.value;
+        console.log(cust);
+
+
+        $.ajax({
+            type: "POST",
+            url: '/tickets/new_ticket',
+            data: {
+                // csrf_token: fields.csrf_token.input.value,
+                category: cust
+                // ticket_id: fields.ticket_ID.input.value
+            },
+            success: function (response) {
+                $("#subcat").empty();
+                for (var i = 0; i < response.length; i++) {
+                    $("#subcat").append(
+                        $("<option></option>")
+                            .attr("value", response[i][0])
+                            .text(response[i][1])
+                    );
+                    console.log(response);
+
+
+                // var self = window.location.href;
+                // $('#subcat').load(self + ' #subcat');
+                // $("#subcat").html(response);
+              
+
+            }
+        },
+            error: function (error) {
+                console.log("ERROR");
+                console.log(error);
+            },
+        });
+
+
+    }
+
+    
 
 
 

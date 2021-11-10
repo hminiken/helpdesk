@@ -1,11 +1,13 @@
 #  https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-v-user-logins
 
+from flask import app
 from wtforms.fields.core import IntegerField, SelectField
-from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
+from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, required
 from app import db
 from app import login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from wtforms.ext.sqlalchemy.fields import QuerySelectField
 
 
 class Users(UserMixin, db.Model):
@@ -32,15 +34,7 @@ def load_user(user_id):
 
 
 
-# from flask_wtf import FlaskForm
-# from wtforms import StringField, PasswordField, BooleanField, SubmitField
-# from wtforms.validators import DataRequired
 
-# class LoginForm(FlaskForm):
-#     username = StringField('Username', validators=[DataRequired()])
-#     password = PasswordField('Password', validators=[DataRequired()])
-#     remember_me = BooleanField('Remember Me')
-#     submit = SubmitField('Sign In')
 
 
 from flask_wtf import FlaskForm
@@ -55,19 +49,45 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Sign In')
 
 
+class Permissions(UserMixin, db.Model):
+    # primary keys are required by SQLAlchemy
+    id = db.Column(db.Integer, primary_key=True)
+    permission_role = db.Column(db.String(100))
+    # permission_description = db.Column(db.String(1000))
+    # permission_level = db.Column(db.Integer)
+    # permission_department = db.Column(db.String(1000))
+
+
+def skill_level_choices():
+    data = db.session.query(Permissions).all()
+    # data = Permissions.query.filter_by().all()
+
+    choices = []
+    for item in data:
+        pair = (item.id, item.permission_role)
+        choices.append(pair)
+
+    return data
+
+
 
 class RegistrationForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
-    user_id = StringField('Employee ID', validators=[DataRequired()], default=9999)
+    user_id = StringField('Employee ID', validators=[DataRequired()])
     fname = StringField('First Name', validators=[DataRequired()])
     lname = StringField('Last Name', validators=[DataRequired()])
-    permission = SelectField('User Type', choices=[
-        ('1', 'Admin'), 
-        ('3', 'Eng. Admin'), 
-        ('4', 'Eng. User'), 
-        ('5', 'CAM Admin'),
-        ('6', 'CAM User')
-        ], validators=[DataRequired()])
+    # permission = SelectField('User Type', choices=[
+    #     ('1', 'Admin'), 
+    #     ('3', 'Eng. Admin'), 
+    #     ('4', 'Eng. User'), 
+    #     ('5', 'CAM Admin'),
+    #     ('6', 'CAM User')
+    #     ], validators=[DataRequired()])
+
+    permission = QuerySelectField(u'User Type',
+                                   validators=[DataRequired()],
+                                  query_factory=skill_level_choices, get_label='permission_role')
+                                #   choices=[(g.id, g.permission_role) for g in data])
     password = PasswordField('Password', validators=[DataRequired()])
     password2 = PasswordField(
         'Repeat Password', validators=[DataRequired(), EqualTo('password')])
@@ -84,3 +104,5 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('Please use a different email address.')
         else:
             return True
+
+

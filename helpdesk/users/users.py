@@ -8,7 +8,7 @@ from helpdesk.users.models import LoginForm, RegistrationForm, Users
 from werkzeug.urls import url_parse
 from app import db
 
-from helpdesk.users.users_utils import add_new_user, get_user_login_info
+from helpdesk.users.users_utils import add_new_user, get_my_assigned_tickets, get_my_watched_tickets, get_my_watched_tickets_updates, get_user_login_info
 
 users_bp = Blueprint('users_bp', __name__, 
                         template_folder='templates', 
@@ -18,8 +18,12 @@ users_bp = Blueprint('users_bp', __name__,
 @login_required
 @users_bp.route("/")
 def user():
+    # get watched tickets
+    assigned = get_my_assigned_tickets()
+    watched = get_my_watched_tickets()
+    updates = get_my_watched_tickets_updates()
     # Get user ticket data
-    return render_template('users/profile.html')
+    return render_template('users/profile.html', watched=watched, updates=updates, assigned=assigned)
 
 
 @users_bp.route("/login",  methods=['GET', 'POST'])
@@ -81,7 +85,7 @@ def add_user():
     form = RegistrationForm()
     if form.validate_on_submit():
         user = Users(user_id=form.user_id.data, email=form.email.data, 
-                    fname=form.fname.data, lname=form.lname.data, FK_role_id=form.permission.data, 
+                    fname=form.fname.data, lname=form.lname.data, FK_role_id=form.permission.data.id, 
                     user_img=imgString)
         user.set_password(form.password.data)
         db.session.add(user)

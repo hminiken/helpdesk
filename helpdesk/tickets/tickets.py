@@ -1,12 +1,13 @@
+import datetime
 from os import stat
 from flask import Flask, Blueprint, render_template, request, redirect, url_for
-from flask.helpers import flash
-from helpdesk.tickets.models import TicketCommentForm,  TicketUpdates
+from flask.helpers import flash, make_response
+from helpdesk.tickets.models import NewTicketForm, Subcategory, TicketCommentForm,  TicketUpdates, Tickets
 from app import db
 from flask_login import current_user
 import json
 
-from helpdesk.tickets.ticket_utils import close_ticket, get_closed_tickets, get_open_tickets, get_status_options, get_ticket_details, get_ticket_status, get_ticket_updates, get_tickets, get_user_data, get_user_name, insert_ticket_data, remove_status, update_assigned_user, update_ticket_status
+from helpdesk.tickets.ticket_utils import add_ticket_watcher, close_ticket, get_closed_tickets, get_existing_tickets, get_open_tickets, get_status_options, get_ticket_details, get_ticket_status, get_ticket_updates, get_ticket_watchers, get_tickets, get_user_data, get_user_name,  insert_ticket_data, remove_status, remove_ticket_watcher, update_assigned_user, update_ticket_status
 
 tickets_bp = Blueprint('tickets_bp', __name__, 
                         template_folder='templates', 
@@ -16,8 +17,6 @@ tickets_bp = Blueprint('tickets_bp', __name__,
 '''
 Show tickets home route. Loads a table of tickets
 '''
-
-
 @tickets_bp.route("/", methods=['GET', 'POST'])
 def show_tickets():    
     tickets = get_tickets()
@@ -25,28 +24,6 @@ def show_tickets():
 
     return render_template('tickets/index.html', tickets=tickets,
                            open_count=open_count)
-
-
-@tickets_bp.route("/filtered", methods=['GET', 'POST'])
-def show_filtered_tickets():
-
-    open_tickets = request.form.get('open')
-    closed_tickets = request.form.get('closed')
-
-    # if open == 'true':
-    #     tickets = get_tickets()
-
-    # if closed == 'true':
-    #     closed = get_closed_tickets()
-    #     tickets.append(closed)
-
-    return redirect(url_for('tickets_bp.show_tickets', open=open_tickets, closed=closed_tickets))
-
-    # tickets = []
-
-
-
-    # return render_template('tickets/index.html', tickets=tickets)
 
 
 '''
@@ -77,6 +54,7 @@ def ticket_details():
     updates = get_ticket_updates(ticket_id)
     status_options = get_status_options()
     ticket_status = get_ticket_status(ticket_id)
+    ticket_watchers = get_ticket_watchers(ticket_id)
 
 
     return render_template('tickets/ticket_details.html', 
@@ -84,7 +62,8 @@ def ticket_details():
                             users=users,
                            updates=updates, form=form, 
                            status_options=status_options,
-                           ticket_status=ticket_status)
+                           ticket_status=ticket_status,
+                           ticket_watchers=ticket_watchers)
 
 
 '''
@@ -105,12 +84,39 @@ def user_details():
     return ticket_id
 
 
+
+@tickets_bp.route('/assign_watcher', methods=['GET'])
+def assign_watcher():
+
+    # Get User Name from DB to update page
+    user_id = request.args.get('user_id')
+    ticket_id = request.args.get('ticket_id')
+
+    ticket_watchers = get_ticket_watchers(ticket_id)
+
+
+    watcher_exists = False
+    for item in ticket_watchers:
+        if item['user_id'] == int(user_id):
+            watcher_exists = True
+
+    if watcher_exists == False:
+        # Only update db if status doesn't already exist
+        add_ticket_watcher(user_id, ticket_id)        
+    else:
+        #remove that status
+        remove_ticket_watcher(user_id, ticket_id)
+
+
+
+    # Return the ticket id, used to update the ticket details html
+    return ticket_id
+
+
 '''
 Route to update the assigned user in the database, 
 then refresh the display on return
 '''
-
-
 @tickets_bp.route('/assign_status', methods=['GET'])
 def assign_statu():
 
@@ -144,11 +150,55 @@ def assign_statu():
 '''
 Route for new ticket form page
 '''
-@tickets_bp.route("/new_ticket")
+@tickets_bp.route("/new_ticket", methods=['GET','POST'])
 def new_ticket():
 
-    # Load the form page
-    return render_template('tickets/create_ticket.html')
+    form = NewTicketForm()
+
+    if form.validate_on_submit():
+        attachments ="?"
+        date = datetime.now()
+        created = current_user.user_id
+        ticket = Tickets(ticket_id=form.ticket_id.data, priority=form.priority.data, description= form.description.data, 
+                        customer= form.customer.data, assembly=form.assembly.data, partnumber=form.partnumber.data, 
+                        workorder=form.workorder.data, category=form.category.data, subcategory= form.subcategory.data,  
+                        attachments=attachments, date_created=date, created_by=created)
+        db.session.add(ticket)
+        db.session.commit()
+
+    choices = []
+
+    cat = request.form.get('category')
+    if cat is not None:
+
+        data = db.session.query(Subcategory).all()
+
+        subcats = {}
+        i = 1
+        item_list = []
+
+        for item in data:
+            if item.FK_category_id == i:
+                item_list.append((item.id, item.subcategory_name))
+            else:
+                subcats[i] = item_list
+                i = i + 1
+                item_list = []
+                item_list.append((item.id, item.subcategory_name))
+                subcats[i] = item_list
+
+
+        choices = subcats.get(int(cat))
+        form.subcat.choices = choices
+    
+
+    if request.method == 'POST' and form.validate_on_submit():
+        #return form.subcat
+        response = make_response(json.dumps(choices))
+        response.content_type = 'application/jsons'
+        return response
+    else:
+        return render_template('tickets/create_ticket.html', form=form)
 
 '''
 Route to create the new ticket in the database and reroute home
@@ -171,3 +221,16 @@ def create_ticket():
                        subcat, priority, wo)
 
     return redirect(url_for('tickets_bp.show_tickets'))
+
+
+@tickets_bp.route('/already_created', methods=['GET', 'POST'])
+def created_ticket_list():
+
+    cust = request.args.get('cust')
+    
+    # Get data about specific ticket by id
+    ticket_list = get_existing_tickets(cust)
+
+    
+    return render_template('tickets/create.html',
+                           ticket_list=ticket_list)

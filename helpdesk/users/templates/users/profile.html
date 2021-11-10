@@ -36,7 +36,7 @@
                                         <h5 class="mb-0">
                                             <span class="pr-1">
                                                 You have <br> 
-                                                <h2><b class="text-danger">12</b></h2> 
+                                                <h2><b class="text-danger">{{assigned|length}}</b></h2> 
                                                 open tickets
                                             </span>
                                         </h5>
@@ -86,44 +86,119 @@
                     </div>
                 </div>
                 <div class="col-lg-9">
-                    <div class="main-card mb-3 card">
-                        <div class="card-body">
-                        <div class="card-header">New Status Updates (TO DO)</div>
-                            <!-- TO DO: Implement status updates - create a table entry when something happens, let user delete it -->
-                            <ul class="list-group list-group-flush">                                   
-                                <li class="bg-transparent list-group-item">
-                                    <div class="widget-content p-0">
-                                        <div class="widget-content-outer">
-                                            <div class="widget-content-wrapper">
-                                                <div class="widget-content-left">
-                                                    <div class="widget-heading">New Ticket Assigned</div>
-                                                    <div class="widget-subheading">Ticket ID 10532, AML, Please add aml...</div>
-                                                </div>
-                                                <div class="widget-content-right">
-                                                    <div class="text-info">3:32 11/5/2021</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                    <div class="mb-3 card">
+                        <div class="card-header-tab card-header">
+                            <div class="card-header-title">
+                                <i class="header-icon lnr-bicycle icon-gradient bg-love-kiss"> </i>
+                                <h4>Ticket Status</h4>
+                            </div>
+                            <ul class="nav">
+                                <li class="nav-item"><a data-toggle="tab" href="#tab-eg5-0" class="nav-link active show">Watched Tickets</a></li>
+                                <li class="nav-item">
+                                    <a data-toggle="tab" href="#tab-eg5-1" class="nav-link show">
+                                        Ticket Updates
+                                        <span class="badge badge-pill badge-alternate">{{updates|length}}</span>
+                                    </a>
                                 </li>
-                                <li class="bg-transparent list-group-item">
-                                    <div class="widget-content p-0">
-                                        <div class="widget-content-outer">
-                                            <div class="widget-content-wrapper">
-                                                <div class="widget-content-left">
-                                                    <div class="widget-heading">New Ticket Assigned</div>
-                                                    <div class="widget-subheading">Ticket ID 10532, AML, Please add aml...</div>
-                                                </div>
-                                                <div class="widget-content-right">
-                                                    <div class="text-info">3:32 11/5/2021</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
+                                <li class="nav-item"><a data-toggle="tab" href="#tab-eg5-2" class="nav-link show">
+                                   Assigned Tickets<span class="badge badge-pill badge-danger">{{assigned|length}}</span>
+                                </a></li>
                             </ul>
                         </div>
+                        <div id="ticket_profile_lists" class="card-body">
+                            <div class="tab-content">
+                                <div class="tab-pane active show" id="tab-eg5-0" role="tabpanel">
+                                    <ul class="list-group list-group-flush">
+                                    
+                                        {% for ticket in watched %}
+                                        <li  class="bg-transparent list-group-item ticket_list">
+                                            <div class="widget-content p-0">
+                                                <div class="widget-content-outer">
+                                                    <div id="{{ticket['ticket_id']}}" class="profile-ticket-item widget-content-wrapper">
+                                                        <div class="widget-content-left">
+                                                            <div class="widget-heading">#{{ticket['ticket_id']}}</div>
+                                                            <div class="widget-subheading">{{ticket['description']}}</div>
+                                                        </div>
+                                                        <div class="widget-content-right">
+                                                            <div class="text-info">{{ticket['date_created'].strftime('%m/%d/%Y')}}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="ticket_detailed_info" id="ticket_detailed_info_{{ticket['ticket_id']}}"></div>
+                                            </div>
+                                        </li>
+                                        {% endfor %}  
+                                    </ul>
+                                </div>
+                                <div class="tab-pane show" id="tab-eg5-1" role="tabpanel">
+                                <ul class="list-group list-group-flush">
+                                
+                                    {% for ticket in updates %}
+                                    <li class="bg-transparent list-group-item ticket_list">
+                                        <div class="widget-content p-0">
+                                            <div class="widget-content-outer">
+                                                <div id="{{ticket['FK_ticket_id']}}" class="profile-ticket-item widget-content-wrapper">
+
+                                                    <div class="widget-content-left">
+                                                        <div class="widget-heading">#{{ticket['FK_ticket_id']}}</div>
+                                                        <div class="widget-subheading">{{ticket['update_description']}}</div>
+                                                    </div>
+                                                    <div class="widget-content-right">
+                                                        <div class="text-info">{{ticket['update_date'].strftime('%m/%d/%Y')}}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="ticket_detailed_info" id="ticket_detailed_info_{{ticket['FK_ticket_id']}}"></div>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+                                <div id="ticket-details-div">
+
+                                    
+                                    
+                                </div>
+                                
+                                
+                                </ul>
+                                
+                                </div>
+                                <div class="tab-pane show" id="tab-eg5-2" role="tabpanel">
+                                    <ul class="list-group list-group-flush">
+                                    
+                                        {% for ticket in assigned %}
+                                            <li class="bg-transparent list-group-item ticket_list">
+                                            <div class="widget-content p-0">
+                                                <div class="widget-content-outer">
+                                                    <div id="{{ticket['ticket_id']}}" class="profile-ticket-item widget-content-wrapper">
+                                                        <div class="widget-content-left">
+                                                            <div class="widget-heading">#{{ticket['ticket_id']}}</div>
+                                                            <div class="widget-subheading">{{ticket['description']}}</div>
+                                                        </div>
+                                                        <div class="widget-content-right">
+                                                            <div class="text-info">{{ticket['date_created'].strftime('%m/%d/%Y')}}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="ticket_detailed_info" id="ticket_detailed_info_{{ticket['ticket_id']}}"></div>
+                                            </div>
+                                        </li>
+                                        {% endfor %}
+                                    
+                                    
+                                    
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-block text-right card-footer">
+                            <a href="javascript:void(0);" class="btn-wide btn-shadow btn btn-danger">Delete</a>
+                        </div>
                     </div>
+
+
+
+
+
                 </div>
             </div>
         </div>
