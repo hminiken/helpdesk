@@ -6,7 +6,7 @@ from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.fields.core import IntegerField, SelectField
 from wtforms.fields.simple import TextAreaField
 
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Optional
 from wtforms.widgets.core import CheckboxInput
 from app import db
 from database import conn_erp, conn_unipoint
@@ -34,8 +34,8 @@ class Tickets(db.Model):
     assigned_to = db.Column(db.Integer)
     customer = db.Column(db.String(1000))
     assembly = db.Column(db.Integer)
-    partnumber = db.Column(db.String(1000))
-    workorder = db.Column(db.String(1000))
+    part_number = db.Column(db.String(1000))
+    work_order = db.Column(db.String(1000))
     category = db.Column(db.String(1000))
     subcategory = db.Column(db.String(1000))
     attachments = db.Column(db.String(1000))
@@ -99,7 +99,7 @@ def category_choices():
 class Subcategory(UserMixin, db.Model):
     # primary keys are required by SQLAlchemy
     id = db.Column(db.Integer, primary_key=True)
-    FK_category_id = db.Column(db.String(100))
+    FK_category_id = db.Column(db.Integer, primary_key=True)
     subcategory_name = db.Column(db.String(100))
 
 
@@ -115,12 +115,12 @@ class NewTicketForm(FlaskForm):
     assembly = StringField('Assembly', validators=[DataRequired()])
     priority = BooleanField('Priority')
     workorder = StringField('Work Order(s)', validators=[DataRequired()])
+    description = TextAreaField('Work Order(s)', validators=[DataRequired()])
     partnumber = StringField('Part Numbers', validators=[DataRequired()])
     customer = SelectField('User Type', choices=data,
                              validators=[DataRequired()])
     category = QuerySelectField('Category',   validators=[DataRequired()], query_factory=category_choices, get_label='category_name')
-    subcat = SelectField('SubCategory', validators=[DataRequired(
-    )])
+    subcat = SelectField('SubCategory',  coerce=int, validators=[Optional()], choices=[], validate_choice=False)
     submit = SubmitField('Create Ticket')
 
 

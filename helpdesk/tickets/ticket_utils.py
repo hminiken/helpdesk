@@ -1,8 +1,12 @@
 
+from datetime import datetime
 from pymysql import NULL
 from database import mysql
 import os
+from app import db
 from flask_login import current_user
+
+from helpdesk.tickets.models import Subcategory, Tickets
 
 #  -----------------------------------------------------------
 # 
@@ -514,4 +518,36 @@ def insert_ticket_data(details, cust, assy, pn, cat, subcat, priority, wo):
     os.mkdir(file_path)
     os.startfile(file_path)
 
+    return
+
+
+def create_new_ticket(form):
+    attachments = "Z:/03. Engineering/Uncontrolled/HelpDeskTickets/"
+    date = datetime.now()
+    created = current_user.user_id
+    subcat_name = Subcategory.query.filter_by(id=form.subcat.data).first()
+
+    # Create the Tickets object to insert into the database
+    ticket = Tickets(priority=form.priority.data, description=form.description.data,
+                     customer=form.customer.data, assembly=form.assembly.data, part_number=form.partnumber.data,
+                     work_order=form.workorder.data, category=form.category.data.category_name, subcategory=subcat_name.subcategory_name,
+                     attachments=attachments, date_created=date, created_by=created)
+
+    # Add to the database                     
+    db.session.add(ticket)
+    db.session.commit()
+
+    # Get the id so we can update the attachments field
+    ticket_id = ticket.id
+    ticket_created = Tickets.query.get(ticket_id)
+    file_path = attachments + str(ticket_id)
+    ticket_created.attachments = file_path
+    db.session.commit()
+
+
+    #make the folder and open
+    # Make the path in QMS and open
+    os.mkdir(file_path)
+    os.startfile(file_path)
+   
     return

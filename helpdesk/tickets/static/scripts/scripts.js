@@ -406,40 +406,57 @@ $(document).ready(function () {
 
     document.getElementById('category').onchange = function () {
         cust = category.value;
+        console.log("MYCAT: " + category);
+
         console.log(cust);
+        subcat_select = document.getElementById('subcat');
 
 
-        $.ajax({
-            type: "POST",
-            url: '/tickets/new_ticket',
-            data: {
-                // csrf_token: fields.csrf_token.input.value,
-                category: cust
-                // ticket_id: fields.ticket_ID.input.value
-            },
-            success: function (response) {
-                $("#subcat").empty();
-                for (var i = 0; i < response.length; i++) {
-                    $("#subcat").append(
-                        $("<option></option>")
-                            .attr("value", response[i][0])
-                            .text(response[i][1])
-                    );
-                    console.log(response);
+        fetch('/tickets/new_ticket/' + category.value).then(function(response) {
+            response.json().then(function(data) {
+                let optionHTML = ''
+                for(let subcat of data.subcats) {
+                    optionHTML += '<option value="' + subcat.id + '">' + subcat.subcategory_name + '</option>';
+                    subcat_select.innerHTML = optionHTML;
+                }
+            })
 
 
-                // var self = window.location.href;
-                // $('#subcat').load(self + ' #subcat');
-                // $("#subcat").html(response);
+        });
+
+
+
+        // $.ajax({
+        //     type: "POST",
+        //     url: '/tickets/new_ticket',
+        //     data: {
+        //         // csrf_token: fields.csrf_token.input.value,
+        //         category: cust
+        //         // ticket_id: fields.ticket_ID.input.value
+        //     },
+        //     success: function (response) {
+        //         $("#subcat").empty();
+        //         for (var i = 0; i < response.length; i++) {
+        //             $("#subcat").append(
+        //                 $("<option></option>")
+        //                     .attr("value", response[i][0])
+        //                     .text(response[i][1])
+        //             );
+        //             console.log(response);
+
+
+        //         // var self = window.location.href;
+        //         // $('#subcat').load(self + ' #subcat');
+        //         // $("#subcat").html(response);
               
 
-            }
-        },
-            error: function (error) {
-                console.log("ERROR");
-                console.log(error);
-            },
-        });
+        //     }
+        // },
+        //     error: function (error) {
+        //         console.log("ERROR");
+        //         console.log(error);
+        //     },
+        // });
 
 
     }

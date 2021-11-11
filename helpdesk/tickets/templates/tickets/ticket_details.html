@@ -61,9 +61,43 @@
                                         </button>
                                         <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu hide section"
                                         x-placement="bottom-start" >
+
+                                        <h6 tabindex="-1" class="dropdown-header">Engineering</h6>
                                         {% for user in users %}
-                                        <button id="{{user['user_id']}}" type="button" tabindex="0" class="dropdown-item assign_user_li">{{user['fname']}} {{user['lname']}}</button>
+                                            {% if user['department'] == 'Engineering' %}
+                                                <button id="{{user['user_id']}}" type="button" tabindex="0" class="dropdown-item assign_user_li">{{user['fname']}} {{user['lname']}}</button>
+                                            {% endif %}                                            
                                         {% endfor %}
+                                        <div tabindex="-1" class="dropdown-divider"></div>
+
+                                        <h6 tabindex="-1" class="dropdown-header">CAM</h6>
+                                        {% for user in users %}
+                                        {% if user['department'] == 'CAM' %}
+                                        <button id="{{user['user_id']}}" type="button" tabindex="0" class="dropdown-item assign_user_li">{{user['fname']}}
+                                            {{user['lname']}}</button>
+                                        {% endif %}
+                                        {% endfor %}
+                                        <div tabindex="-1" class="dropdown-divider"></div>
+
+                                        <h6 tabindex="-1" class="dropdown-header">Purchasing, Planning</h6>
+                                        {% for user in users %}
+                                        {% if user['department'] == 'Purchasing, Planning' %}
+                                        <button id="{{user['user_id']}}" type="button" tabindex="0" class="dropdown-item assign_user_li">{{user['fname']}}
+                                            {{user['lname']}}</button>
+                                        {% endif %}
+                                        {% endfor %}
+                                        <div tabindex="-1" class="dropdown-divider"></div>
+
+                                        <h6 tabindex="-1" class="dropdown-header">Misc.</h6>
+                                        {% for user in users %}
+                                        {% if user['department'] != 'Purchasing, Planning' and user['department'] != 'CAM' and user['department'] !=
+                                        'Engineering' %}
+                                        <button id="{{user['user_id']}}" type="button" tabindex="0" class="dropdown-item assign_user_li">{{user['fname']}}
+                                            {{user['lname']}}</button>
+                                        {% endif %}
+                                        {% endfor %}
+                                        <div tabindex="-1" class="dropdown-divider"></div>
+
                                     </div>
                                 </div>
                             </div>

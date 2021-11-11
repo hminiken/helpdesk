@@ -1,0 +1,151 @@
+{% extends "users/base.html" %}
+
+{% block content %}
+
+
+<div class="app-main">
+
+
+
+    <div class="app-main__outer">
+        <div class="app-main__inner">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="mb-3 card">
+                  
+                        <div>
+                            <ul class="list-group">
+                                <button class="active list-group-item-action list-group-item"> 
+                                    <i class="nav-link-icon far fa-edit "> </i> Information
+                                </button>
+                                <button class="list-group-item-action list-group-item"> 
+                                    <i class="nav-link-icon fas fa-envelope-open-text"> </i> Email Preferences
+                                </button>
+                               
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-lg-9">
+                    <div class="mb-3 card">
+                        <div class="card-header-tab card-header">
+                            <div class="card-header-title">
+                                <i class="header-icon lnr-bicycle icon-gradient bg-love-kiss"> </i>
+                                <h4>EDIT PROFILE</h4>
+                            </div>
+                        </div>
+                        <div class="mb-3 text-center card card-body">
+                        <!-- <div class="row">
+                                <div class="menu-header-content btn-pane-right">
+                                    <div class="avatar-icon-wrapper mr-3 avatar-icon-xl btn-hover-shine">
+                                        <div class="avatar-icon rounded">
+                                            <img class="profile-avatar rounded-circle" src="{{ url_for('users_bp.static',filename='images/avatars/')}}{{ current_user.user_img }}" alt="Avatar">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h6 class="menu-header-subtitle">Change Profile Picture</h6>
+                                    </div>
+                                    <div class="menu-header-btn-pane">
+                                        <div class="position-relative form-group">
+                                        
+                                        <input name="file" type="file" class="form-control-file">
+                                            <small class="form-text text-muted">This is some placeholder block-level help text for the above input. It's a bit
+                                                lighter and easily wraps to a new line.</small>
+                                        </div>
+                                    </div>
+                                </div>                                
+                        </div>
+                        <div class="row">
+                            <form class="" method="POST" style="width: 95%;">
+                                {{ form.hidden_tag() }}
+                                <fieldset>
+                                    <div class="grid-menu grid-menu-2col">
+                                        <div class="form-row">
+                                            <div class="col-lg-6 ">
+                                                <div class="position-relative form-group">
+                                                    {{ form.email.label }}
+                                                    {{ form.email(size=32) }}<br>                            
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 ">
+                                                <div class="position-relative form-group">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col-lg-6 ">
+                                                <div class="position-relative form-group">
+                                                    {{ form.fname.label }}
+                                                    {{ form.fname(size=32) }}<br>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 ">
+                                                <div class="position-relative form-group">
+                                                    {{ form.lname.label }}
+                                                    {{ form.lname(size=32) }}<br>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    
+                                    
+                                </fieldset>
+                                {% if form.errors %}
+                                {{ form.errors }}
+                                {% endif %}
+
+                                <div class="input-block update-profile">
+                                    <p>{{ form.submit()}}</p>
+                                </div>
+                            </form>
+                            <div class="row">
+
+                            </div>
+                        </div> -->
+
+                        <div class="row">
+                            <div>
+                                <div class="custom-checkbox custom-control">
+                                    <input type="checkbox" id="exampleCustomCheckbox"
+                                        class="custom-control-input">
+                                        <label class="custom-control-label" for="exampleCustomCheckbox">Check this custom checkbox
+                                    </label>
+                                </div>
+                                <div class="custom-checkbox custom-control">
+                                    <input type="checkbox" id="exampleCustomCheckbox2"
+                                        class="custom-control-input">
+                                        <label class="custom-control-label" for="exampleCustomCheckbox2">Or thisone
+                                    </label>
+                                </div>
+                                <div class="custom-checkbox custom-control">
+                                    <input type="checkbox" id="exampleCustomCheckbox3" disabled=""
+                                        class="custom-control-input">
+                                        <label class="custom-control-label" for="exampleCustomCheckbox3">But not this disabled one
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="lds-grid">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+</div>
+
+
+{% endblock %}

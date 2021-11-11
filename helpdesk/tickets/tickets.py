@@ -1,13 +1,13 @@
-import datetime
+from datetime import datetime
 from os import stat
-from flask import Flask, Blueprint, render_template, request, redirect, url_for
+from flask import Flask, Blueprint, render_template, request, redirect, url_for, jsonify
 from flask.helpers import flash, make_response
 from helpdesk.tickets.models import NewTicketForm, Subcategory, TicketCommentForm,  TicketUpdates, Tickets
 from app import db
 from flask_login import current_user
 import json
 
-from helpdesk.tickets.ticket_utils import add_ticket_watcher, close_ticket, get_closed_tickets, get_existing_tickets, get_open_tickets, get_status_options, get_ticket_details, get_ticket_status, get_ticket_updates, get_ticket_watchers, get_tickets, get_user_data, get_user_name,  insert_ticket_data, remove_status, remove_ticket_watcher, update_assigned_user, update_ticket_status
+from helpdesk.tickets.ticket_utils import add_ticket_watcher, close_ticket, create_new_ticket, get_closed_tickets, get_existing_tickets, get_open_tickets, get_status_options, get_ticket_details, get_ticket_status, get_ticket_updates, get_ticket_watchers, get_tickets, get_user_data, get_user_name,  insert_ticket_data, remove_status, remove_ticket_watcher, update_assigned_user, update_ticket_status
 
 tickets_bp = Blueprint('tickets_bp', __name__, 
                         template_folder='templates', 
@@ -153,52 +153,36 @@ Route for new ticket form page
 @tickets_bp.route("/new_ticket", methods=['GET','POST'])
 def new_ticket():
 
+    #instantiate the form, and get the initial choices for the subcategory, where category is 1
     form = NewTicketForm()
-
-    if form.validate_on_submit():
-        attachments ="?"
-        date = datetime.now()
-        created = current_user.user_id
-        ticket = Tickets(ticket_id=form.ticket_id.data, priority=form.priority.data, description= form.description.data, 
-                        customer= form.customer.data, assembly=form.assembly.data, partnumber=form.partnumber.data, 
-                        workorder=form.workorder.data, category=form.category.data, subcategory= form.subcategory.data,  
-                        attachments=attachments, date_created=date, created_by=created)
-        db.session.add(ticket)
-        db.session.commit()
-
-    choices = []
-
-    cat = request.form.get('category')
-    if cat is not None:
-
-        data = db.session.query(Subcategory).all()
-
-        subcats = {}
-        i = 1
-        item_list = []
-
-        for item in data:
-            if item.FK_category_id == i:
-                item_list.append((item.id, item.subcategory_name))
-            else:
-                subcats[i] = item_list
-                i = i + 1
-                item_list = []
-                item_list.append((item.id, item.subcategory_name))
-                subcats[i] = item_list
-
-
-        choices = subcats.get(int(cat))
-        form.subcat.choices = choices
-    
+    form.subcat.choices = [(int(subcategory.id), subcategory.subcategory_name)
+                           for subcategory in Subcategory.query.filter_by(FK_category_id='1').all()]
 
     if request.method == 'POST' and form.validate_on_submit():
-        #return form.subcat
-        response = make_response(json.dumps(choices))
-        response.content_type = 'application/jsons'
-        return response
-    else:
-        return render_template('tickets/create_ticket.html', form=form)
+        create_new_ticket(form)
+        return redirect(url_for('tickets_bp.show_tickets'))
+
+
+    return render_template('tickets/create_ticket.html', form=form)
+
+
+'''
+'''
+@tickets_bp.route("/new_ticket/<category>", methods=['GET', 'POST'])
+def new_ticket_subcatgory(category):
+
+    subcats = Subcategory.query.filter_by(FK_category_id=category).all()
+
+    subcatsList = []
+
+    for subcat in subcats:
+        subcatObj = {}
+        subcatObj['id'] = int(subcat.id)
+        subcatObj['subcategory_name'] = subcat.subcategory_name
+        subcatsList.append(subcatObj)
+
+
+    return jsonify({'subcats' : subcatsList})
 
 '''
 Route to create the new ticket in the database and reroute home

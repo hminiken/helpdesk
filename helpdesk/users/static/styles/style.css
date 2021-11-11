@@ -1,3 +1,31 @@
+
+.upload-photo {
+   cursor: pointer;
+   /* Style as you please, it will become the visible UI component. */
+    color: #fff;
+   background-color: #3ac47d;
+   border-color: #3ac47d;
+   padding: .375rem .75rem;
+   border-radius: .25rem;
+}
+
+#upload-photo {
+   /* opacity: 0; */
+   position: absolute;
+   z-index: -1;
+ 
+}
+
+.input-block input {
+	background-color: #192024 !important;
+}
+
+.input-block input:hover {
+	background-color: #303e46 !important;
+}
+
+
+
 .avatar-wrapper.mt-2.avatar-wrapper-overlap {
 	margin-left: 5%;
 	margin-bottom: 1%;
@@ -384,4 +412,79 @@
 	background: #fbfdff;
 	box-shadow: inset 0 0 0 2px #a7e245;
 	transform: translateX(30%);
+}
+
+
+
+
+/* LOADER */
+
+.lds-grid {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-grid div {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(0, 2, 109, 0.411);
+  animation: lds-grid 1.2s linear infinite;
+}
+.lds-grid div:nth-child(1) {
+  top: 8px;
+  left: 8px;
+  animation-delay: 0s;
+}
+.lds-grid div:nth-child(2) {
+  top: 8px;
+  left: 32px;
+  animation-delay: -0.4s;
+}
+.lds-grid div:nth-child(3) {
+  top: 8px;
+  left: 56px;
+  animation-delay: -0.8s;
+}
+.lds-grid div:nth-child(4) {
+  top: 32px;
+  left: 8px;
+  animation-delay: -0.4s;
+}
+.lds-grid div:nth-child(5) {
+  top: 35px;
+  left: 35px;
+  animation-delay: -0.8s;
+  width: 10px;
+  height: 10px;
+}
+.lds-grid div:nth-child(6) {
+  top: 32px;
+  left: 56px;
+  animation-delay: -1.2s;
+}
+.lds-grid div:nth-child(7) {
+  top: 56px;
+  left: 8px;
+  animation-delay: -0.8s;
+}
+.lds-grid div:nth-child(8) {
+  top: 56px;
+  left: 32px;
+  animation-delay: -1.2s;
+}
+.lds-grid div:nth-child(9) {
+  top: 56px;
+  left: 56px;
+  animation-delay: -1.6s;
+}
+@keyframes lds-grid {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }

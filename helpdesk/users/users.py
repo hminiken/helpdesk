@@ -50,28 +50,6 @@ def login():
 
 
 
-# @users_bp.route("/log_user_in", methods=['POST'])
-# def log_user_in():
-#     email = request.form.get('login-email')
-#     password = request.form.get('login-password')
-
-#     user = get_user_login_info(email)
-
-#     if not user or not check_password_hash(user[0]['password'], password):
-#         # flash('Please check your login details and try again.')
-#         # if the user doesn't exist or password is wrong, reload the page
-#         return redirect(url_for('users_bp.login'))
-
-#     return redirect(url_for('users_bp.user'))
-
-
-
-# @users_bp.route("/logout")
-# def logout():
-#     # return render_template('users/login.html')
-#     return 'Logout'
-
-
 @users_bp.route("/add_user",  methods=['GET', 'POST'])
 def add_user():
     # if current_user.is_authenticated:
@@ -94,8 +72,6 @@ def add_user():
         return redirect(url_for('users_bp.user'))
     return render_template('users/admin_add_user.html', title='Register', form=form)
 
-    # return render_template('users/login.html')
-    # return render_template('users/admin_add_user.html', form=form)
 
 
 @users_bp.route('/logout')
@@ -103,16 +79,20 @@ def logout():
     logout_user()
     return redirect(url_for('users_bp.login'))
 
-# @users_bp.route("/submit_user", methods=['POST'])
-# def submit_user():
-#     # return render_template('users/login.html')
-#     email = request.form.get('newuser-email')
-#     emp_id = request.form.get('newuser-emp-id')
-#     fname = request.form.get('newuser-fname')
-#     lname = request.form.get('newuser-lname')
-#     role = request.form.get('role-select')
+
+@users_bp.route("/edit_profile",  methods=['GET', 'POST'])
+def edit_profile():
     
 
 
-#     add_new_user(email, emp_id, fname, lname, role)
-#     return redirect(url_for('users_bp.user'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        # user = Users(user_id=form.user_id.data, email=form.email.data,
+        #              fname=form.fname.data, lname=form.lname.data, FK_role_id=form.permission.data.id,
+        #              user_img=imgString)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Congratulations, you are now a registered user!')
+        return redirect(url_for('users_bp.user'))
+    return render_template('users/edit_profile.html', form=form)
