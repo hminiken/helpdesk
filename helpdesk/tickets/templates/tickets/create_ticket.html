@@ -15,11 +15,9 @@
                     <div class="main-card mb-3 card">
                         <div class="card-body">
                             <div class="row">
-
-                            <h5 class="card-title">Create a New Ticket</h5>
-                            
+                                <h5 class="card-title">Create a New Ticket</h5>                            
                             </div>
-                            <form class="" action="/tickets/new_ticket" method="post">
+                            <form class="" action="" method="post">
                                 {{ form.hidden_tag() }}
                                 <div class="grid-menu grid-menu-2col">
                                     <div class="form-row">
@@ -31,9 +29,6 @@
                                         </div>      
                                         <div class="col-sm-6">
                                             <div class="position-relative form-group">
-                                                <!-- <label for="exampleEmail" class="">Assembly</label>
-                                                <input name="assy_input" id="assy_input" type="text" class="form-control">
-                                            </div> -->
                                                 {{ form.assembly.label }}
                                                 {{ form.assembly}}<br>
                                             </div>
@@ -42,24 +37,18 @@
                                     <div class="form-row">
                                         <div class="col-sm-6">
                                             <div class="position-relative form-group">
-                                                <!-- <label for="exampleEmail" class="">Part Number(s)</label>
-                                                <input name="pn_input" id="pn_input" type="text" class="form-control"> -->
                                                     {{ form.partnumber.label }}
                                                     {{ form.partnumber}}<br>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="position-relative form-group">
-                                                <!-- <label for="exampleEmail" class="">Work Order(s)</label>
-                                                <input name="wo_input" id="wo_input" type="text" class="form-control"> -->
                                                     {{ form.workorder.label }}
                                                     {{ form.workorder}}<br>
                                             </div>
                                         </div>
-                                    </div>
-                                    
-                                </div>
-                                
+                                    </div>                                    
+                                </div>                                
                                 <div class="form-row">
                                     <div class="col-sm-6">
                                         <div class="position-relative form-group">
@@ -67,23 +56,30 @@
                                                 {{ form.category.label }}
                                                 {{ form.category(class='form-control') }}<br>
                                             </div>
-                                    </div>
+                                        </div>
                                     </div>
                                     
                                     <div class="col-sm-6">
                                         <div class="position-relative form-group">
                                             <div class="position-relative form-group">
+                                                {% set z = form.subcat.process_data(countryNameVariable) %}
                                                 {{ form.subcat.label }}
                                                 {{ form.subcat(class='form-control') }}<br>
                                             </div>
-                                    </div>
+                                        </div>
                                     </div>
                                 </div>
                                
                                 <p>{{ form.priority() }} {{ form.priority.label }}</p>
                                 
-                                <div class="position-relative form-group"><label for="exampleText" class="">Description/Details</label><textarea
+                                <!-- <div class="position-relative form-group"><label for="exampleText" class="">Description/Details</label><textarea
                                    style="height: 150px;" name="details_input" id="details_input" class="form-control"></textarea>
+                                </div> -->
+                                <div class="position-relative form-group">
+                                    <div class="position-relative form-group">
+                                        {{ form.description.label }}
+                                        {{ form.description }}<br>
+                                    </div>
                                 </div>
                                 
                                    
@@ -93,6 +89,11 @@
                                         </div>
                                     </form>
                                 </div>
+                                {% for field, errors in form.errors.items() %}
+                                <div class="alert alert-error">
+                                    {{ form[field].label }}: {{ ', '.join(errors) }}
+                                </div>
+                                {% endfor %}
                             </div>
                         </div>
                         
