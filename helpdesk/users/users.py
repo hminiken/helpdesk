@@ -1,14 +1,16 @@
+import os
 import random
 from flask import Flask, Blueprint, render_template, request, redirect, url_for
 from flask.helpers import flash
 from flask_login import current_user, login_user, logout_user
 from flask_login.utils import login_required
-from werkzeug.security import generate_password_hash, check_password_hash
-from helpdesk.users.models import LoginForm, RegistrationForm, Users
+from helpdesk.users.models import LoginForm, RegistrationForm, UpdateProfileForm, Users
 from werkzeug.urls import url_parse
 from app import db
+from datetime import datetime
+# from flask_uploads import UploadSet, configure_uploads, IMAGES
 
-from helpdesk.users.users_utils import add_new_user, get_my_assigned_tickets, get_my_watched_tickets, get_my_watched_tickets_updates, get_user_login_info
+from helpdesk.users.users_utils import  get_my_assigned_tickets, get_my_watched_tickets, get_my_watched_tickets_updates
 
 users_bp = Blueprint('users_bp', __name__, 
                         template_folder='templates', 
@@ -22,6 +24,10 @@ def user():
     assigned = get_my_assigned_tickets()
     watched = get_my_watched_tickets()
     updates = get_my_watched_tickets_updates()
+
+    current_user.last_login = datetime.now()
+    db.session.commit()
+
     # Get user ticket data
     return render_template('users/profile.html', watched=watched, updates=updates, assigned=assigned)
 
@@ -80,19 +86,50 @@ def logout():
     return redirect(url_for('users_bp.login'))
 
 
+# photos = UploadSet('photos', IMAGES)
+
 @users_bp.route("/edit_profile",  methods=['GET', 'POST'])
 def edit_profile():
+
+    # update_user = Users(email=current_user.email, fname=current_user.fname, lname=current_user.lname, 
+    #                     ticket_created_updates=current_user.ticket_created_updates,
+    #                     ticket_assigned_updates=current_user.ticket_assigned_updates, 
+    #                     ticket_watched_updates=current_user.ticket_watched_updates)
+
+    form = UpdateProfileForm()
+
+    if request.method == 'GET':
+        form.email.data=current_user.email
+        form.fname.data=current_user.fname
+        form.lname.data=current_user.lname        
+        form.email_created.data=current_user.ticket_created_updates
+        form.email_assigned.data=current_user.ticket_assigned_updates
+        form.email_watched.data=current_user.ticket_watched_updates
+
+ 
     
-
-
-    form = RegistrationForm()
     if form.validate_on_submit():
-        # user = Users(user_id=form.user_id.data, email=form.email.data,
-        #              fname=form.fname.data, lname=form.lname.data, FK_role_id=form.permission.data.id,
-        #              user_img=imgString)
-        user.set_password(form.password.data)
-        db.session.add(user)
+
+        assets_dir = os.path.join(
+            os.path.dirname(url_for('users_bp.static', filename='images/avatars'))
+        )
+
+        assets_dir = '/static/images/avatars/'
+
+        filename = 'profileImg' + str(current_user.user_id) + '.jpg'
+        img = form.user_img.data
+        img.save(os.path.dirname(__file__) + assets_dir + '/' + filename)
+
+        user = Users.query.filter_by(email=current_user.email).first()
+        user.email=form.email.data
+        user.fname=form.fname.data
+        user.lname=form.lname.data
+        user.ticket_created_updates=form.email_created.data
+        user.ticket_assigned_updates=form.email_assigned.data 
+        user.ticket_watched_updates = form.email_watched.data
+        user.user_img = filename
+
         db.session.commit()
-        flash('Congratulations, you are now a registered user!')
         return redirect(url_for('users_bp.user'))
+
     return render_template('users/edit_profile.html', form=form)

@@ -14,7 +14,7 @@ class Config(object):
     #     'erp':      'mssql+pyodbc://zachd:1716@QEA-ERP805.QEA.local\iERP90,1436:1436/iERP807?driver=ODBC+Driver+17+for+SQL+Server'
     # }
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    
+    MAX_CONTENT_LENGTH = 1 * 1024 * 1024  # 1MB max-limit.
 
 # engine = create_engine(
 #     "mssql+pyodbc://scott:tiger@myhost:port/databasename?driver=ODBC+Driver+17+for+SQL+Server")

@@ -1,7 +1,9 @@
 #  https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-v-user-logins
 
+from datetime import datetime
 from flask import app
 from wtforms.fields.core import IntegerField, SelectField
+from wtforms.fields.simple import FileField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, required
 from app import db
 from app import login
@@ -9,6 +11,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms.validators import DataRequired
 
 class Users(UserMixin, db.Model):
     # primary keys are required by SQLAlchemy
@@ -20,6 +25,12 @@ class Users(UserMixin, db.Model):
     fname = db.Column(db.String(1000))
     lname = db.Column(db.String(1000))
     user_img = db.Column(db.String(1000))
+    last_login = db.Column(db.DateTime(
+        1000), nullable=False, default=datetime.now())
+    ticket_created_updates = db.Column(db.Integer)
+    ticket_assigned_updates = db.Column(db.Integer)
+    ticket_watched_updates = db.Column(db.Integer)
+
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
@@ -33,13 +44,19 @@ def load_user(user_id):
     return Users.query.get(int(user_id))
 
 
+class UpdateProfileForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    fname = StringField('First Name', validators=[DataRequired()])
+    lname = StringField('Last Name', validators=[DataRequired()])
+    user_img = FileField('Image')
+    email_created = BooleanField('Tickets I created')
+    email_assigned = BooleanField('Tickets I am assigned to')
+    email_watched = BooleanField('Tickets I am watching')
+    submit = SubmitField('Update Profile')
 
 
 
 
-from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired
 
 
 class LoginForm(FlaskForm):
@@ -50,17 +67,12 @@ class LoginForm(FlaskForm):
 
 
 class Permissions(UserMixin, db.Model):
-    # primary keys are required by SQLAlchemy
     id = db.Column(db.Integer, primary_key=True)
     permission_role = db.Column(db.String(100))
-    # permission_description = db.Column(db.String(1000))
-    # permission_level = db.Column(db.Integer)
-    # permission_department = db.Column(db.String(1000))
 
 
 def skill_level_choices():
     data = db.session.query(Permissions).all()
-    # data = Permissions.query.filter_by().all()
 
     choices = []
     for item in data:
@@ -76,13 +88,6 @@ class RegistrationForm(FlaskForm):
     user_id = StringField('Employee ID', validators=[DataRequired()])
     fname = StringField('First Name', validators=[DataRequired()])
     lname = StringField('Last Name', validators=[DataRequired()])
-    # permission = SelectField('User Type', choices=[
-    #     ('1', 'Admin'), 
-    #     ('3', 'Eng. Admin'), 
-    #     ('4', 'Eng. User'), 
-    #     ('5', 'CAM Admin'),
-    #     ('6', 'CAM User')
-    #     ], validators=[DataRequired()])
 
     permission = QuerySelectField(u'User Type',
                                    validators=[DataRequired()],

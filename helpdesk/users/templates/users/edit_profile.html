@@ -33,11 +33,11 @@
                         <div class="card-header-tab card-header">
                             <div class="card-header-title">
                                 <i class="header-icon lnr-bicycle icon-gradient bg-love-kiss"> </i>
-                                <h4>EDIT PROFILE</h4>
+                                <h4>USER INFORMATION</h4>
                             </div>
                         </div>
                         <div class="mb-3 text-center card card-body">
-                        <!-- <div class="row">
+                        <div class="row">
                                 <div class="menu-header-content btn-pane-right">
                                     <div class="avatar-icon-wrapper mr-3 avatar-icon-xl btn-hover-shine">
                                         <div class="avatar-icon rounded">
@@ -58,10 +58,14 @@
                                 </div>                                
                         </div>
                         <div class="row">
-                            <form class="" method="POST" style="width: 95%;">
+                            <form class="" method="POST" style="width: 95%;" enctype="multipart/form-data">
                                 {{ form.hidden_tag() }}
                                 <fieldset>
                                     <div class="grid-menu grid-menu-2col">
+                                        <div class="form-row">
+                                            {{ form.user_img.label }}
+                                            {{ form.user_img(size=32) }}<br>
+                                            </div>
                                         <div class="form-row">
                                             <div class="col-lg-6 ">
                                                 <div class="position-relative form-group">
@@ -88,7 +92,34 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    
+                                        <div class="form-row">
+                                            <div class="card-header-title">
+                                                <h4>EMAIL PREFERENCES</h4>
+                                            </div>
+                                            &nbsp;
+                                            <p></p>
+                                            <p>If selected, any ticket changes (e.g. a new assignee, a new status update, a new
+                                                comment, etc.) will also be sent to your email.</p>
+                                            
+                                                <p>EMAIL ME FOR: </p>
+                                            <div class="position-relative form-group">
+                                                <div class="form-row">
+                                                    <p>{{ form.email_created() }} {{ form.email_created.label }}</p>
+                                                    </div>
+                                                <div class="form-row">
+
+                                                    <p>{{ form.email_assigned() }} {{ form.email_assigned.label }}</p>
+                                                    </div>
+                                                <div class="form-row">
+
+                                                    <p>{{ form.email_watched() }} {{ form.email_watched.label }}</p>
+                                            
+                                            
+                                            
+                                                </div>
+                                            </div>
+                                        </div>
+                                   
                                     
                                 </fieldset>
                                 {% if form.errors %}
@@ -102,34 +133,15 @@
                             <div class="row">
 
                             </div>
-                        </div> -->
-
-                        <div class="row">
-                            <div>
-                                <div class="custom-checkbox custom-control">
-                                    <input type="checkbox" id="exampleCustomCheckbox"
-                                        class="custom-control-input">
-                                        <label class="custom-control-label" for="exampleCustomCheckbox">Check this custom checkbox
-                                    </label>
-                                </div>
-                                <div class="custom-checkbox custom-control">
-                                    <input type="checkbox" id="exampleCustomCheckbox2"
-                                        class="custom-control-input">
-                                        <label class="custom-control-label" for="exampleCustomCheckbox2">Or thisone
-                                    </label>
-                                </div>
-                                <div class="custom-checkbox custom-control">
-                                    <input type="checkbox" id="exampleCustomCheckbox3" disabled=""
-                                        class="custom-control-input">
-                                        <label class="custom-control-label" for="exampleCustomCheckbox3">But not this disabled one
-                                    </label>
-                                </div>
-                            </div>
+                        </div>
                         </div>
                         </div>
 
 
-                    </div>
+
+
+                    <div class="mb-3 card">
+                        
                 </div>
             </div>
         </div>
