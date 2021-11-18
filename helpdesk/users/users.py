@@ -110,24 +110,21 @@ def edit_profile():
     
     if form.validate_on_submit():
 
-        assets_dir = os.path.join(
-            os.path.dirname(url_for('users_bp.static', filename='images/avatars'))
-        )
-
+        user = Users.query.filter_by(email=current_user.email).first()
         assets_dir = '/static/images/avatars/'
 
-        filename = 'profileImg' + str(current_user.user_id) + '.jpg'
-        img = form.user_img.data
-        img.save(os.path.dirname(__file__) + assets_dir + '/' + filename)
+        if form.user_img.data.filename != '':
+            filename = 'profileImg' + str(current_user.user_id) + '.jpg'
+            img = form.user_img.data
+            img.save(os.path.dirname(__file__) + assets_dir + '/' + filename)        
+            user.user_img = filename
 
-        user = Users.query.filter_by(email=current_user.email).first()
         user.email=form.email.data
         user.fname=form.fname.data
         user.lname=form.lname.data
         user.ticket_created_updates=form.email_created.data
         user.ticket_assigned_updates=form.email_assigned.data 
         user.ticket_watched_updates = form.email_watched.data
-        user.user_img = filename
 
         db.session.commit()
         return redirect(url_for('users_bp.user'))

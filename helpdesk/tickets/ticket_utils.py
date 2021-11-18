@@ -1,10 +1,13 @@
 
 from datetime import datetime
+from flask.templating import render_template
+from flask_mail import Message
 from pymysql import NULL
 from database import mysql
 import os
 from app import db
 from flask_login import current_user
+from app import mail
 
 from helpdesk.tickets.models import Subcategory, Tickets
 
@@ -24,7 +27,11 @@ def get_tickets():
     (SELECT 
 	(SELECT status_name FROM status_list WHERE status_id = FK_status_id) as status_name 
 	FROM ticket_status 
-	WHERE FK_ticket_id=ticket_id And FK_status_id=4) as ticket_status
+	WHERE FK_ticket_id=ticket_id ORDER BY FK_status_id DESC LIMIT 1) as ticket_status,
+    (SELECT 
+	(SELECT status_badge FROM status_list WHERE status_id = FK_status_id) as status_name 
+	FROM ticket_status 
+	WHERE FK_ticket_id=ticket_id ORDER BY FK_status_id DESC LIMIT 1) as ticket_badge
     from tickets 
     ORDER BY ticket_id DESC
 
@@ -375,6 +382,108 @@ def close_ticket(ticket_id):
     conn.commit()
 
 
+def email_ticket_update(ticket_id, update_msg):
+    conn = mysql.connect()
+    cursor = conn.cursor()
+
+    sql_qry = '''
+                SELECT FK_user_id as user_id,
+                (Select CONCAT(fname, ' ', lname) from users where user_id=FK_user_id) AS watcher,          
+                (Select ticket_watched_updates from users where user_id=FK_user_id) AS send_update,
+                (Select email from users where user_id=FK_user_id) AS email
+                FROM helpdesk.ticket_watching
+                WHERE FK_ticket_id=%s;
+                '''
+
+    cursor.execute(sql_qry, (ticket_id))
+    data = cursor.fetchall()
+
+    watcher_emails = []
+
+    columns = [column[0] for column in cursor.description]
+
+    for row in data:
+        watcher_emails.append(dict(zip(columns, row)))
+
+    # Get the creator
+    sql_qry = '''
+            SELECT 
+            (Select CONCAT(fname, ' ', lname) from users where user_id=created_by ) AS created, 
+            (Select ticket_created_updates from users where user_id=created_by ) AS send_update,
+            (Select email from users where user_id=created_by) AS email    
+            FROM tickets WHERE ticket_id=%s;
+                '''
+
+    cursor.execute(sql_qry, (ticket_id))
+    data = cursor.fetchall()
+
+    created_email = []
+
+    columns = [column[0] for column in cursor.description]
+
+    for row in data:
+        created_email.append(dict(zip(columns, row)))
+
+    # Get the assignee
+    sql_qry = '''
+                SELECT  
+                (Select CONCAT(fname, ' ', lname) from users where user_id=assigned_to ) AS created, 
+                (Select ticket_assigned_updates from users where user_id=assigned_to ) AS send_update,
+                (Select email from users where user_id=assigned_to ) AS email       
+                FROM tickets  WHERE ticket_id=%s
+                '''
+
+    cursor.execute(sql_qry, (ticket_id))
+    data = cursor.fetchall()
+
+    assigned_email = []
+
+    columns = [column[0] for column in cursor.description]
+
+    for row in data:
+        assigned_email.append(dict(zip(columns, row)))
+
+
+    # Now create the email list
+    email_msg = create_email(ticket_id, update_msg)
+
+
+    for item in watcher_emails:
+        if item['send_update'] == 1:
+            email_msg.add_recipient(item['email'])
+
+    for item in assigned_email:
+        if item['send_update'] == 1:
+            email_msg.add_recipient(item['email'])
+    
+    for item in created_email:
+        if item['send_update'] == 1:
+            email_msg.add_recipient(item['email'])
+
+    if len(email_msg.recipients) > 0:
+        mail.send(email_msg)
+
+    return
+
+def create_email(t_id, update_msg):
+
+    ticket = Tickets.query.filter_by(ticket_id=t_id).first()
+
+    subject = "[Engineering Ticket #" + t_id + "] " + ticket.category + " - " + ticket.subcategory
+    
+    email_msg = Message(
+        subject=subject,
+        sender="engineeringtickets@qualitel.net",
+    )
+
+    email_msg.html = render_template(
+        'tickets/ticket_update_email.html', description=ticket.description, update_message=update_msg, 
+        ticket_num=t_id, assembly=ticket.assembly, category=ticket.category, subcategory=ticket.subcategory,
+        workorder=ticket.work_order, partnumber=ticket.part_number)
+
+    return email_msg
+
+
 #  -----------------------------------------------------------
 #
 #  =======         Section for Ticket Watching         =======
@@ -551,3 +660,4 @@ def create_new_ticket(form):
     os.startfile(file_path)
    
     return
+

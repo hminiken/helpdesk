@@ -6,7 +6,7 @@ from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.fields.core import IntegerField, SelectField
 from wtforms.fields.simple import TextAreaField
 
-from wtforms.validators import DataRequired, Optional
+from wtforms.validators import DataRequired, Length, Optional
 from wtforms.widgets.core import CheckboxInput
 from app import db
 from database import conn_erp, conn_unipoint
@@ -112,11 +112,15 @@ def subcategory_choices():
 
 class NewTicketForm(FlaskForm):
     data = customer_choices()
-    assembly = StringField('Assembly', validators=[DataRequired()])
+    assembly = StringField('Assembly', validators=[
+                           DataRequired(), Length(max=100)])
     priority = BooleanField('Priority')
-    workorder = StringField('Work Order(s)', validators=[DataRequired()])
-    description = TextAreaField('Work Order(s)', validators=[DataRequired()])
-    partnumber = StringField('Part Numbers', validators=[DataRequired()])
+    workorder = StringField('Work Order(s)', validators=[
+                            DataRequired(), Length(max=100)])
+    description = TextAreaField('Description', validators=[
+                                DataRequired(), Length(max=1000)])
+    partnumber = StringField('Part Numbers', validators=[
+                             DataRequired(), Length(max=100)])
     customer = SelectField('User Type', choices=data,
                              validators=[DataRequired()])
     category = QuerySelectField('Category',   validators=[DataRequired()], query_factory=category_choices, get_label='category_name')

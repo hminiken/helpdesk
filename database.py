@@ -1,6 +1,7 @@
 from flask_login.login_manager import LoginManager
 from flaskext.mysql import MySQL
 from flask_sqlalchemy import SQLAlchemy
+from flask_mail import Mail
 import pyodbc
 
 
@@ -8,7 +9,7 @@ import pyodbc
 mysql = MySQL()
 db = SQLAlchemy()
 login = LoginManager()
-
+mail = Mail()
 
 def conn_database(conn_str):
     conn = pyodbc.connect(conn_str)

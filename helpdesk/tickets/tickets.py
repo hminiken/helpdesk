@@ -7,7 +7,7 @@ from app import db
 from flask_login import current_user
 import json
 
-from helpdesk.tickets.ticket_utils import add_ticket_watcher, close_ticket, create_new_ticket, get_closed_tickets, get_existing_tickets, get_open_tickets, get_status_options, get_ticket_details, get_ticket_status, get_ticket_updates, get_ticket_watchers, get_tickets, get_user_data, get_user_name,  insert_ticket_data, remove_status, remove_ticket_watcher, update_assigned_user, update_ticket_status
+from helpdesk.tickets.ticket_utils import add_ticket_watcher, close_ticket, create_new_ticket, email_ticket_update, get_closed_tickets, get_existing_tickets, get_open_tickets, get_status_options, get_ticket_details, get_ticket_status, get_ticket_updates, get_ticket_watchers, get_tickets, get_user_data, get_user_name,  insert_ticket_data, remove_status, remove_ticket_watcher, update_assigned_user, update_ticket_status
 
 tickets_bp = Blueprint('tickets_bp', __name__, 
                         template_folder='templates', 
@@ -42,7 +42,14 @@ def ticket_details():
                              update_description=form.comment.data)
         db.session.add(user)
         db.session.commit()
+
+        # Send the emails:
+        update_msg = current_user.fname + " " + \
+            current_user.lname + " has added a new comment: \n\n     " + form.comment.data
+
         form.comment.data = ""
+
+        email_ticket_update(ticket_id, update_msg)
 
     # Get data about specific ticket by id
     details = get_ticket_details(ticket_id)
@@ -123,10 +130,11 @@ def assign_statu():
     # Get User Name from DB to update page
     status_id = request.args.get('status_id')
     ticket_id = request.args.get('ticket_id')
-
+    status_name = ""
     status = get_ticket_status(ticket_id)
     
     status_exists = False
+    update_msg = ""
     for item in status:
         if item['status_id'] == int(status_id):
             status_exists = True
@@ -137,10 +145,18 @@ def assign_statu():
         if int(status_id) == 4 or int(status_id) == 5:
             #close ticket
             close_ticket(ticket_id)
+        status = get_ticket_status(ticket_id)
+        status_name = status[0]['status_name']
+        update_msg = current_user.fname + " " + current_user.lname + \
+            " has updated the status to: " + status_name
     else:
         #remove that status
         remove_status(status_id, ticket_id)
+        update_msg = current_user.fname + " " + current_user.lname + \
+            " has removed the status: " + status_name
 
+    # Send the emails:
+    email_ticket_update(ticket_id, update_msg)
 
     # Return the ticket id, used to update the ticket details html
     return ticket_id

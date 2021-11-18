@@ -48,7 +48,7 @@ class UpdateProfileForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     fname = StringField('First Name', validators=[DataRequired()])
     lname = StringField('Last Name', validators=[DataRequired()])
-    user_img = FileField('Image')
+    user_img = FileField('')
     email_created = BooleanField('Tickets I created')
     email_assigned = BooleanField('Tickets I am assigned to')
     email_watched = BooleanField('Tickets I am watching')

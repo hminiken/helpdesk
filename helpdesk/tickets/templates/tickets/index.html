@@ -14,7 +14,7 @@
             
             <div class="row">
                 
-                <div class="col-lg-7">
+                <div id="ticket-left-sidebar" class="col-lg-7">
                     <div class="main-card mb-3 card" >
                         <div class="card-body">
                             <div class="row">
@@ -49,9 +49,9 @@
                                         <div class="col-md-12">
                            
                                             <div class="position-relative form-group">
-                                                <div>
+                                                <div id="radio-open-close">
                                                     <div class="custom-radio custom-control custom-control-inline">
-                                                        <input type="radio" id="show_open_tickets" name="customRadio" class="custom-control-input" >
+                                                        <input type="radio" id="show_open_tickets" name="customRadio" class="custom-control-input" checked="True">
                                                         <label class="custom-control-label" for="show_open_tickets">Open</label>
                                                     </div>
                                                     <div class="custom-radio custom-control custom-control-inline">
@@ -60,7 +60,7 @@
                                                         <label class="custom-control-label" for="show_closed_tickets">Closed</label>
                                                     </div>
                                                     <div class="custom-radio custom-control custom-control-inline">
-                                                        <input type="radio" id="show_all_tickets" name="customRadio" class="custom-control-input" checked="True">
+                                                        <input type="radio" id="show_all_tickets" name="customRadio" class="custom-control-input" >
                                                         <label class="custom-control-label" for="show_all_tickets">All</label>
                                                     </div>
                                                 </div>
@@ -89,9 +89,10 @@
                                                     <!-- <th>Status</th> -->
                                                     <th>Created</th>
                                                     <th>Assigned To</th>
+                                                    <th>Status</th>
                                                 </tr>
                                             </thead>
-                                            <tbody >
+                                            <tbody id="ticket_table_body">
                                                 {% for item in tickets %}
                                                 <tr id="{{ item['ticket_id']}}" class='ticket_table'>
                                                     <td><i class="{{ 'fa fa-fire' if item['priority'] == 1 else ''}}"></i></td>
@@ -103,6 +104,7 @@
                                                     <!-- <td><div class="badge badge-warning">Completed</div></td> -->
                                                     <td>{{ item['date_created'].strftime('%m/%d/%Y')}}</td>
                                                     <td>{{ item['assigned']}}</td>
+                                                    <td > <div class="badge badge-{{item['ticket_badge']}}"> {{item['ticket_status']}}</div></td>
                                                     <td style="display: none;">{{ item['customer']}}</td>
                                                     <td style="display: none;">{{ item['created']}}</td>
                                                     <td style="display: none;">{{ item['description']}}</td>

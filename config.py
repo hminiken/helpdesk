@@ -3,18 +3,35 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config(object):
-    # ...
-    # SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-    #     'sqlite:///' + os.path.join(basedir, 'app.db')
-
+  
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'QualitelHelpDesk'
 
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:jupiter5@localhost/helpdesk'
-    # SQLALCHEMY_BINDS = {
-    #     'erp':      'mssql+pyodbc://zachd:1716@QEA-ERP805.QEA.local\iERP90,1436:1436/iERP807?driver=ODBC+Driver+17+for+SQL+Server'
-    # }
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     MAX_CONTENT_LENGTH = 1 * 1024 * 1024  # 1MB max-limit.
 
-# engine = create_engine(
-#     "mssql+pyodbc://scott:tiger@myhost:port/databasename?driver=ODBC+Driver+17+for+SQL+Server")
+
+
+
+    # MAIL:
+    # MAIL_SERVER = 'smtp.office365.com'
+    # MAIL_PORT = 587
+    # MAIL_USERNAME = 'hillarym@qualitel.net'
+    # MAIL_PASSWORD = 'Nightwing!13'
+    # MAIL_USE_TLS = True
+    # MAIL_USE_SSL = False
+
+    # MAIL_SERVER='smtp.mailtrap.io'
+    # MAIL_PORT=2525
+    # MAIL_USERNAME='6f97b25e586226'
+    # MAIL_PASSWORD='5a66fac992bc94'
+    # MAIL_USE_TLS=True
+    # MAIL_USE_SSL=False
+
+    MAIL_SERVER = '10.1.10.120'
+    MAIL_PORT=25
+    # MAIL_USERNAME='engineeringtickets@qualitel.net'
+    # MAIL_PASSWORD=
+    MAIL_USE_TLS=False
+    MAIL_USE_SSL=False

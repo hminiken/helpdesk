@@ -16,6 +16,10 @@
  
 }
 
+.subsequent-row {
+	margin-left: -20%;
+}
+
 .input-block input {
 	background-color: #192024 !important;
 }

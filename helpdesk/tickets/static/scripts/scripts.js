@@ -1,6 +1,21 @@
 $(document).ready(function () {
 
+    
+    function getOnlyOpen() {
+            console.log("CHECKED");
+            var val = "closed";
+        $("#ticket_table_body tr").filter(function () {
+                $(this).toggle(
+                    $(this).text().toLowerCase().indexOf(val) <= -1
+                )
+            });
+        };
 
+    getOnlyOpen();
+
+
+    // ======
+    // Get the ticket details and display in the sidebar div "ticket_detailed_info"
     $(document).on('click', 'tr.ticket_table', function () {
         var id = $(this).attr('id');
         console.log(id);
@@ -11,11 +26,7 @@ $(document).ready(function () {
             data: { ticket_id: id },
             // dataType: 'json',
             success: function (response) {
-                // location.reload();
-                // $("#ticket_detailed_info").load(location.href + " #ticket_detailed_info>*", "");
-                // $("#ticket_detailed_info").load(" #ticket_detailed_info");
                 $("#ticket_detailed_info").html(response);
-
             },
             error: function (xhr) {
                 //Do Something to handle error
@@ -26,18 +37,12 @@ $(document).ready(function () {
     });
 
 
-    // $("#submit_ticket_status").submit(function (e) {
+    // ======
+    // When clicking hte dropdown, apply new status to the ticket
     $(document).on("click", "#submit_ticket_status", function (e) {
         e.preventDefault(); // avoid to execute the actual submit of the form.
 
-        var form = $(this);
-        var url = form.attr('action');
-
-
-
         id = $("#current_ticket_id").attr('ticket_id');
-        console.log("SUBMIT " + id);
-
 
         const fields = {
             csrf_token: {
@@ -61,10 +66,7 @@ $(document).ready(function () {
                 comment: fields.comment.input.value,
                 ticket_id: fields.ticket_ID.input.value
             },
-
-
             success: function (response) {
-                // console.log(response)
                 $("#ticket_detailed_info").html("");
                 $("#ticket_detailed_info").html(response);
 
@@ -78,15 +80,14 @@ $(document).ready(function () {
 
     });
 
-
+    // ======
     // Filter table
     $(document).on('keyup', '#table_search_input', function () {
-        // $('#table_search_input').on('keyup', function () {
         var search_val = $(this).val().toLowerCase();
 
         if ($('#show_closed_tickets').is(':checked')) {
             var val = "closed";
-            $("#ticket_table_all tr").filter(function () {
+            $("#ticket_table_body tr").filter(function () {
                 $(this).toggle(
                     $(this).text().toLowerCase().indexOf(val) > -1 &&
                     $(this).text().toLowerCase().indexOf(search_val) > -1
@@ -94,7 +95,7 @@ $(document).ready(function () {
             });
         } else if ($('#show_open_tickets').is(':checked')) {
             var val = "closed";
-            $("#ticket_table_all tr").filter(function () {
+            $("#ticket_table_body tr").filter(function () {
                 $(this).toggle(
                     $(this).text().toLowerCase().indexOf(val) <= -1 &&
                     $(this).text().toLowerCase().indexOf(search_val) > -1
@@ -103,7 +104,7 @@ $(document).ready(function () {
         }
         else if ($('#show_all_tickets').is(':checked')) {
             val = "";
-            $("#ticket_table_all tr").filter(function () {
+            $("#ticket_table_body tr").filter(function () {
                 $(this).toggle($(this).text().toLowerCase().indexOf(val) <= 1 &&
                     // $(this).text().toLowerCase().indexOf(val) <= 1) && 
                     $(this).text().toLowerCase().indexOf(search_val) > -1)
@@ -118,19 +119,17 @@ $(document).ready(function () {
 
 
     $("#show_closed_tickets").change(function () {
-
         search_val = document.getElementById('table_search_input').value;
         console.log("SEARCH:" + search_val)
         if ($('#show_closed_tickets').is(':checked')) {
             console.log("CHECKED");
             var val = "closed";
-            $("#ticket_table_all tr").filter(function () {
+            $("#ticket_table_body tr").filter(function () {
                 $(this).toggle(
                     $(this).text().toLowerCase().indexOf(val) > -1 &&
                     $(this).text().toLowerCase().indexOf(search_val) > -1
                 )
             });
-
         }
 
     });
@@ -138,19 +137,16 @@ $(document).ready(function () {
 
 
     $("#show_open_tickets").change(function () {
-
         search_val = document.getElementById('table_search_input').value;
-
         if ($('#show_open_tickets').is(':checked')) {
             console.log("CHECKED");
             var val = "closed";
-            $("#ticket_table_all tr").filter(function () {
+            $("#ticket_table_body tr").filter(function () {
                 $(this).toggle(
                     $(this).text().toLowerCase().indexOf(val) <= -1 &&
                     $(this).text().toLowerCase().indexOf(search_val) > -1
                 )
             });
-
         }
 
     });
@@ -161,7 +157,7 @@ $(document).ready(function () {
         search_val = document.getElementById('table_search_input').value;
         if ($('#show_all_tickets').is(':checked')) {
             var val = "";
-            $("#ticket_table_all tr").filter(function () {
+            $("#ticket_table_body tr").filter(function () {
                 $(this).toggle($(this).text().toLowerCase().indexOf(val) <= 1 &&
                     // $(this).text().toLowerCase().indexOf(val) <= 1) && 
                     $(this).text().toLowerCase().indexOf(search_val) > -1)
@@ -187,10 +183,6 @@ $(document).ready(function () {
             data: { status_id: id, ticket_id: current_ticket },
             // dataType: 'json',
             success: function (response) {
-                // location.reload();
-                // $("#ticket_detailed_info").load(location.href + " #ticket_detailed_info>*", "");
-                // $("#ticket_detailed_info").load(" #ticket_detailed_info");
-                // $("#assign_user_button").html(response);
                 $.ajax({
                     url: "/tickets/ticket_details",
                     type: "get",
@@ -202,7 +194,26 @@ $(document).ready(function () {
                         //Refresh the ticket table
                         var self = window.location.href;
                         console.log("Loading '#ticket_table_all' from " + self);
-                        $('#ticket_table_all').load(self + ' #ticket_table_all');
+                        // $('#ticket_table_all').load(self + ' #ticket_table_all');
+                        getOnlyOpen();
+                        // var self = window.location.href;
+                        // $('#show_open_tickets').prop('checked', true).checkbox('refresh');
+                        // $('#show_open_tickets').attr("checked", true)
+                        // $('#show_open_tickets').trigger("click")
+                        // alert($('#show_open_tickets').prop('checked'));
+                        // $('#radio-open-close').load(self + ' #radio-open-close');
+                        $('#ticket_table_all').load(self + ' #ticket_table_all', function() {
+                            $('#show_open_tickets').prop('checked', true).trigger("click");
+                            var val = "closed";
+                            $("#ticket_table_body tr").filter(function () {
+                                $(this).toggle(
+                                    $(this).text().toLowerCase().indexOf(val) <= -1
+                                )
+                            });
+                        
+                        });
+                        // getOnlyOpen();
+
 
                     },
                     error: function (xhr) {
@@ -283,16 +294,15 @@ $(document).ready(function () {
                     data: { ticket_id: current_ticket },
                     // dataType: 'json',
                     success: function (response) {
-                        // location.reload();
-                        // $("#ticket_detailed_info").load(location.href + " #ticket_detailed_info>*", "");
-                        // $("#ticket_detailed_info").load(" #ticket_detailed_info");
                         $("#ticket_detailed_info").html(response);
-
-                        //Refresh the ticket table
-                        var self = window.location.href;
-                        console.log("Loading '#ticket_table_all' from " + self);
+                        // getOnlyOpen();
+                        // var self = window.location.href;
+                        // $('#show_open_tickets').prop('checked', true).checkbox('refresh');
+                        // $('#show_open_tickets').attr("checked", true)
+                        // $('#show_open_tickets').trigger("click")
+                        // alert($('#show_open_tickets').prop('checked'));
+                        // $('#radio-open-close').load(self + ' #radio-open-close');
                         $('#ticket_table_all').load(self + ' #ticket_table_all');
-                        // $('#all_ticket_updates').load(self + ' #all_ticket_updates');
 
                     },
                     error: function (xhr) {
@@ -307,6 +317,7 @@ $(document).ready(function () {
         });
 
         // $('#assign_user_button').html(id)
+        getOnlyOpen();
 
     });
 
@@ -347,25 +358,6 @@ $(document).ready(function () {
     $('body').on('click', 'div.watcher-icon', function () {
         var id = $(this).attr('id');
         console.log(id);
-        // $("#ticket_detailed_info").html("");
-        // $.ajax({
-        //     url: "/tickets/ticket_details",
-        //     type: "get",
-        //     data: { ticket_id: id },
-        //     // dataType: 'json',
-        //     success: function (response) {
-        //         // location.reload();
-        //         // $("#ticket_detailed_info").load(location.href + " #ticket_detailed_info>*", "");
-        //         // $("#ticket_detailed_info").load(" #ticket_detailed_info");
-        //         $("#ticket_detailed_info").html(response);
-        //         console.log(response);
-
-        //     },
-        //     error: function (xhr) {
-        //         //Do Something to handle error
-        //     }
-        // });
-
 
     });
 
