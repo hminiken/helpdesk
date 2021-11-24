@@ -1,0 +1,112 @@
+{% extends "tickets/base.html" %}
+
+{% block content %}
+
+<body>
+
+<script type="text/javascript" src="{{ url_for('.static',filename='scripts/create_ticket.js') }}"></script>
+
+<div class="app-main">    
+    <div class="app-main__outer">
+        <div class="app-main__inner">            
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="main-card mb-3 card">
+                        <div class="card-body">
+                            <div class="row">
+                                <h5 class="card-title">Create a New Ticket</h5>                            
+                            </div>
+                            <form class="" action="" method="post">
+                                {{ form.hidden_tag() }}
+                                <div class="grid-menu grid-menu-2col">
+                                    <div class="form-row">
+                                        <div class="col-sm-6">
+                                        <div class="position-relative form-group">
+                                            {{ form.customer.label }}
+                                            {{ form.customer(class='form-control') }}<br>                                        
+                                        </div>
+                                        </div>      
+                                        <div class="col-sm-6">
+                                            <div class="position-relative form-group">
+                                                {{ form.assembly.label }}
+                                                {{ form.assembly}}<br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-sm-6">
+                                            <div class="position-relative form-group">
+                                                    {{ form.partnumber.label }}
+                                                    {{ form.partnumber}}<br>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="position-relative form-group">
+                                                    {{ form.workorder.label }}
+                                                    {{ form.workorder}}<br>
+                                            </div>
+                                        </div>
+                                    </div>                                    
+                                </div>                                
+                                <div class="form-row">
+                                    <div class="col-sm-6">
+                                        <div class="position-relative form-group">
+                                            <div class="position-relative form-group">
+                                                {{ form.category.label }}
+                                                {{ form.category(class='form-control') }}<br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-sm-6">
+                                        <div class="position-relative form-group">
+                                            <div class="position-relative form-group">
+                                                {{ form.subcat.label }}
+                                                {{ form.subcat(class='form-control') }}<br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                                <p>{{ form.priority() }} {{ form.priority.label }}</p>
+                                
+                                <div class="position-relative form-group">
+                                    <div class="position-relative form-group">
+                                        {{ form.description.label }}
+                                        {{ form.description }}<br>
+                                    </div>
+                                </div>                                
+                                   
+                                <div class="input-block black-submit">
+                                    <p>{{ form.submit()}}</p>
+                                </div>
+                            </form>
+                        </div>
+                        {% for field, errors in form.errors.items() %}
+                            <div class="alert alert-error">
+                                {{ form[field].label }}: {{ ', '.join(errors) }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                        
+                <div class="col-md-4">
+
+                    <div class="main-card mb-3 card">
+                        <div class="card-body">
+                            <h4 class="card-title">Open Tickets</h4>
+                            
+                            <div id="current_open_ticket_list">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>    
+            </div>
+        </div>            
+    </div>
+</div>
+    
+</body>
+
+{% endblock %}

@@ -1,0 +1,153 @@
+{% extends "users/base.html" %}
+
+{% block content %}
+
+<!-- Use this so we can do ticket functionality within our profile page -->
+<script type="text/javascript" src="{{ url_for('tickets_bp.static',filename='scripts/scripts.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('.static',filename='scripts/scripts.js') }}"></script>
+
+
+<div class="app-main">
+    <div class="app-main__inner">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="mb-3 profile-responsive card">
+
+                        <div class="card-header" id="current_ticket_id" >
+                            <h4>
+                                What is this page?
+                            </h4>
+                        </div>
+                        
+                        <div class="card-body">
+                    <p>A list of upcoming features and their status!</p>
+                    <p>Not every feature is ready to use, but since the ticket system is functional, Engineering wanted to roll it out and get started.</p>
+                    <p> If you notice a bug or issue in the website, or if you want a feature added, and it's not already listed here, submit a new ticket! Use the "Ticket System" category and this page will be updated to show it's status. 
+                    </p>
+                    </div>
+                    
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <div id="ticket_status_lists" class="mb-3 card">
+                <div class="card-header-tab card-header">
+                    <div class="card-header-title">
+                        <i class="header-icon lnr-bicycle icon-gradient bg-love-kiss"> </i>
+                        <h4>Upcoming Features</h4>
+                    </div>
+                   
+                </div>
+                <div id="" class="card-body">
+                            <ul class="list-group list-group-flush">
+
+                                <li class="bg-transparent list-group-item ticket_list">
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-outer">
+                                            <div  class="profile-ticket-item widget-content-wrapper">
+                                                <div class="widget-content-left">
+                                                    <div class="widget-heading">Edit Ticket From Profile Page</div>
+                                                    <div class="widget-subheading">Currently, tickets are meant to be viewed from the profile page only. The ability to assign users and update the ticket from the profile page is in progress.</div>
+                                                </div>
+                                                <div class="widget-content-right">
+                                                    <div class="badge badge-info">In Progress</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ticket_detailed_info"
+                                            id="ticket_detailed_info_aaaaaaaaa"></div>
+                                    </div>
+                                </li>
+
+                                <li class="bg-transparent list-group-item ticket_list">
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-outer">
+                                            <div class="profile-ticket-item widget-content-wrapper">
+                                                <div class="widget-content-left">
+                                                    <div class="widget-heading">Create Ticket Attachment Subdirectory</div>
+                                                    <div class="widget-subheading">Due to difficulties with the server and SQMS, no subdirectories are made. If attachments are needed, please use the provided link in the ticket details to create the subdirectory.</div>
+                                                </div>
+                                                <div class="widget-content-right">
+                                                    <div class="badge badge-secondary">Unscheduled</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ticket_detailed_info" id="ticket_detailed_info_aaaaaaaaa"></div>
+                                    </div>
+                                </li>
+
+                                <li class="bg-transparent list-group-item ticket_list">
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-outer">
+                                            <div class="profile-ticket-item widget-content-wrapper">
+                                                <div class="widget-content-left">
+                                                    <div class="widget-heading">Ticket Priority</div>
+                                                    <div class="widget-subheading">Guidelines on what makes a ticket a priority need to still be determined and implemented on the create ticket page.</div>
+                                                </div>
+                                                <div class="widget-content-right">
+                                                    <div class="badge badge-secondary">Unscheduled</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ticket_detailed_info" id="ticket_detailed_info_aaaaaaaaa"></div>
+                                    </div>
+                                </li>
+
+                                <li class="bg-transparent list-group-item ticket_list">
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-outer">
+                                            <div class="profile-ticket-item widget-content-wrapper">
+                                                <div class="widget-content-left">
+                                                    <div class="widget-heading">Ticket Due Dates</div>
+                                                    <div class="widget-subheading">Need ability to determine standard turn times, and add that to the ticket. Need to add ability to update commit date by the asignee. </div>
+                                                </div>
+                                                <div class="widget-content-right">
+                                                    <div class="badge badge-secondary">Unscheduled</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ticket_detailed_info" id="ticket_detailed_info_aaaaaaaaa"></div>
+                                    </div>
+                                </li>
+
+                                <li class="bg-transparent list-group-item ticket_list">
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-outer">
+                                            <div class="profile-ticket-item widget-content-wrapper">
+                                                <div class="widget-content-left">
+                                                    <div class="widget-heading">Admin Features</div>
+                                                    <div class="widget-subheading">Update admin pages to allow editing of ticket categories, new users, delete users, edit users.</div>
+                                                </div>
+                                                <div class="widget-content-right">
+                                                    <div class="badge badge-secondary">Unscheduled</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ticket_detailed_info" id="ticket_detailed_info_aaaaaaaaa"></div>
+                                    </div>
+                                </li>
+
+
+
+                            </ul>
+                        </div>
+                       
+
+
+
+                            </ul>
+                </div>
+
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+{% endblock %}

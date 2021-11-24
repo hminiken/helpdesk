@@ -1,0 +1,9 @@
+{% include "base.html" %}
+
+<script type="text/javascript" src="{{ url_for('.static',filename='scripts/script.js') }}"></script>
+<link rel="stylesheet" type="text/css" href="{{ url_for('.static',filename='styles/style.css') }}">
+</link>
+
+
+
+<body>{% block content %}{% endblock %}</body>
