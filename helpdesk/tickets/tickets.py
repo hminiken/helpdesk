@@ -1,18 +1,27 @@
-from datetime import datetime
-from os import stat
-from flask import Flask, Blueprint, render_template, request, redirect, url_for, jsonify
-from flask.helpers import flash, make_response
-from helpdesk.tickets.models import NewTicketForm, Subcategory, TicketCommentForm,  TicketUpdates, Tickets
-from app import db
-from flask_login import current_user
-import json
+'''
+* Author: Hillary Miniken
+* Email: hminiken@outlook.com
+* Date Created: 2021-11-18
+* Filename: tickets.py
+*
+* Description: main script for the tickets blueprint,
+               loads the routes for the ticket pages
+'''
 
-from helpdesk.tickets.ticket_utils import add_ticket_watcher, close_ticket, create_new_ticket, email_ticket_update, get_closed_tickets, get_existing_tickets, get_open_tickets, get_status_options, get_ticket_details, get_ticket_status, get_ticket_updates, get_ticket_watchers, get_tickets, get_user_data, get_user_name,  insert_ticket_data, remove_status, remove_ticket_watcher, update_assigned_user, update_ticket_status
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify
+from globals import TICKET_CLOSED
+from helpdesk.tickets.models import NewTicketForm, Subcategory, TicketCommentForm,  TicketUpdates
+from database import  db
+from flask_login import current_user
+from helpdesk.tickets.ticket_utils import add_ticket_watcher, close_ticket, create_new_ticket, email_ticket_update, \
+                                          get_existing_tickets, get_open_tickets, get_status_options, get_ticket_details, \
+                                          get_ticket_status, get_ticket_updates, get_ticket_watchers, get_tickets, \
+                                          get_user_data, insert_ticket_data, remove_status, \
+                                          remove_ticket_watcher, update_assigned_user, update_ticket_status
 
 tickets_bp = Blueprint('tickets_bp', __name__, 
                         template_folder='templates', 
                         static_folder='static')
-
 
 '''
 Show tickets home route. Loads a table of tickets
@@ -91,7 +100,10 @@ def user_details():
     return ticket_id
 
 
-
+'''
+Route to add a watcher to the ticket in the database, 
+then refresh the display on return
+'''
 @tickets_bp.route('/assign_watcher', methods=['GET'])
 def assign_watcher():
 
@@ -100,7 +112,6 @@ def assign_watcher():
     ticket_id = request.args.get('ticket_id')
 
     ticket_watchers = get_ticket_watchers(ticket_id)
-
 
     watcher_exists = False
     for item in ticket_watchers:
@@ -113,8 +124,6 @@ def assign_watcher():
     else:
         #remove that status
         remove_ticket_watcher(user_id, ticket_id)
-
-
 
     # Return the ticket id, used to update the ticket details html
     return ticket_id
@@ -142,7 +151,7 @@ def assign_statu():
     if status_exists == False:
         # Only update db if status doesn't already exist
         update_ticket_status(status_id, ticket_id)
-        if int(status_id) == 4 or int(status_id) == 5:
+        if int(status_id) == TICKET_CLOSED:
             #close ticket
             close_ticket(ticket_id)
         status = get_ticket_status(ticket_id)
@@ -200,6 +209,7 @@ def new_ticket_subcatgory(category):
 
     return jsonify({'subcats' : subcatsList})
 
+
 '''
 Route to create the new ticket in the database and reroute home
 '''
@@ -223,6 +233,10 @@ def create_ticket():
     return redirect(url_for('tickets_bp.show_tickets'))
 
 
+'''
+Route for ticket creation page, fetch all the open tickets
+for that customer, then display on the right hand possible
+'''
 @tickets_bp.route('/already_created', methods=['GET', 'POST'])
 def created_ticket_list():
 
@@ -231,6 +245,5 @@ def created_ticket_list():
     # Get data about specific ticket by id
     ticket_list = get_existing_tickets(cust)
 
-    
     return render_template('tickets/create.html',
                            ticket_list=ticket_list)

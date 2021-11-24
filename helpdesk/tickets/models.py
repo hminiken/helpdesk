@@ -1,19 +1,27 @@
+'''
+* Author: Hillary Miniken
+* Email: hminiken@outlook.com
+* Date Created: 2021-11-18
+* Filename: models.py
+*
+* Description: for use with SQLAlchemy, the ticket classes and the 
+               forms that allow the database to be updated
+'''
+
+from wtforms_sqlalchemy.fields import QuerySelectField
 from flask_login.mixins import UserMixin
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, BooleanField, SubmitField, IntegerField, SelectField
 from flask_wtf import FlaskForm
 from datetime import datetime
-from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from wtforms.fields.core import IntegerField, SelectField
+# from wtforms.fields.core import IntegerField, SelectField
 from wtforms.fields.simple import TextAreaField
-
 from wtforms.validators import DataRequired, Length, Optional
-from wtforms.widgets.core import CheckboxInput
-from app import db
-from database import conn_erp, conn_unipoint
+import wtforms_sqlalchemy
+from database import db
+from database import conn_erp
 
 
 class TicketUpdates(db.Model):
-    # primary keys are required by SQLAlchemy
     ticket_update_id = db.Column(db.Integer, primary_key=True)
     FK_ticket_id = db.Column(db.Integer)
     update_user = db.Column(db.Integer)
@@ -24,7 +32,6 @@ class TicketUpdates(db.Model):
 
 
 class Tickets(db.Model):
-    # primary keys are required by SQLAlchemy
     ticket_id = db.Column(db.Integer, primary_key=True)
     priority = db.Column(db.Integer)
     description = db.Column(db.String(1000))
@@ -45,68 +52,52 @@ class Tickets(db.Model):
     id = ticket_id
 
    
-
-class TicketCommentForm(FlaskForm):
-    comment = TextAreaField('Status Update', validators=[DataRequired()])
-    ticket_id = IntegerField(validators=[DataRequired()])
-
-
-def customer_choices():
-
-    cursor_unipoint = conn_erp()
-
-    task_query = '''
-        SELECT Customer.CUS_CustomerID  as id, Customer.CUS_SortRef as customer, Customer.CUS_ActiveFlag
-        FROM 
-        Customer
-     WHERE Customer.CUS_SortRef Not Like 'QX%';
-        '''
-
-    task_list = []
-
-    result = cursor_unipoint.execute(task_query).fetchall()
-
-    for row in result:
-        # task_list.append([x for x in row])
-        task_list.append(row)
-
-    data = []
-    data.append((0, "000 - Not Applicable or Many"))
-    i = 0
-    for item in task_list:
-        if item[0].isnumeric() and item[2] == True:
-            data.append((int(item[0]), item[0] + " - " + item[1]))
-            # item[0] = int(item[0])
-            i = i + 1
-
-    return data
-
-
 class Category(UserMixin, db.Model):
-    # primary keys are required by SQLAlchemy
     id = db.Column(db.Integer, primary_key=True)
     category_name = db.Column(db.String(100))
-    # permission_description = db.Column(db.String(1000))
-    # permission_level = db.Column(db.Integer)
-    # permission_department = db.Column(db.String(1000))
-
-
-def category_choices():
-    data = db.session.query(Category).all()  
-    return data
 
 
 class Subcategory(UserMixin, db.Model):
-    # primary keys are required by SQLAlchemy
     id = db.Column(db.Integer, primary_key=True)
     FK_category_id = db.Column(db.Integer, primary_key=True)
     subcategory_name = db.Column(db.String(100))
 
 
-def subcategory_choices():
-    data = db.session.query(Subcategory).all()
+def customer_choices():
+    cursor_unipoint = conn_erp()
+    cust_query = '''
+                SELECT Customer.CUS_CustomerID  as id, Customer.CUS_SortRef as customer, Customer.CUS_ActiveFlag
+                FROM 
+                Customer
+                WHERE Customer.CUS_SortRef Not Like 'QX%';
+                '''
+
+    cust_list = []
+    result = cursor_unipoint.execute(cust_query).fetchall()
+    for row in result:
+        cust_list.append(row)
+
+    # Create the list for the dropdown in the format ZZZ - Customer Name
+    data = []
+    data.append((0, "000 - Not Applicable or Many"))
+    i = 0
+    for item in cust_list:
+        if item[0].isnumeric() and item[2] == True:
+            data.append((int(item[0]), item[0] + " - " + item[1]))
+            i = i + 1
+
     return data
 
+
+def category_choices():
+    data = db.session.query(Category).all()
+    return data
+
+
+
+class TicketCommentForm(FlaskForm):
+    comment = TextAreaField('Status Update', validators=[DataRequired()])
+    ticket_id = IntegerField(validators=[DataRequired()])
 
 
 
@@ -122,10 +113,17 @@ class NewTicketForm(FlaskForm):
     partnumber = StringField('Part Numbers', validators=[
                              DataRequired(), Length(max=100)])
     customer = SelectField('User Type', choices=data,
-                             validators=[DataRequired()])
-    category = QuerySelectField('Category',   validators=[DataRequired()], query_factory=category_choices, get_label='category_name')
-    subcat = SelectField('SubCategory',  coerce=int, validators=[Optional()], choices=[], validate_choice=False)
+                           validators=[DataRequired()])
+    category = QuerySelectField('Category',   validators=[DataRequired(
+                                )], query_factory=category_choices, get_label='category_name')
+    subcat = SelectField('SubCategory',  coerce=int, validators=[
+                         Optional()], choices=[], validate_choice=False)
     submit = SubmitField('Create Ticket')
+
+
+
+
+
 
 
    

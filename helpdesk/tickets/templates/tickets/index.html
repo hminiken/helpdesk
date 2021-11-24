@@ -2,22 +2,20 @@
 
 {% block content %}
 
-    <script type="text/javascript" src="{{ url_for('.static',filename='scripts/scripts.js') }}"></script>
-
+<script type="text/javascript" src="{{ url_for('.static',filename='scripts/scripts.js') }}"></script>
 <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
-<div class="app-main" >
-    
-    
-    
+
+
+<div class="app-main" >   
     <div class="app-main__outer">
-        <div class="app-main__inner">
-            
-            <div class="row">
-                
+        <div class="app-main__inner">            
+            <div class="row">                
                 <div id="ticket-left-sidebar" class="col-lg-7">
                     <div class="main-card mb-3 card" >
                         <div class="card-body">
+                        <!-- Ticket Header -->
                             <div class="row">
+                                <!-- Ticket Header Left Col -->
                                 <div class="col-md-5">
                                     <div class="row ">
                                         <div class="col-md-12">
@@ -25,18 +23,20 @@
                                         </div>
                                     </div>
                                     <div class="row subsequent-row">
-                                        <div class="col-md-12">
-                            
+                                        <div class="col-md-12">                            
                                             <a href="{{ url_for('tickets_bp.new_ticket') }}"> <button class="mb-2 mr-2 btn btn-primary">New Ticket
                                                 </button>
                                             </a>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
-                            
+                                <!-- Ticket Header Middle Col -->
+                                <div class="col-md-2">                            
                                 </div>
+                                <!-- Ticket Header Right Col -->
                                 <div class="col-md-5">
+
+                                    <!-- Table Search Box -->
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="dataTables_filter">
@@ -45,9 +45,10 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <!-- Open, Closed, All Ticket Radio Buttons -->
                                     <div class="row subsequent-row">
-                                        <div class="col-md-12">
-                           
+                                        <div class="col-md-12">                           
                                             <div class="position-relative form-group">
                                                 <div id="radio-open-close">
                                                     <div class="custom-radio custom-control custom-control-inline">
@@ -64,90 +65,72 @@
                                                         <label class="custom-control-label" for="show_all_tickets">All</label>
                                                     </div>
                                                 </div>
-                                            </div>
-                            
-                            
-                            
+                                            </div>                            
                                         </div>
-                                    </div>
-                            
-                            
-                                </div>
-                            
-                            </div>
-
-                                </div>
-                                <div  class="scroll-area-lg">
-                                    <div class="scrollbar-container ps--active-y ps">
-                                        <table class="mb-0 table table-hover sortable" id="ticket_table_all">
-                                            <thead>
-                                                <tr>
-                                                    <th><i class="fa fa-fire"></i></th>
-                                                    <th>Ticket ID</th>
-                                                    <th>Cat</th>
-                                                    <th>Description</th>
-                                                    <!-- <th>Status</th> -->
-                                                    <th>Created</th>
-                                                    <th>Assigned To</th>
-                                                    <th>Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="ticket_table_body">
-                                                {% for item in tickets %}
-                                                <tr id="{{ item['ticket_id']}}" class='ticket_table'>
-                                                    <td><i class="{{ 'fa fa-fire' if item['priority'] == 1 else ''}}"></i></td>
-                                                    
-                                                    <!-- <td><i class="fa fa-fire"></i></td> -->
-                                                    <td>#{{ item['ticket_id']}}</td>
-                                                    <td>{{ item['category']}}</td>
-                                                    <td class="text-truncate" style="max-width: 150px;">{{ item['description']}}</td>
-                                                    <!-- <td><div class="badge badge-warning">Completed</div></td> -->
-                                                    <td>{{ item['date_created'].strftime('%m/%d/%Y')}}</td>
-                                                    <td>{{ item['assigned']}}</td>
-                                                    <td > <div class="badge badge-{{item['ticket_badge']}}"> {{item['ticket_status']}}</div></td>
-                                                    <td style="display: none;">{{ item['customer']}}</td>
-                                                    <td style="display: none;">{{ item['created']}}</td>
-                                                    <td style="display: none;">{{ item['description']}}</td>
-                                                    <td style="display: none;">{{ item['subcategory']}}</td>
-                                                    <td style="display: none;">{{ item['assembly']}}</td>
-                                                    <td style="display: none;">{{ item['part_number']}}</td>
-                                            <td style="display: none;" class="is_open">{{ item['ticket_status']}}</td>
-
-                                                </tr>
-                                                
-                                                {% endfor %}                                
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                                    </div>  
+                                </div>                            
                             </div>
                         </div>
-                    
-                    
-                    
-                    <div id="ticket_detailed_info" class="col-lg-5 ticket-details-div">
-                        <!-- Load the ticket data here -->
+                        <!-- Ticket Table  -->
+                        <div  class="scroll-area-lg">
+                            <div class="scrollbar-container ps--active-y ps">
+                                <table class="mb-0 table table-hover sortable" id="ticket_table_all">
+                                    <thead>
+                                        <tr>
+                                            <th><i class="fa fa-fire"></i></th>
+                                            <th>Ticket ID</th>
+                                            <th>Cat</th>
+                                            <th>Description</th>
+                                            <th>Created</th>
+                                            <th>Assigned To</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ticket_table_body">
+                                        {% for item in tickets %}
+                                        <tr  id="{{ item['ticket_id']}}" class='ticket_table'>
+                                            <td><i style="color:crimson;" class="{{ 'fa fa-fire' if item['priority'] == 1 else ''}}"></i>
+                                            {% if item['priority'] == 1 %}
+                                                <span style="display: none;">1</span>
+                                            {% else %}
+                                                <span style="display: none;">0</span>
+                                            {% endif %}
+                                            </td>                                            
+                                            <td>#{{ item['ticket_id']}}</td>
+                                            <td>{{ item['category']}}</td>
+                                            <td class="text-truncate" style="max-width: 150px;">{{ item['description']}}</td>
+                                            <td>{{ item['date_created'].strftime('%m/%d/%Y')}}</td>
+                                            <td>{{ item['assigned']}}</td>
+                                            <td > <div class="badge badge-{{item['ticket_badge']}}"> {{item['ticket_status']}}</div></td>
+
+                                            <!-- Table hidden rows for search capability -->
+                                            <td style="display: none;">{{ item['customer']}}</td>
+                                            <td style="display: none;">{{ item['created']}}</td>
+                                            <td style="display: none;">{{ item['description']}}</td>
+                                            <td style="display: none;">{{ item['subcategory']}}</td>
+                                            <td style="display: none;">{{ item['assembly']}}</td>
+                                            <td style="display: none;">{{ item['part_number']}}</td>
+                                            <td style="display: none;" class="is_open">{{ item['ticket_status']}}</td>
+                                        </tr>                                        
+                                        {% endfor %}                                
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                    </div>
+                </div>             
+                    
+                    
+                <div id="ticket_detailed_info" class="col-lg-5 ticket-details-div">
+                    <!-- Load the ticket data here -->
                 </div>
-                
             </div>
-        </div>
-        
-        
-        
+        </div>        
     </div>
-    
-    
-    
 </div>
+        
+        
+   
 
-<!-- <script>
-    $('tr.ticket_table').click(function () {
-            var id = $(this).attr('id');
-            alert(id);
-
-        });
-        </script> -->
 
 {% endblock %}

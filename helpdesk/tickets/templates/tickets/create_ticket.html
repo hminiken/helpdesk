@@ -4,12 +4,11 @@
 
 <body>
 
-<script type="text/javascript" src="{{ url_for('.static',filename='scripts/scripts.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('.static',filename='scripts/create_ticket.js') }}"></script>
 
 <div class="app-main">    
     <div class="app-main__outer">
-        <div class="app-main__inner">
-            
+        <div class="app-main__inner">            
             <div class="row">
                 <div class="col-md-8">
                     <div class="main-card mb-3 card">
@@ -71,108 +70,43 @@
                                
                                 <p>{{ form.priority() }} {{ form.priority.label }}</p>
                                 
-                                <!-- <div class="position-relative form-group"><label for="exampleText" class="">Description/Details</label><textarea
-                                   style="height: 150px;" name="details_input" id="details_input" class="form-control"></textarea>
-                                </div> -->
                                 <div class="position-relative form-group">
                                     <div class="position-relative form-group">
                                         {{ form.description.label }}
                                         {{ form.description }}<br>
                                     </div>
-                                </div>
-                                
+                                </div>                                
                                    
-                                        <!-- <button id="submit_new_ticket" class="mt-1 btn btn-primary">Submit</button> -->
-                                        <div class="input-block green-submit">
-                                            <p>{{ form.submit()}}</p>
-                                        </div>
-                                    </form>
+                                <div class="input-block black-submit">
+                                    <p>{{ form.submit()}}</p>
                                 </div>
-                                {% for field, errors in form.errors.items() %}
-                                <div class="alert alert-error">
-                                    {{ form[field].label }}: {{ ', '.join(errors) }}
-                                </div>
-                                {% endfor %}
-                            </div>
+                            </form>
                         </div>
-                        
-                        <div class="col-md-4">
-
-                            <div class="main-card mb-3 card">
-                                <div class="card-body">
-                                    <h4 class="card-title">Open Tickets</h4>
-                                    
-                                    <div id="current_open_ticket_list">
-
-                                    </div>
-                                    </div>
-                                </div>
-
-
-
-                            <!-- <div class="main-card mb-3 card">
-                                <div class="card-body">
-                                    <h4 class="card-title">Instructions</h4>
-                                    <h5 class="card-subtitle">Customer</h5>
-                                    <p>asdf</p>
-                                    <h5 class="card-subtitle">Assembly</h5>
-                                    <p>asdf</p>
-                                    <h5 class="card-subtitle">Part Number</h5>
-                                    <p></p>
-                                    <h5 class="card-subtitle">Link to Attachments</h5>
-                                    <p></p>
-                                    <h5 class="card-subtitle">Category</h5>
-                                    <p></p>
-                                    <h5 class="card-subtitle">Subcategory</h5>
-                                    <p></p>
-                                    <h5 class="card-subtitle">Description/Details</h5>
-                                    <p></p>
-                                    
-                                    
-                                    
-                                </div>
-                            </div> -->
+                        {% for field, errors in form.errors.items() %}
+                            <div class="alert alert-error">
+                                {{ form[field].label }}: {{ ', '.join(errors) }}
                             </div>
-
-
-                    <!-- <div class="modal fade bd-example-modal-lg show" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
-                        style="display: block; margin-top: 5%;" aria-modal="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas
-                                        eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
-                                    <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue
-                                        laoreet rutrum faucibus dolor auctor.</p>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Save changes</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
+                        {% endfor %}
                     </div>
-
-
-                        </div>
-
-                        
-                    </div>
-
-
-
-
-
                 </div>
-                
+                        
+                <div class="col-md-4">
+
+                    <div class="main-card mb-3 card">
+                        <div class="card-body">
+                            <h4 class="card-title">Open Tickets</h4>
+                            
+                            <div id="current_open_ticket_list">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>    
             </div>
-            </body>
-            
-            {% endblock %}
+        </div>            
+    </div>
+</div>
+    
+</body>
+
+{% endblock %}

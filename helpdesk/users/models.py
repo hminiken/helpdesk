@@ -2,14 +2,13 @@
 
 from datetime import datetime
 from flask import app
-from wtforms.fields.core import IntegerField, SelectField
 from wtforms.fields.simple import FileField
-from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, required
-from app import db
-from app import login
+from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
+from database import db
+from database import login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from wtforms.ext.sqlalchemy.fields import QuerySelectField
+from wtforms_sqlalchemy.fields import QuerySelectField
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField

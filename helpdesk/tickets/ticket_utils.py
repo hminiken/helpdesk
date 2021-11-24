@@ -1,3 +1,13 @@
+'''
+* Author: Hillary Miniken
+* Email: hminiken@outlook.com
+* Date Created: 2021-11-18
+* Filename: ticket_utils.py
+*
+* Description: Functions for use in the tickets.py script. 
+               Fetches and processes data from database to
+               be loaded onto the ticket pages.
+'''
 
 from datetime import datetime
 from flask.templating import render_template
@@ -5,10 +15,9 @@ from flask_mail import Message
 from pymysql import NULL
 from database import mysql
 import os
-from app import db
+from database import db, mail
 from flask_login import current_user
-from app import mail
-
+from globals import TICKET_CLOSED
 from helpdesk.tickets.models import Subcategory, Tickets
 
 #  -----------------------------------------------------------
@@ -22,17 +31,17 @@ def get_tickets():
     cursor = conn.cursor()
 
     qry = '''SELECT *, 
-    (Select CONCAT(fname, ' ', lname) from users where user_id=created_by ) AS created, 
-    (Select CONCAT(fname, ' ', lname) from users where user_id=assigned_to ) AS assigned  ,
+    (SELECT CONCAT(fname, ' ', lname) FROM users WHERE user_id=created_by ) AS created, 
+    (SELECT CONCAT(fname, ' ', lname) FROM users WHERE user_id=assigned_to ) AS assigned  ,
     (SELECT 
 	(SELECT status_name FROM status_list WHERE status_id = FK_status_id) as status_name 
 	FROM ticket_status 
-	WHERE FK_ticket_id=ticket_id ORDER BY FK_status_id DESC LIMIT 1) as ticket_status,
+	WHERE FK_ticket_id=ticket_id ORDER BY FK_status_id ASC LIMIT 1) as ticket_status,
     (SELECT 
 	(SELECT status_badge FROM status_list WHERE status_id = FK_status_id) as status_name 
 	FROM ticket_status 
-	WHERE FK_ticket_id=ticket_id ORDER BY FK_status_id DESC LIMIT 1) as ticket_badge
-    from tickets 
+	WHERE FK_ticket_id=ticket_id ORDER BY FK_status_id ASC LIMIT 1) as ticket_badge
+    FROM tickets 
     ORDER BY ticket_id DESC
 
     '''
@@ -57,9 +66,9 @@ def get_closed_tickets():
     cursor = conn.cursor()
 
     qry = '''SELECT *, 
-    (Select CONCAT(fname, ' ', lname) from users where user_id=created_by ) AS created, 
-    (Select CONCAT(fname, ' ', lname) from users where user_id=assigned_to ) AS assigned  
-    from tickets 
+    (SELECT CONCAT(fname, ' ', lname) FROM users WHERE user_id=created_by ) AS created, 
+    (SELECT CONCAT(fname, ' ', lname) FROM users WHERE user_id=assigned_to ) AS assigned  
+    FROM tickets 
     WHERE closed_by IS NOT NULL
     ORDER BY ticket_id DESC
 
@@ -112,13 +121,13 @@ def get_ticket_details(ticket_id):
     cursor = conn.cursor()
 
     qry = '''
-        Select *, 
-        (Select CONCAT(fname, ' ', lname) from users where user_id=created_by ) AS created, 
-        (Select CONCAT(fname, ' ', lname) from users where user_id=assigned_to ) AS assigned, 
-        (Select user_img from users where user_id=assigned_to ) AS user_assigned_img, 
-        (Select user_img from users where user_id=created_by ) AS user_created_img, 
-        (Select CONCAT(fname, ' ', lname) from users where user_id=closed_by ) AS closed 
-        from tickets where ticket_id=%s;
+        SELECT *, 
+        (SELECT CONCAT(fname, ' ', lname) FROM users WHERE user_id=created_by ) AS created, 
+        (SELECT CONCAT(fname, ' ', lname) FROM users WHERE user_id=assigned_to ) AS assigned, 
+        (SELECT user_img FROM users WHERE user_id=assigned_to ) AS user_assigned_img, 
+        (SELECT user_img FROM users WHERE user_id=created_by ) AS user_created_img, 
+        (SELECT CONCAT(fname, ' ', lname) FROM users WHERE user_id=closed_by ) AS closed 
+        FROM tickets WHERE ticket_id=%s;
     '''
 
     cursor.execute(qry, (ticket_id))
@@ -139,7 +148,7 @@ def get_ticket_updates(ticket_id):
     cursor = conn.cursor()
 
     cursor.execute(
-        "SELECT * from ticket_updates where FK_ticket_id=" + ticket_id)
+        "SELECT * ROM ticket_updates WHERE FK_ticket_id=" + ticket_id)
     data = cursor.fetchone()
 
     ticket_list = []
@@ -183,7 +192,7 @@ def get_user_data():
     cursor = conn.cursor()
 
     qry = '''
-    SELECT *, 	(Select permission_department from permissions where id=FK_role_id) as department from users ORDER BY fname
+    SELECT *, 	(SELECT permission_department FROM permissions WHERE id=FK_role_id) as department FROM users ORDER BY fname
     '''
 
     cursor.execute(qry)
@@ -299,6 +308,15 @@ def update_assigned_user(uid, ticket_id):
                    uid,  current_user.user_id,  current_user.user_id, int(ticket_id)))
     conn.commit()
 
+    # Remove status "unassigned if exists"
+    update_qry = '''
+        DELETE FROM helpdesk.ticket_status 
+        WHERE FK_ticket_id=%s AND FK_status_id=%s;
+    '''
+
+    cursor.execute(update_qry, (int(ticket_id), 4))
+    conn.commit()
+
     return
 
 
@@ -334,6 +352,7 @@ def update_ticket_status(status_id, ticket_id):
     cursor.execute(update_qry, (ticket_id, status_id))
     conn.commit()
 
+
     return
 
 
@@ -365,6 +384,17 @@ def remove_status(status_id, ticket_id):
                    update_desc, status_id, ticket_id))
     conn.commit()
 
+    if int(status_id) == TICKET_CLOSED:
+        update_qry = '''
+        UPDATE tickets
+        SET closed_by=NULL, date_closed=NULL
+        WHERE ticket_id=%s
+        '''
+
+        cursor.execute(update_qry, (ticket_id))
+        conn.commit()
+
+
     return
 
 
@@ -388,9 +418,9 @@ def email_ticket_update(ticket_id, update_msg):
 
     sql_qry = '''
                 SELECT FK_user_id as user_id,
-                (Select CONCAT(fname, ' ', lname) from users where user_id=FK_user_id) AS watcher,          
-                (Select ticket_watched_updates from users where user_id=FK_user_id) AS send_update,
-                (Select email from users where user_id=FK_user_id) AS email
+                (SELECT CONCAT(fname, ' ', lname) FROM users WHERE user_id=FK_user_id) AS watcher,          
+                (SELECT ticket_watched_updates FROM users WHERE user_id=FK_user_id) AS send_update,
+                (SELECT email FROM users WHERE user_id=FK_user_id) AS email
                 FROM helpdesk.ticket_watching
                 WHERE FK_ticket_id=%s;
                 '''
@@ -408,9 +438,9 @@ def email_ticket_update(ticket_id, update_msg):
     # Get the creator
     sql_qry = '''
             SELECT 
-            (Select CONCAT(fname, ' ', lname) from users where user_id=created_by ) AS created, 
-            (Select ticket_created_updates from users where user_id=created_by ) AS send_update,
-            (Select email from users where user_id=created_by) AS email    
+            (SELECT CONCAT(fname, ' ', lname) FROM users WHERE user_id=created_by ) AS created, 
+            (SELECT ticket_created_updates FROM users WHERE user_id=created_by ) AS send_update,
+            (SELECT email FROM users WHERE user_id=created_by) AS email    
             FROM tickets WHERE ticket_id=%s;
                 '''
 
@@ -427,9 +457,9 @@ def email_ticket_update(ticket_id, update_msg):
     # Get the assignee
     sql_qry = '''
                 SELECT  
-                (Select CONCAT(fname, ' ', lname) from users where user_id=assigned_to ) AS created, 
-                (Select ticket_assigned_updates from users where user_id=assigned_to ) AS send_update,
-                (Select email from users where user_id=assigned_to ) AS email       
+                (SELECT CONCAT(fname, ' ', lname) FROM users WHERE user_id=assigned_to ) AS created, 
+                (SELECT ticket_assigned_updates FROM users WHERE user_id=assigned_to ) AS send_update,
+                (SELECT email FROM users WHERE user_id=assigned_to ) AS email       
                 FROM tickets  WHERE ticket_id=%s
                 '''
 
@@ -469,7 +499,7 @@ def create_email(t_id, update_msg):
 
     ticket = Tickets.query.filter_by(ticket_id=t_id).first()
 
-    subject = "[Engineering Ticket #" + t_id + "] " + ticket.category + " - " + ticket.subcategory
+    subject = "[Engineering Ticket #" + str(t_id) + "] " + ticket.category + " - " + ticket.subcategory
     
     email_msg = Message(
         subject=subject,
@@ -497,10 +527,10 @@ def get_ticket_watchers(ticket_id):
 
     sql_qry = '''
             SELECT FK_user_id as user_id,
-            (Select CONCAT(fname, ' ', lname) from users where user_id=FK_user_id) AS watcher,
-            (Select user_img from users where user_id=FK_user_id) AS user_img,
+            (SELECT CONCAT(fname, ' ', lname) FROM users WHERE user_id=FK_user_id) AS watcher,
+            (SELECT user_img FROM users WHERE user_id=FK_user_id) AS user_img,
             (SELECT 
-                (Select permission_department from permissions where id=FK_role_id) 
+                (SELECT permission_department FROM permissions WHERE id=FK_role_id) 
                 FROM helpdesk.users WHERE user_id=FK_user_id) AS department
             FROM helpdesk.ticket_watching
             WHERE FK_ticket_id=%s;
@@ -608,9 +638,20 @@ def insert_ticket_data(details, cust, assy, pn, cat, subcat, priority, wo):
     cursor.execute(sql_qry, (priority_bool, details, created_by, assigned_to,
                              cust, assy, pn, wo, cat, subcat))
     conn.commit()
+    new_id = cursor.lastrowid
+
+    #Add status of unassigned
+    sql_qry = '''
+    INSERT INTO ticket_status
+    (FK_ticket_id, FK_status_id)
+    VALUES(%s, %s)
+       '''
+
+    cursor.execute(sql_qry, (4, new_id))
+    conn.commit()
 
     # get the id of the request just made and insert filepath
-    new_id = cursor.lastrowid
+    
     file_path = "Z:/03. Engineering/Uncontrolled/HelpDeskTickets/" + \
         str(new_id)
 

@@ -4,12 +4,11 @@ from flask.helpers import url_for
 from config import Config
 
 from database import mysql, db, login, mail
-from helpdesk.tickets.tickets import tickets_bp
+from helpdesk.users.users import users_bp
+from flask import Flask
 from helpdesk.users.users import users_bp
 from helpdesk.dashboard.dashboard import dashboard_bp
-from flask_login import LoginManager
-from flask_wtf import CsrfProtect
-from flask import Flask
+from helpdesk.tickets.tickets import tickets_bp
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -54,4 +53,4 @@ def home():
 
 
 if __name__ == "__main__":
-    app.run(host='127.0.0.1', port=8000)
+    app.run(host='0.0.0.0')

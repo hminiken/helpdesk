@@ -2,12 +2,15 @@
 
 {% block content %}
 
+<!-- Use this so we can do ticket functionality within our profile page -->
+<script type="text/javascript" src="{{ url_for('tickets_bp.static',filename='scripts/scripts.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('.static',filename='scripts/scripts.js') }}"></script>
+
 
 <div class="app-main">
     
     
     
-    <div class="app-main__outer">
         <div class="app-main__inner">
             <div class="row">
                 <div class="col-lg-3">
@@ -75,12 +78,57 @@
                                         <div class="col-sm-6">
                                             <div class="p-1">
                                                 <button
-                                                    class="btn-icon-vertical btn-transition-text btn-transition btn-transition-alt pt-2 pb-2 btn btn-outline-dark profile-grid-menu">
+                                                    class="btn-icon-vertical btn-transition-text btn-transition btn-transition-alt pt-2 pb-2 btn btn-outline-warning profile-grid-menu">
                                                     <i class="fas fa-sign-out-alt fa-2x lnr-lighter  opacity-7 btn-icon-wrapper mb-2"></i> Log Out
                                                 </button>
                                                
                                             </div>
                                         </div>
+
+                                        {% if permission[0]['permission_level'] < 4 %}
+                                        <div class="col-sm-6">
+                                            <div class="p-1">
+                                                <a href="{{ url_for('users_bp.edit_profile') }}" class="nav-item">
+                                                    <button
+                                                        class="btn-icon-vertical btn-transition-text btn-transition btn-transition-alt pt-2 pb-2 btn btn-outline-info profile-grid-menu">
+                                                        <i class=" fas fa-user-plus fa-2x lnr-gift opacity-7 btn-icon-wrapper mb-2"> </i> Add Users
+                                                    </button>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="p-1">
+                                                <a href="{{ url_for('users_bp.edit_profile') }}" class="nav-item">
+                                                    <button
+                                                        class="btn-icon-vertical btn-transition-text btn-transition btn-transition-alt pt-2 pb-2 btn btn-outline-focus profile-grid-menu">
+                                                        <i class=" fas fa-th-list fa-2x lnr-gift opacity-7 btn-icon-wrapper mb-2"> </i> Edit Categories
+                                                    </button>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="p-1">
+                                                <a href="{{ url_for('users_bp.edit_profile') }}" class="nav-item">
+                                                    <button
+                                                        class="btn-icon-vertical btn-transition-text btn-transition btn-transition-alt pt-2 pb-2 btn btn-outline-info profile-grid-menu">
+                                                        <i class=" fas fa-user-edit fa-2x lnr-gift opacity-7 btn-icon-wrapper mb-2"> </i> Edit Users
+                                                    </button>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="p-1">
+                                                <a href="{{ url_for('users_bp.edit_profile') }}" class="nav-item">
+                                                    <button
+                                                        class="btn-icon-vertical btn-transition-text btn-transition btn-transition-alt pt-2 pb-2 btn btn-outline-focus profile-grid-menu">
+                                                        <i class=" fas fa-th-list fa-2x lnr-gift opacity-7 btn-icon-wrapper mb-2"> </i> Edit Categories
+                                                    </button>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        {% endif %}
                                     </div>
                                 </div>
                             </li>
@@ -88,7 +136,7 @@
                     </div>
                 </div>
                 <div class="col-lg-9">
-                    <div class="mb-3 card">
+                    <div id="ticket_status_lists" class="mb-3 card">
                         <div class="card-header-tab card-header">
                             <div class="card-header-title">
                                 <i class="header-icon lnr-bicycle icon-gradient bg-love-kiss"> </i>
@@ -96,14 +144,19 @@
                             </div>
                             <ul class="nav">
                                 <li class="nav-item"><a data-toggle="tab" href="#tab-eg5-0" class="nav-link active show">Watched Tickets</a></li>
-                                <li class="nav-item">
+                                <li id="ticket_updates_badge" class="nav-item">
                                     <a data-toggle="tab" href="#tab-eg5-1" class="nav-link show">
                                         Ticket Updates
-                                        <span class="badge badge-pill badge-alternate">{{updates|length}}</span>
+                                        {% if updates|length > 0 %}
+                                            <span  class="badge badge-pill badge-alternate">{{updates|length}}</span>
+                                        {% endif %}
                                     </a>
                                 </li>
                                 <li class="nav-item"><a data-toggle="tab" href="#tab-eg5-2" class="nav-link show">
-                                   Assigned Tickets<span class="badge badge-pill badge-danger">{{assigned|length}}</span>
+                                    Assigned Tickets
+                                    {% if assigned|length > 0 %}
+                                    <span class="badge badge-pill badge-danger">{{assigned|length}}</span>
+                                    {% endif %}
                                 </a></li>
                             </ul>
                         </div>
@@ -132,9 +185,10 @@
                                         {% endfor %}  
                                     </ul>
                                 </div>
-                                <div class="tab-pane show" id="tab-eg5-1" role="tabpanel">
-                                <ul class="list-group list-group-flush">
-                                
+                                <div  class="tab-pane show" id="tab-eg5-1" role="tabpanel">
+                                <div id="list_of_ticket_updates">
+                                    <ul  class="list-group list-group-flush">
+                                        <p></p>
                                     {% for ticket in updates %}
                                     <li class="bg-transparent list-group-item ticket_list">
                                         <div class="widget-content p-0">
@@ -162,8 +216,12 @@
                                 
                                 
                                 </ul>
-                                
                                 </div>
+                                <div class="d-block text-right card-footer">
+                                    <a id="clear_ticket_updates" href="javascript:void(0);" class="btn-wide btn-shadow btn btn-danger">Delete</a>
+                                </div>
+                                
+                            </div>
                                 <div class="tab-pane show" id="tab-eg5-2" role="tabpanel">
                                     <ul class="list-group list-group-flush">
                                     
@@ -181,7 +239,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="ticket_detailed_info" id="ticket_detailed_info_{{ticket['ticket_id']}}"></div>
+                                                <div class="ticket_detailed_info" id="ticket_assigned_detailed_info_{{ticket['ticket_id']}}"></div>
                                             </div>
                                         </li>
                                         {% endfor %}
@@ -192,9 +250,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="d-block text-right card-footer">
-                            <a href="javascript:void(0);" class="btn-wide btn-shadow btn btn-danger">Delete</a>
-                        </div>
+                        
                     </div>
 
 
@@ -204,7 +260,6 @@
                 </div>
             </div>
         </div>
-    </div>
 </div>
 
 

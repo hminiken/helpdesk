@@ -5,7 +5,9 @@
 <div class="mb-3 card ticket-detail-card scroller">
     <div class="card-header">
         <div class="card-header-title" id="current_ticket_id" ticket_id="{{item['ticket_id']}}">
-            <h4><i class="fa fa-server">  </i> Ticket #{{item['ticket_id']}}</h4>
+            <h4><i class="fa fa-server">  </i> 
+                <i style="color:crimson;" class="{{ 'fa fa-fire' if item['priority'] == 1 else ''}}"></i>
+                Ticket #{{item['ticket_id']}}</h4>
         </div>
         
     </div>
@@ -52,171 +54,168 @@
                                     src="{{ url_for('users_bp.static',filename='images/avatars/') }}{{ item['user_assigned_img']}}" alt="">
                                 </div>
                                 <div class="widget-content-left">
-                                    <div class="widget-heading">Assigned To:</div>
+                                    <div class="widget-heading">
+                                        Assigned To:
+                                    </div>
                                     <div class="widget-subheading opacity-9">
                                         <div class="dropdown d-inline-block show" style="overflow: visible !important; ">
                                             <button id="assign_user_button" aria-haspopup="true" aria-expanded="true" data-toggle="dropdown"
                                             class="mb-2 mr-2 dropdown-toggle btn btn-outline-link">
-                                            {{item['assigned']}}
-                                        </button>
-                                        <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu hide section"
-                                        x-placement="bottom-start" >
+                                                {{item['assigned']}}
+                                            </button>
+                                            <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu hide section"
+                                                x-placement="bottom-start" >
+                                                <!-- Engineers -->
+                                                <h6 tabindex="-1" class="dropdown-header">Engineering</h6>
+                                                {% for user in users %}
+                                                    {% if user['department'] == 'Engineering' %}
+                                                        <button id="{{user['user_id']}}" type="button" tabindex="0" class="dropdown-item assign_user_li">{{user['fname']}} {{user['lname']}}</button>
+                                                    {% endif %}                                            
+                                                {% endfor %}
+                                                <div tabindex="-1" class="dropdown-divider"></div>
 
-                                        <h6 tabindex="-1" class="dropdown-header">Engineering</h6>
-                                        {% for user in users %}
-                                            {% if user['department'] == 'Engineering' %}
-                                                <button id="{{user['user_id']}}" type="button" tabindex="0" class="dropdown-item assign_user_li">{{user['fname']}} {{user['lname']}}</button>
-                                            {% endif %}                                            
-                                        {% endfor %}
-                                        <div tabindex="-1" class="dropdown-divider"></div>
+                                                <!-- CAMs -->
+                                                <h6 tabindex="-1" class="dropdown-header">CAM</h6>
+                                                {% for user in users %}
+                                                {% if user['department'] == 'CAM' %}
+                                                <button id="{{user['user_id']}}" type="button" tabindex="0" class="dropdown-item assign_user_li">{{user['fname']}}
+                                                    {{user['lname']}}</button>
+                                                {% endif %}
+                                                {% endfor %}
+                                                <div tabindex="-1" class="dropdown-divider"></div>
 
-                                        <h6 tabindex="-1" class="dropdown-header">CAM</h6>
-                                        {% for user in users %}
-                                        {% if user['department'] == 'CAM' %}
-                                        <button id="{{user['user_id']}}" type="button" tabindex="0" class="dropdown-item assign_user_li">{{user['fname']}}
-                                            {{user['lname']}}</button>
-                                        {% endif %}
-                                        {% endfor %}
-                                        <div tabindex="-1" class="dropdown-divider"></div>
+                                                <!-- Planning, Purchasing -->
+                                                <h6 tabindex="-1" class="dropdown-header">Purchasing, Planning</h6>
+                                                {% for user in users %}
+                                                {% if user['department'] == 'Purchasing, Planning' %}
+                                                <button id="{{user['user_id']}}" type="button" tabindex="0" class="dropdown-item assign_user_li">{{user['fname']}}
+                                                    {{user['lname']}}</button>
+                                                {% endif %}
+                                                {% endfor %}
+                                                <div tabindex="-1" class="dropdown-divider"></div>
 
-                                        <h6 tabindex="-1" class="dropdown-header">Purchasing, Planning</h6>
-                                        {% for user in users %}
-                                        {% if user['department'] == 'Purchasing, Planning' %}
-                                        <button id="{{user['user_id']}}" type="button" tabindex="0" class="dropdown-item assign_user_li">{{user['fname']}}
-                                            {{user['lname']}}</button>
-                                        {% endif %}
-                                        {% endfor %}
-                                        <div tabindex="-1" class="dropdown-divider"></div>
+                                                <!-- MISC -->
+                                                <h6 tabindex="-1" class="dropdown-header">Misc.</h6>
+                                                {% for user in users %}
+                                                {% if user['department'] != 'Purchasing, Planning' and user['department'] != 'CAM' and user['department'] !=
+                                                'Engineering' %}
+                                                <button id="{{user['user_id']}}" type="button" tabindex="0" class="dropdown-item assign_user_li">{{user['fname']}}
+                                                    {{user['lname']}}</button>
+                                                {% endif %}
+                                                {% endfor %}
+                                                <div tabindex="-1" class="dropdown-divider"></div>
 
-                                        <h6 tabindex="-1" class="dropdown-header">Misc.</h6>
-                                        {% for user in users %}
-                                        {% if user['department'] != 'Purchasing, Planning' and user['department'] != 'CAM' and user['department'] !=
-                                        'Engineering' %}
-                                        <button id="{{user['user_id']}}" type="button" tabindex="0" class="dropdown-item assign_user_li">{{user['fname']}}
-                                            {{user['lname']}}</button>
-                                        {% endif %}
-                                        {% endfor %}
-                                        <div tabindex="-1" class="dropdown-divider"></div>
-
+                                            </div>
+                                        </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="widget-content-right">
+                            <div class="widget-content-wrapper">
+                                
+                                <div class="widget-content-left mr-3">
+                                    <img width="42" height="42" class="rounded-circle"
+                                    src="{{ url_for('users_bp.static',filename='images/avatars/')}}{{item['user_created_img']}}" alt="">
+                                    
+                                </div>
+                                <div class="widget-content-left">
+                                    <div class="widget-heading">Created By:</div>
+                                    <div class="widget-subheading opacity-9">{{item['created']}}</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="widget-content-right">
-                    <div class="widget-content-wrapper">
-                        
-                        <div class="widget-content-left mr-3">
-                            <img width="42" height="42" class="rounded-circle"
-                            src="{{ url_for('users_bp.static',filename='images/avatars/')}}{{item['user_created_img']}}" alt="">
-                            
+            </li>
+        </ul>
+
+        <!-- TICKET INFO -->
+        <ul class="list-group list-group-flush">
+            <li class="p-0 list-group-item">
+                <div class="grid-menu grid-menu-2col">
+                    
+                    <div class="no-gutters row">
+                        <div class="col-sm-3">
+                            <div class="widget-content-ticketinfo">Category</div>
                         </div>
-                        <div class="widget-content-left">
-                            <div class="widget-heading">Created By:</div>
-                            <div class="widget-subheading opacity-9">{{item['created']}}</div>
+                        <div class="col-sm-9">
+                            <div class="widget-content-ticketinfo">{{item['category']}} :: {{item['subcategory']}}</div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </li>
-</ul>
-
-
-
-
-
-<ul class="list-group list-group-flush">
-    <li class="p-0 list-group-item">
-        <div class="grid-menu grid-menu-2col">
-            
-            <div class="no-gutters row">
-                <div class="col-sm-3">
-                    <div class="widget-content-ticketinfo">Category</div>
+            </li>
+            <li class="p-0 list-group-item">
+                <div class="grid-menu grid-menu-2col">
+                    
+                    <div class="no-gutters row">
+                        <div class="col-sm-3">
+                            <div class="widget-content-ticketinfo">Customer</div>
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="widget-content-ticketinfo">{{item['customer']}}</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-sm-9">
-                    <div class="widget-content-ticketinfo">{{item['category']}} :: {{item['subcategory']}}</div>
+            </li>            
+            <li class="p-0 list-group-item">
+                <div class="no-gutters row">
+                    <div class="col-sm-3">
+                        <div class="widget-content-ticketinfo">Assembly: </div>
+                    </div>
+                    <div class="col-sm-9">
+                        <div class="widget-content-ticketinfo">{{item['assembly']}}</div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </li>
-    <li class="p-0 list-group-item">
-        <div class="grid-menu grid-menu-2col">
-            
-            <div class="no-gutters row">
-                <div class="col-sm-3">
-                    <div class="widget-content-ticketinfo">Customer</div>
+            </li>
+            <li class="p-0 list-group-item">
+                <div class="no-gutters row">
+                    <div class="col-sm-3">
+                        <div class="widget-content-ticketinfo">Part Number: </div>
+                    </div>
+                    <div class="col-sm-9">
+                        <div class="widget-content-ticketinfo">{{item['part_number']}}</div>
+                    </div>
                 </div>
-                <div class="col-sm-9">
-                    <div class="widget-content-ticketinfo">{{item['customer']}}</div>
+            </li>
+            <li class="p-0 list-group-item">
+                <div class="no-gutters row">
+                    <div class="col-sm-3">
+                        <div class="widget-content-ticketinfo">Work Order: </div>
+                    </div>
+                    <div class="col-sm-9">
+                        <div class="widget-content-ticketinfo">{{item['work_order']}}</div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </li>
-    
-    <li class="p-0 list-group-item">
-        <div class="no-gutters row">
-            <div class="col-sm-3">
-                <div class="widget-content-ticketinfo">Assembly: </div>
-            </div>
-            <div class="col-sm-9">
-                <div class="widget-content-ticketinfo">{{item['assembly']}}</div>
-            </div>
-        </div>
-    </li>
-    <li class="p-0 list-group-item">
-        <div class="no-gutters row">
-            <div class="col-sm-3">
-                <div class="widget-content-ticketinfo">Part Number: </div>
-            </div>
-            <div class="col-sm-9">
-                <div class="widget-content-ticketinfo">{{item['part_number']}}</div>
-            </div>
-        </div>
-    </li>
-    <li class="p-0 list-group-item">
-        <div class="no-gutters row">
-            <div class="col-sm-3">
-                <div class="widget-content-ticketinfo">Work Order: </div>
-            </div>
-            <div class="col-sm-9">
-                <div class="widget-content-ticketinfo">{{item['work_order']}}</div>
-            </div>
-        </div>
-    </li>
-    <li class="p-0 list-group-item">
-        <div class="no-gutters row">
-            <div class="col-sm-3">
-                <div class="widget-content-ticketinfo">Attachments:</div>
-            </div>
-            <div class="col-sm-9">
-                <div class="widget-content-ticketinfo">{{item['attachments']}}</div>
-            </div>
-        </div>
-    </li>
-    <li class="p-0 list-group-item">
-        <div class="no-gutters row">
-            <div class="col-sm-3">
-                <div class="widget-content-ticketinfo">Details: </div>
-            </div>
-            <div class="col-sm-9">
-                <div class="widget-content-ticketinfo">{{item['description']}}</div>
-            </div>
-        </div>
-    </li>
-    
-</ul>
+            </li>
+            <li class="p-0 list-group-item">
+                <div class="no-gutters row">
+                    <div class="col-sm-3">
+                        <div class="widget-content-ticketinfo">Attachments:</div>
+                    </div>
+                    <div class="col-sm-9">
+                        <div class="widget-content-ticketinfo">{{item['attachments']}}</div>
+                    </div>
+                </div>
+            </li>
+            <li class="p-0 list-group-item">
+                <div class="no-gutters row">
+                    <div class="col-sm-3">
+                        <div class="widget-content-ticketinfo">Details: </div>
+                    </div>
+                    <div class="col-sm-9">
+                        <div class="widget-content-ticketinfo">{{item['description']}}</div>
+                    </div>
+                </div>
+            </li>            
+        </ul>
 
-<!-- Submit a comment, have to reroute and load this section again -->
-<p>&nbsp;</p>
-<!-- <form class="" action="/tickets/ticket_details/{{item['ticket_id']}}" method="post"> -->
-    <form class="" action="/tickets/ticket_details" method="post" id="ticket_comment_form">
-        {{ form.hidden_tag() }}
-        <div class="position-relative form-group">
-            <!-- <label for="exampleText" class="">Status Update</label>
-                <textarea style="height: 50px;" name="details_input" id="details_input" class="form-control"></textarea> -->
+        <!-- Submit a comment, have to reroute and load this section again -->
+        <p>&nbsp;</p>
+        <form class="" action="/tickets/ticket_details" method="post" id="ticket_comment_form">
+            {{ form.hidden_tag() }}
+            <div class="position-relative form-group">
                 <div class="input-block">
                     {{ form.comment.label }}
                     {{ form.comment(class="form-control") }}
@@ -233,9 +232,9 @@
             </div>
         </form>
         
-   
+        <!-- TICKET COMMENT HISTORY -->
         <div class="">
-            <div class="container " id="all_ticket_updates">                 
+            <div class="container " id="all_ticket_updates">                
                 
                 <div class="rightbox">
                     <div class="rb-container">
@@ -259,14 +258,14 @@
                     </div>
                 </div>
             </div>
-        </div>     
-        
-        
+        </div>             
     </div>
 
     <!-- Footer, who's watching -->
     <div >
         <div id="accordion" class="accordion-wrapper mb-3">
+
+            <!-- Engineering -->
             <div class="card" style="z-index: 50;">
                 <div id="headingOne" class="card-header">
                         <div class="dropup " style="overflow: visible !important; ">
@@ -285,7 +284,7 @@
                             </div>
                         </div>
                 </div>
-                <div  class="collapse show" style="">
+                <div  class="collapse show" >
                     <div class="avatar-wrapper mt-2 avatar-wrapper-overlap">
                         {% for watcher in ticket_watchers %}
                             {% if watcher['department'] == 'Engineering' %}
@@ -299,6 +298,8 @@
                     </div>
                 </div>
             </div>
+
+            <!-- CAMs -->
             <div class="card" style="z-index: 60;">
                 <div id="headingTwo" class="b-radius-0 card-header">
                     <div class="dropup " style="overflow: visible !important; ">
@@ -317,7 +318,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="collapse show" style="">
+                <div class="collapse show" >
                     <div class="avatar-wrapper mt-2 avatar-wrapper-overlap">
                         {% for watcher in ticket_watchers %}
                             {% if watcher['department'] == 'CAM' %}
@@ -331,6 +332,8 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Purchasing, planning -->
             <div class="card" style="z-index: 70;">
                 <div id="headingTwo" class="b-radius-0 card-header">
                     <div class="dropup " style="overflow: visible !important; ">
@@ -348,7 +351,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="collapse show" style="">
+
+                <div class="collapse show">
                     <div class="avatar-wrapper mt-2 avatar-wrapper-overlap">
                         {% for watcher in ticket_watchers %}
                         {% if watcher['department'] == 'Purchasing, Planning' %}
@@ -362,6 +366,8 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Misc, Other -->
             <div class="card" style="z-index: 70;">
                 <div id="headingTwo" class="b-radius-0 card-header">
                     <div class="dropup " style="overflow: visible !important; ">
@@ -379,7 +385,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="collapse show" style="">
+                <div class="collapse show">
                     <div class="avatar-wrapper mt-2 avatar-wrapper-overlap">
                         {% for watcher in ticket_watchers %}
                             {% if watcher['department'] != 'Engineering' and watcher['department'] != 'CAM' and watcher['department'] != 'Purchasing, Planning' %}
@@ -393,42 +399,8 @@
                     </div>
                 </div>
             </div>
+
         </div>
-
-
-
-
-        <!-- <div class="d-block card-footer">
-            <div class="row subsequent-row">                
-                <div class="dropdown d-inline-block show" style="overflow: visible !important; ">
-                    <button id="assign_user_button" aria-haspopup="true" aria-expanded="true" data-toggle="dropdown"
-                    class="mb-2 mr-2 dropdown-toggle btn btn-outline-link">
-                    Users Watching
-                    </button>
-                    <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu hide section" x-placement="bottom-start">
-                        {% for user in users %}
-                        <button id="{{user['user_id']}}" type="button" tabindex="0"
-                        class="dropdown-item assign_watcher_li">{{user['fname']}} {{user['lname']}}</button>
-                        {% endfor %}
-                    </div>
-                </div>            
-            </div>
-            <div class="row">
-                Engineering:       
-                <div class="row">
-                    <div class="avatar-wrapper mt-2 avatar-wrapper-overlap">  
-                        {% for watcher in ticket_watchers %}
-                        <div class="avatar-icon-wrapper avatar-wrapper-overlap avatar-icon-sm">
-                            <div id="{{watcher['user_id']}}" class="watcher-icon avatar-icon" title="{{watcher['watcher']}}">
-                                <img src="{{ url_for('users_bp.static',filename='images/avatars/')}}{{watcher['user_img']}}"
-                                alt="">
-                            </div>
-                        </div>
-                        {% endfor %}                    
-                    </div>
-                </div>            
-            </div>            
-        </div> -->
     </div>
 
 </div>

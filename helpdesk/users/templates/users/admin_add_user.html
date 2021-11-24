@@ -2,7 +2,9 @@
 
 {% block content %}
 
-<div class="app-main">
+<div class="app-main add-user-main">
+        <div class="app-main__outer">
+            <div class="app-main__inner">
     <div class="add-user-card">
     <section class="forms-section">
         <h1 class="section-title">Admin</h1>
@@ -16,48 +18,85 @@
                     <!-- <form class="" action="/tickets/create_ticket" method="post"> -->
                         {{ form.hidden_tag() }}
                     <fieldset>
-                        <div class="input-block">
-                            <!-- <label for="newuser-email">E-mail</label>
-                            <input id="newuser-email" name="newuser-email" type="email" required> -->
-                            {{ form.email.label }}
-                            {{ form.email(size=32) }}<br>
-                            
+                        <div class="row">                        
+                            <div class="col-lg-6">
+                                <div class="form-row">
+                                    <div class="input-block">
+                                        <!-- <label for="newuser-email">E-mail</label>
+                                                                <input id="newuser-email" name="newuser-email" type="email" required> -->
+                                        {{ form.email.label }}
+                                        {{ form.email(size=32) }}<br>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-row">
+                                    <div class="input-block">
+                                        <!-- <label for="newuser-emp-id">Qualitel Employee ID</label>
+                                                                <input id="newuser-emp-id" name="newuser-emp-id" type="number" required> -->
+                                        {{ form.user_id.label }}
+                                        {{ form.user_id(size=32) }}<br>
+                                    
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="input-block">
-                            <!-- <label for="newuser-emp-id">Qualitel Employee ID</label>
-                            <input id="newuser-emp-id" name="newuser-emp-id" type="number" required> -->
-                            {{ form.user_id.label }}
-                            {{ form.user_id(size=32) }}<br>
-                            
+
+                        <div class="row">                        
+                            <div class="col-lg-6">
+                                <div class="form-row">
+                                    <div class="input-block">
+                                        <!-- <label for="newuser-emp-id">Qualitel Employee ID</label>
+                                                                                        <input id="newuser-emp-id" name="newuser-emp-id" type="number" required> -->
+                                        {{ form.password.label }}
+                                        {{ form.password(size=32) }}<br>
+                                    
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-row">
+                                    <div class="input-block">
+                                        <!-- <label for="newuser-emp-id">Qualitel Employee ID</label>
+                                                                                                                <input id="newuser-emp-id" name="newuser-emp-id" type="number" required> -->
+                                        {{ form.password2.label }}
+                                        {{ form.password2(size=32) }}<br>
+                                    
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="input-block">
-                            <!-- <label for="newuser-emp-id">Qualitel Employee ID</label>
-                                                    <input id="newuser-emp-id" name="newuser-emp-id" type="number" required> -->
-                            {{ form.password.label }}
-                            {{ form.password(size=32) }}<br>
+
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-row">
+                                    <div class="input-block">
+                                        <!-- <label for="newuser-emp-id">Qualitel Employee ID</label>
+                                                                                                                <input id="newuser-emp-id" name="newuser-emp-id" type="number" required> -->
+                                        {{ form.fname.label }}
+                                        {{ form.fname(size=32) }}<br>
                         
-                        </div>
-                        <div class="input-block">
-                            <!-- <label for="newuser-emp-id">Qualitel Employee ID</label>
-                                                                            <input id="newuser-emp-id" name="newuser-emp-id" type="number" required> -->
-                            {{ form.password2.label }}
-                            {{ form.password2(size=32) }}<br>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-row">
+                                    <div class="input-block">
+                                        <!-- <label for="newuser-emp-id">Qualitel Employee ID</label>
+                                                                                                                                        <input id="newuser-emp-id" name="newuser-emp-id" type="number" required> -->
+                                        {{ form.lname.label }}
+                                        {{ form.lname(size=32) }}<br>
                         
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="input-block">
-                            <!-- <label for="newuser-fname">First Name</label>
-                            <input id="newuser-fname" name="newuser-fname" type="text" required> -->
-                            {{ form.fname.label }}
-                            {{ form.fname(size=32) }}<br>
-                            
-                        </div>
-                        <div class="input-block">
-                            <!-- <label for="newuser-lname">Last Name</label>
-                            <input id="newuser-lname" name="newuser-lname" type="text" required> -->
-                            {{ form.lname.label }}
-                            {{ form.lname(size=32) }}<br>
-                           
-                        </div>
+                        
+                       
+                        
+                       
+                       
                         <div class="input-block">
                            
                             {{ form.permission.label }}
@@ -68,7 +107,10 @@
                     {% if form.errors %}
                     {{ form.errors }}
                     {% endif %}
-                    <button id="submit_new_user" type="submit" class="btn-login">Add User</button>
+                    <!-- <button id="submit_new_user" type="submit" class="btn-login">Add User</button> -->
+                    <div class="input-block black-submit">
+                        <p>{{ form.submit()}}</p>
+                    </div>
                 </form>
             </div>
             <!-- <div class="form-wrapper">
@@ -97,6 +139,8 @@
         </div> -->
         </div>
     </section>
+</div>
+</div>
 </div>
 </div>
 

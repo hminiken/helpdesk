@@ -1,4 +1,14 @@
 
+.row + .row > * {
+	/* display: flex;
+	flex-wrap: wrap;
+	margin-right: -15px;
+	margin-left: -15px; */
+
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
 .upload-photo {
    cursor: pointer;
    /* Style as you please, it will become the visible UI component. */
@@ -20,16 +30,20 @@
 	margin-left: -20%;
 }
 
-.input-block input {
+.black-submit input {
 	background-color: #192024 !important;
+
 }
 
-.input-block input:hover {
+.black-submit input:hover {
 	background-color: #303e46 !important;
 }
 
 
-
+/* .green-submit [type='submit']{
+	background-color: #192024;
+	color: #fbfdff;
+} */
 .avatar-wrapper.mt-2.avatar-wrapper-overlap {
 	margin-left: 5%;
 	margin-bottom: 1%;
@@ -107,7 +121,10 @@
      color: lightgrey;
  }
 
+.add-user-main {
+    background-color: lightsteelblue;
 
+}
 
 .add-user-card {
     position: relative;
@@ -115,9 +132,8 @@
     flex-direction: column;
     min-width: 0;
     word-wrap: break-word;
-    background-color: steelblue;
     background-clip: border-box;
-    border: 1px solid rgba(26, 54, 126, 0.125);
+    /* border: 1px solid rgba(26, 54, 126, 0.125); */
     border-radius: .25rem;
      margin: 0 auto;
      padding-bottom: 2em;

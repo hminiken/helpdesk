@@ -6,11 +6,11 @@ from flask_login import current_user, login_user, logout_user
 from flask_login.utils import login_required
 from helpdesk.users.models import LoginForm, RegistrationForm, UpdateProfileForm, Users
 from werkzeug.urls import url_parse
-from app import db
+from database import db
 from datetime import datetime
 # from flask_uploads import UploadSet, configure_uploads, IMAGES
 
-from helpdesk.users.users_utils import  get_my_assigned_tickets, get_my_watched_tickets, get_my_watched_tickets_updates
+from helpdesk.users.users_utils import  get_my_assigned_tickets, get_my_permissions, get_my_watched_tickets, get_my_watched_tickets_updates
 
 users_bp = Blueprint('users_bp', __name__, 
                         template_folder='templates', 
@@ -24,12 +24,10 @@ def user():
     assigned = get_my_assigned_tickets()
     watched = get_my_watched_tickets()
     updates = get_my_watched_tickets_updates()
-
-    current_user.last_login = datetime.now()
-    db.session.commit()
+    permission = get_my_permissions()
 
     # Get user ticket data
-    return render_template('users/profile.html', watched=watched, updates=updates, assigned=assigned)
+    return render_template('users/profile.html', watched=watched, updates=updates, assigned=assigned, permission=permission)
 
 
 @users_bp.route("/login",  methods=['GET', 'POST'])
@@ -82,6 +80,8 @@ def add_user():
 
 @users_bp.route('/logout')
 def logout():
+    current_user.last_login = datetime.now()
+    db.session.commit()
     logout_user()
     return redirect(url_for('users_bp.login'))
 
@@ -90,11 +90,6 @@ def logout():
 
 @users_bp.route("/edit_profile",  methods=['GET', 'POST'])
 def edit_profile():
-
-    # update_user = Users(email=current_user.email, fname=current_user.fname, lname=current_user.lname, 
-    #                     ticket_created_updates=current_user.ticket_created_updates,
-    #                     ticket_assigned_updates=current_user.ticket_assigned_updates, 
-    #                     ticket_watched_updates=current_user.ticket_watched_updates)
 
     form = UpdateProfileForm()
 
@@ -130,3 +125,12 @@ def edit_profile():
         return redirect(url_for('users_bp.user'))
 
     return render_template('users/edit_profile.html', form=form)
+
+
+@users_bp.route('/clear_ticket_updates', methods=['POST'])
+def clear_ticket_updates():
+    current_user.last_login = datetime.now()
+    db.session.commit()
+
+    return ""
+
