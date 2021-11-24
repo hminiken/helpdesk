@@ -1,0 +1,175 @@
+{% extends "users/base.html" %}
+
+{% block content %}
+
+
+<div class="app-main">
+    
+    
+    
+    <div class="app-main__outer">
+        <div class="app-main__inner">
+            <div class="row">
+                <!-- <div class="col-lg-3">
+                    <div class="mb-3 card">
+                        
+                        <div>
+                            <ul class="list-group">
+                                <button class="active list-group-item-action list-group-item"> 
+                                    <i class="nav-link-icon far fa-edit "> </i> Information
+                                </button>
+                                <button class="list-group-item-action list-group-item"> 
+                                    <i class="nav-link-icon fas fa-envelope-open-text"> </i> Email Preferences
+                                </button>
+                                
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                 -->
+                
+                <div class="col-lg-12">
+                    <div class="mb-3 card">
+                        <div class="card-header-tab card-header">
+                            <div class="card-header-title">
+                                <i class="header-icon lnr-bicycle icon-gradient bg-love-kiss"> </i>
+                                <h4>USER INFORMATION</h4>
+                            </div>
+                        </div>
+                        <div class="mb-3  card card-body">
+                            <div class="row">
+                                <div class="menu-header-content btn-pane-right">
+                                    <div class="avatar-icon-wrapper mr-3 avatar-icon-xl btn-hover-shine">
+                                        <div class="avatar-icon rounded">
+                                            <img class="profile-avatar rounded-circle" src="{{ url_for('users_bp.static',filename='images/avatars/')}}{{ current_user.user_img }}" alt="Avatar">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h6 class="menu-header-subtitle">Change Profile Picture</h6>
+                                    </div>
+                                    
+                                </div>                                
+                            </div>
+                            <div class="row">
+                                <form class="" method="POST" style="width: 95%;" enctype="multipart/form-data">
+                                    {{ form.hidden_tag() }}
+                                    <fieldset>
+                                         <div class="row">
+
+                                        <div class="col-lg-6">
+                                            <div class="form-row">
+                                                <br>
+                                                {{ form.user_img.label }}
+                                                {{ form.user_img(size=32) }}<br>
+                                                <small class="form-text text-muted">Image must be less than 1Mb</small>
+                                            </div>
+                                            <br>
+                                            <div class="form-row">
+                                                <div class="col-lg-6 ">
+                                                    <div class="position-relative form-group">
+                                                        {{ form.email.label }}
+                                                        {{ form.email(size=32) }}<br>                            
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 ">
+                                                    <div class="position-relative form-group">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-lg-6 ">
+                                                    <div class="position-relative form-group">
+                                                        {{ form.fname.label }}
+                                                        {{ form.fname(size=32) }}<br>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 ">
+                                                    <div class="position-relative form-group">
+                                                        {{ form.lname.label }}
+                                                        {{ form.lname(size=32) }}<br>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-row ">
+                                                <div class="col-lg-6 ">
+                                                <h4>EMAIL PREFERENCES</h4>
+                                                </div>
+                                                <div class="col-lg-6 ">
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="form-row ">
+                                                <div class="col-lg-12 ">
+                                                    <p>If selected, any ticket changes (e.g. a new assignee, a new status update, a new
+                                                        comment, etc.) will also be sent to your email.</p>
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col-lg-12 ">
+                                                    <div class=" form-group">
+                                                        <div class="form-row">
+                                                            <p>EMAIL ME FOR: </p>
+                                                            </div>
+                                                        <div class="form-row">
+                                                            <p>{{ form.email_created() }} {{ form.email_created.label }}</p>
+                                                        </div>
+                                                        <div class="form-row">
+                                                            <p>{{ form.email_assigned() }} {{ form.email_assigned.label }}</p>
+                                                        </div>
+                                                        <div class="form-row">
+                                                            <p>{{ form.email_watched() }} {{ form.email_watched.label }}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                            </div>
+                                        </div>
+
+
+                                         
+                                    </fieldset>
+                                    {% if form.errors %}
+                                    {{ form.errors }}
+                                    {% endif %}
+                                    
+                                    <div class="input-block black-submit">
+                                        <p>{{ form.submit()}}</p>
+                                    </div>
+                                </form>
+                            </div>
+
+                                        <div class="row">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                            
+                            
+                            <div class="mb-3 card">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lds-grid">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                
+                
+                {% endblock %}

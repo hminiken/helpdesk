@@ -9,6 +9,129 @@
 */
 
 
+/* .active {
+	border-bottom: 2px solid rgb(207, 207, 207);
+}
+
+.active a {
+	font-weight: bolder;
+}
+ */
+
+.ticket-detail-card {
+     overflow-y: scroll;
+    max-height: 85vh;
+ }
+
+
+.ticket-detail-card::-webkit-scrollbar {
+  width: 10px;
+}
+
+.ticket-detail-card::-webkit-scrollbar-track {
+  background-color: #e4e4e4;
+  border-radius: 100px;
+}
+
+.ticket-detail-card::-webkit-scrollbar-thumb {
+  border-radius: 100px;
+  border: 6px solid rgba(0, 0, 0, 0.18);
+  border-left: 0;
+  border-right: 0;
+  background-color: #d8d8d8;
+}
+
+.scroller {
+  overflow-y: scroll;
+  scrollbar-color: #d8d8d8 #e4e4e4 ;
+  scrollbar-width: thin;
+}
+
+.section {
+  max-height: 250px;
+  padding: 1rem;
+  overflow-y: auto;
+  direction: ltr;
+  scrollbar-color: #d4aa70 #e4e4e4;
+  scrollbar-width: thin;
+}
+
+  .section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .section p + p {
+    margin-top: 1rem;
+  }
+
+
+.section::-webkit-scrollbar {
+  width: 10px;
+}
+
+.section::-webkit-scrollbar-track {
+  background-color: #e4e4e4;
+  border-radius: 100px;
+}
+
+.section::-webkit-scrollbar-thumb {
+  border-radius: 100px;
+  border: 6px solid rgba(0, 0, 0, 0.18);
+  border-left: 0;
+  border-right: 0;
+  background-color: #d8d8d8;
+}
+
+
+
+
+
+.custom-scrollbar {
+  padding: 1rem;
+  overflow-y: scroll;
+  direction: ltr;
+  scrollbar-color: #d4aa70 #e4e4e4;
+  scrollbar-width: thin;
+}
+
+  .custom-scrollbar h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .custom-scrollbar p + p {
+    margin-top: 1rem;
+  }
+
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: #e4e4e4;
+  border-radius: 100px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  border-radius: 100px;
+  border: 6px solid rgba(0, 0, 0, 0.18);
+  border-left: 0;
+  border-right: 0;
+  background-color: #d8d8d8;
+}
+
+
+
+
+
+
+
+
+
 
 .initial-circle
     {
@@ -22,10 +145,14 @@
     background:rgb(0, 6, 83)
     }
 
+	.app-header {
+		background-color: white !important;
+	}
+
 /* Basic */
 
 	body {
-		background: #fff;
+		background: rgb(228, 228, 228) !important;
 	}
 
 	body, input, select, textarea {

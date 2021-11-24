@@ -2,15 +2,18 @@
 
 {% block content %}
 
+<!-- Use this so we can do ticket functionality within our profile page -->
+<script type="text/javascript" src="{{ url_for('tickets_bp.static',filename='scripts/scripts.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('.static',filename='scripts/scripts.js') }}"></script>
+
 
 <div class="app-main">
     
     
     
-    <div class="app-main__outer">
         <div class="app-main__inner">
             <div class="row">
-                <div class="col-lg-4">
+                <div class="col-lg-3">
                     <div class="mb-3 profile-responsive card">
                         <div class="dropdown-menu-header">
                             <div class="dropdown-menu-header-inner bg-dark">
@@ -18,13 +21,12 @@
                                     style="background-image: url('assets/images/dropdown-header/abstract3.jpg');"></div>
                                 <div class="menu-header-content btn-pane-right">
                                     <div class="avatar-icon-wrapper mr-3 avatar-icon-xl btn-hover-shine">
-                                        <div class="">
-                                            <img class="profile-avatar" src="{{ url_for('users_bp.static',filename='images/avatars/profileImg1552.jpg')}}" alt="Avatar 5">
-                                        </div>
+                                        <img class="profile-avatar rounded-circle" src="{{ url_for('users_bp.static',filename='images/avatars/')}}{{ current_user.user_img }}" alt="Avatar 5">
                                     </div>
                                     <div class="menu-header-btn-pane ">
-                                        <h5 class="menu-header-title">Ruben Tillman</h5>
-                                        <h6 class="menu-header-subtitle">Etiam sit amet orci eget</h6>
+                                        <h5 class="menu-header-title">{{current_user.fname}} {{current_user.lname}}</h5>
+                                        <h6 class="menu-header-subtitle">{{current_user.email}}</h6>
+                                   
                                     </div>
                                    
                                 </div>
@@ -36,9 +38,10 @@
                                     <div class="text-center">
                                         <h5 class="mb-0">
                                             <span class="pr-1">
-                                                <b class="text-danger">12</b> new leads,
+                                                You have <br> 
+                                                <h2><b class="text-danger">{{assigned|length}}</b></h2> 
+                                                open tickets
                                             </span>
-                                            <span><b class="text-success">$56.24</b> in sales</span>
                                         </h5>
                                     </div>
                                 </div>
@@ -48,51 +51,215 @@
                                     <div class="no-gutters row">
                                         <div class="col-sm-6">
                                             <div class="p-1">
+                                                <a href="{{ url_for('users_bp.edit_profile') }}" class="nav-item">
                                                 <button
-                                                    class="btn-icon-vertical btn-transition-text btn-transition btn-transition-alt pt-2 pb-2 btn btn-outline-dark">
-                                                    <i class="lnr-lighter text-dark opacity-7 btn-icon-wrapper mb-2"></i> Automation
+                                                    class="btn-icon-vertical btn-transition-text btn-transition btn-transition-alt pt-2 pb-2 btn btn-outline-focus profile-grid-menu">
+                                                        <i class=" far fa-edit fa-2x lnr-gift opacity-7 btn-icon-wrapper mb-2"> </i> Edit Profile
+                                                    </button>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="p-1">
+                                                <button
+                                                    class="btn-icon-vertical btn-transition-text btn-transition btn-transition-alt pt-2 pb-2 btn btn-outline-danger profile-grid-menu">
+                                                    <i class="far fa-calendar-alt fa-2x lnr-construction  opacity-7 btn-icon-wrapper mb-2"></i> Calendar
                                                 </button>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="p-1">
                                                 <button
-                                                    class="btn-icon-vertical btn-transition-text btn-transition btn-transition-alt pt-2 pb-2 btn btn-outline-danger">
-                                                    <i class="lnr-construction text-danger opacity-7 btn-icon-wrapper mb-2"></i> Reports
+                                                    class="btn-icon-vertical btn-transition-text btn-transition btn-transition-alt pt-2 pb-2 btn btn-outline-success profile-grid-menu">
+                                                    <i class="fas fa-unlock-alt fa-2x  opacity-7 btn-icon-wrapper mb-2"></i> Reset Password
                                                 </button>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="p-1">
                                                 <button
-                                                    class="btn-icon-vertical btn-transition-text btn-transition btn-transition-alt pt-2 pb-2 btn btn-outline-success">
-                                                    <i class="lnr-bus text-success opacity-7 btn-icon-wrapper mb-2"></i> Activity
+                                                    class="btn-icon-vertical btn-transition-text btn-transition btn-transition-alt pt-2 pb-2 btn btn-outline-warning profile-grid-menu">
+                                                    <i class="fas fa-sign-out-alt fa-2x lnr-lighter  opacity-7 btn-icon-wrapper mb-2"></i> Log Out
                                                 </button>
+                                               
+                                            </div>
+                                        </div>
+
+                                        {% if permission[0]['permission_level'] < 4 %}
+                                        <div class="col-sm-6">
+                                            <div class="p-1">
+                                                <a href="{{ url_for('users_bp.edit_profile') }}" class="nav-item">
+                                                    <button
+                                                        class="btn-icon-vertical btn-transition-text btn-transition btn-transition-alt pt-2 pb-2 btn btn-outline-info profile-grid-menu">
+                                                        <i class=" fas fa-user-plus fa-2x lnr-gift opacity-7 btn-icon-wrapper mb-2"> </i> Add Users
+                                                    </button>
+                                                </a>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="p-1">
-                                                <button
-                                                    class="btn-icon-vertical btn-transition-text btn-transition btn-transition-alt pt-2 pb-2 btn btn-outline-focus">
-                                                    <i class="lnr-gift text-focus opacity-7 btn-icon-wrapper mb-2"> </i>Settings
-                                                </button>
+                                                <a href="{{ url_for('users_bp.edit_profile') }}" class="nav-item">
+                                                    <button
+                                                        class="btn-icon-vertical btn-transition-text btn-transition btn-transition-alt pt-2 pb-2 btn btn-outline-focus profile-grid-menu">
+                                                        <i class=" fas fa-th-list fa-2x lnr-gift opacity-7 btn-icon-wrapper mb-2"> </i> Edit Categories
+                                                    </button>
+                                                </a>
                                             </div>
                                         </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="p-1">
+                                                <a href="{{ url_for('users_bp.edit_profile') }}" class="nav-item">
+                                                    <button
+                                                        class="btn-icon-vertical btn-transition-text btn-transition btn-transition-alt pt-2 pb-2 btn btn-outline-info profile-grid-menu">
+                                                        <i class=" fas fa-user-edit fa-2x lnr-gift opacity-7 btn-icon-wrapper mb-2"> </i> Edit Users
+                                                    </button>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="p-1">
+                                                <a href="{{ url_for('users_bp.edit_profile') }}" class="nav-item">
+                                                    <button
+                                                        class="btn-icon-vertical btn-transition-text btn-transition btn-transition-alt pt-2 pb-2 btn btn-outline-focus profile-grid-menu">
+                                                        <i class=" fas fa-th-list fa-2x lnr-gift opacity-7 btn-icon-wrapper mb-2"> </i> Edit Categories
+                                                    </button>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        {% endif %}
                                     </div>
                                 </div>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <div class="col-lg-8">
-                    <div class="main-card mb-3 card">
-                        <div class="card-body">
+                <div class="col-lg-9">
+                    <div id="ticket_status_lists" class="mb-3 card">
+                        <div class="card-header-tab card-header">
+                            <div class="card-header-title">
+                                <i class="header-icon lnr-bicycle icon-gradient bg-love-kiss"> </i>
+                                <h4>Ticket Status</h4>
+                            </div>
+                            <ul class="nav">
+                                <li class="nav-item"><a data-toggle="tab" href="#tab-eg5-0" class="nav-link active show">Watched Tickets</a></li>
+                                <li id="ticket_updates_badge" class="nav-item">
+                                    <a data-toggle="tab" href="#tab-eg5-1" class="nav-link show">
+                                        Ticket Updates
+                                        {% if updates|length > 0 %}
+                                            <span  class="badge badge-pill badge-alternate">{{updates|length}}</span>
+                                        {% endif %}
+                                    </a>
+                                </li>
+                                <li class="nav-item"><a data-toggle="tab" href="#tab-eg5-2" class="nav-link show">
+                                    Assigned Tickets
+                                    {% if assigned|length > 0 %}
+                                    <span class="badge badge-pill badge-danger">{{assigned|length}}</span>
+                                    {% endif %}
+                                </a></li>
+                            </ul>
                         </div>
+                        <div id="ticket_profile_lists" class="card-body">
+                            <div class="tab-content">
+                                <div class="tab-pane active show" id="tab-eg5-0" role="tabpanel">
+                                    <ul class="list-group list-group-flush">
+                                    
+                                        {% for ticket in watched %}
+                                        <li  class="bg-transparent list-group-item ticket_list">
+                                            <div class="widget-content p-0">
+                                                <div class="widget-content-outer">
+                                                    <div id="{{ticket['ticket_id']}}" class="profile-ticket-item widget-content-wrapper">
+                                                        <div class="widget-content-left">
+                                                            <div class="widget-heading">#{{ticket['ticket_id']}}</div>
+                                                            <div class="widget-subheading">{{ticket['description']}}</div>
+                                                        </div>
+                                                        <div class="widget-content-right">
+                                                            <div class="text-info">{{ticket['date_created'].strftime('%m/%d/%Y')}}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="ticket_detailed_info" id="ticket_detailed_info_{{ticket['ticket_id']}}"></div>
+                                            </div>
+                                        </li>
+                                        {% endfor %}  
+                                    </ul>
+                                </div>
+                                <div  class="tab-pane show" id="tab-eg5-1" role="tabpanel">
+                                <div id="list_of_ticket_updates">
+                                    <ul  class="list-group list-group-flush">
+                                        <p></p>
+                                    {% for ticket in updates %}
+                                    <li class="bg-transparent list-group-item ticket_list">
+                                        <div class="widget-content p-0">
+                                            <div class="widget-content-outer">
+                                                <div id="{{ticket['FK_ticket_id']}}" class="profile-ticket-item widget-content-wrapper">
+
+                                                    <div class="widget-content-left">
+                                                        <div class="widget-heading">#{{ticket['FK_ticket_id']}}</div>
+                                                        <div class="widget-subheading">{{ticket['update_description']}}</div>
+                                                    </div>
+                                                    <div class="widget-content-right">
+                                                        <div class="text-info">{{ticket['update_date'].strftime('%m/%d/%Y')}}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="ticket_detailed_info" id="ticket_detailed_info_{{ticket['FK_ticket_id']}}"></div>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+                                <div id="ticket-details-div">
+
+                                    
+                                    
+                                </div>
+                                
+                                
+                                </ul>
+                                </div>
+                                <div class="d-block text-right card-footer">
+                                    <a id="clear_ticket_updates" href="javascript:void(0);" class="btn-wide btn-shadow btn btn-danger">Delete</a>
+                                </div>
+                                
+                            </div>
+                                <div class="tab-pane show" id="tab-eg5-2" role="tabpanel">
+                                    <ul class="list-group list-group-flush">
+                                    
+                                        {% for ticket in assigned %}
+                                            <li class="bg-transparent list-group-item ticket_list">
+                                            <div class="widget-content p-0">
+                                                <div class="widget-content-outer">
+                                                    <div id="{{ticket['ticket_id']}}" class="profile-ticket-item widget-content-wrapper">
+                                                        <div class="widget-content-left">
+                                                            <div class="widget-heading">#{{ticket['ticket_id']}}</div>
+                                                            <div class="widget-subheading">{{ticket['description']}}</div>
+                                                        </div>
+                                                        <div class="widget-content-right">
+                                                            <div class="text-info">{{ticket['date_created'].strftime('%m/%d/%Y')}}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="ticket_detailed_info" id="ticket_assigned_detailed_info_{{ticket['ticket_id']}}"></div>
+                                            </div>
+                                        </li>
+                                        {% endfor %}
+                                    
+                                    
+                                    
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
                     </div>
+
+
+
+
+
                 </div>
             </div>
         </div>
-    </div>
 </div>
 
 

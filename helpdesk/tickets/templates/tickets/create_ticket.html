@@ -2,133 +2,111 @@
 
 {% block content %}
 
-<div class="app-main">
-    
-    
-    
+<body>
+
+<script type="text/javascript" src="{{ url_for('.static',filename='scripts/create_ticket.js') }}"></script>
+
+<div class="app-main">    
     <div class="app-main__outer">
-        <div class="app-main__inner">
-            
+        <div class="app-main__inner">            
             <div class="row">
                 <div class="col-md-8">
                     <div class="main-card mb-3 card">
                         <div class="card-body">
-                            <h5 class="card-title">Controls Types</h5>
-                            <form class="" action="/tickets/create_ticket" method="post">
-                                
+                            <div class="row">
+                                <h5 class="card-title">Create a New Ticket</h5>                            
+                            </div>
+                            <form class="" action="" method="post">
+                                {{ form.hidden_tag() }}
                                 <div class="grid-menu grid-menu-2col">
                                     <div class="form-row">
                                         <div class="col-sm-6">
-                                            <div class="position-relative form-group">
-                                                <label for="exampleEmail" class="">Customer</label>
-                                                <input name="cust_input" id="cust_input" type="text" class="form-control">
-                                            </div>
+                                        <div class="position-relative form-group">
+                                            {{ form.customer.label }}
+                                            {{ form.customer(class='form-control') }}<br>                                        
+                                        </div>
                                         </div>      
                                         <div class="col-sm-6">
                                             <div class="position-relative form-group">
-                                                <label for="exampleEmail" class="">Assembly</label>
-                                                <input name="assy_input" id="assy_input" type="text" class="form-control">
+                                                {{ form.assembly.label }}
+                                                {{ form.assembly}}<br>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-row">
                                         <div class="col-sm-6">
                                             <div class="position-relative form-group">
-                                                <label for="exampleEmail" class="">Part Number</label>
-                                                <input name="pn_input" id="pn_input" type="text" class="form-control">
+                                                    {{ form.partnumber.label }}
+                                                    {{ form.partnumber}}<br>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
-                                        
+                                            <div class="position-relative form-group">
+                                                    {{ form.workorder.label }}
+                                                    {{ form.workorder}}<br>
+                                            </div>
                                         </div>
-                                    </div>
-                                    
-                                </div>
-                                
+                                    </div>                                    
+                                </div>                                
                                 <div class="form-row">
                                     <div class="col-sm-6">
                                         <div class="position-relative form-group">
-                                            <label for="exampleSelect" class="">Select Category</label>
-                                            <select
-                                            name="cat_select" id="cat_select" class="form-control">
-                                            <option>AML/AVL</option>
-                                            <option>ECO</option>
-                                            <option>BOM</option>
-                                            <option>BTP</option>
-                                            <option>Routing</option>
-                                            <option>Work Order</option>
-                                            <option>Item Card</option>
-                                            <option>Rework</option>
-                                            <option>Customer</option>
-                                        </select>
-                                    </div>
+                                            <div class="position-relative form-group">
+                                                {{ form.category.label }}
+                                                {{ form.category(class='form-control') }}<br>
+                                            </div>
+                                        </div>
                                     </div>
                                     
                                     <div class="col-sm-6">
                                         <div class="position-relative form-group">
-                                            <label for="exampleSelect" class="">Select Subcategory</label>
-                                            <select name="subcat_select"
-                                            id="subcat_select" class="form-control">
-                                            <option>Add Alternate</option>
-                                            <option>Modify ECO</option>
-                                            <option>Add Attrition</option>
-                                            <option>Panel Review</option>
-                                            <option>Routing Missing</option>
-                                            <option>Status Update</option>
-                                            <option>Create SUP</option>
-                                            <option>Create Instruction</option>
-                                            <option>Customer Visit</option>
-                                            <option>Delete AML</option>
-                                            <option>Update Usage</option>
-                                        </select>
-                                    </div>
+                                            <div class="position-relative form-group">
+                                                {{ form.subcat.label }}
+                                                {{ form.subcat(class='form-control') }}<br>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-
-                                <div class="position-relative form-check">
-                                    <input name="priority_check" id="priority_check" type="checkbox" class="form-check-input">
-                                    <label for="exampleCheck" class="form-check-label">Priority</label>
-                                </div>
-                                <p></p>
+                               
+                                <p>{{ form.priority() }} {{ form.priority.label }}</p>
                                 
-                                <div class="position-relative form-group"><label for="exampleText" class="">Description/Details</label><textarea
-                                   style="height: 150px;" name="details_input" id="details_input" class="form-control"></textarea>
-                                </div>
-                                
+                                <div class="position-relative form-group">
+                                    <div class="position-relative form-group">
+                                        {{ form.description.label }}
+                                        {{ form.description }}<br>
+                                    </div>
+                                </div>                                
                                    
-                                        <button id="submit_new_ticket" class="mt-1 btn btn-primary">Submit</button>
-                                    </form>
+                                <div class="input-block black-submit">
+                                    <p>{{ form.submit()}}</p>
                                 </div>
-                            </div>
+                            </form>
                         </div>
+                        {% for field, errors in form.errors.items() %}
+                            <div class="alert alert-error">
+                                {{ form[field].label }}: {{ ', '.join(errors) }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
                         
-                        <div class="col-md-4">
-                            <div class="main-card mb-3 card">
-                                <div class="card-body">
-                                    <h4 class="card-title">Instructions</h4>
-                                    <h5 class="card-subtitle">Customer</h5>
-                                    <p>asdf</p>
-                                    <h5 class="card-subtitle">Assembly</h5>
-                                    <p>asdf</p>
-                                    <h5 class="card-subtitle">Part Number</h5>
-                                    <p></p>
-                                    <h5 class="card-subtitle">Link to Attachments</h5>
-                                    <p></p>
-                                    <h5 class="card-subtitle">Category</h5>
-                                    <p></p>
-                                    <h5 class="card-subtitle">Subcategory</h5>
-                                    <p></p>
-                                    <h5 class="card-subtitle">Description/Details</h5>
-                                    <p></p>
-                                    
-                                    
-                                    
-                                </div></div>
+                <div class="col-md-4">
+
+                    <div class="main-card mb-3 card">
+                        <div class="card-body">
+                            <h4 class="card-title">Open Tickets</h4>
+                            
+                            <div id="current_open_ticket_list">
+
                             </div>
                         </div>
                     </div>
-                </div>
-                
+                </div>    
             </div>
-            
-            {% endblock %}
+        </div>            
+    </div>
+</div>
+    
+</body>
+
+{% endblock %}
