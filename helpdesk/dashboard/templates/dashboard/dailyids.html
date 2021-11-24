@@ -1,0 +1,69 @@
+
+{% extends "users/base.html" %}
+
+{% block content %}
+
+<!-- Use this so we can do ticket functionality within our profile page -->
+<script type="text/javascript" src="{{ url_for('tickets_bp.static',filename='scripts/scripts.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('.static',filename='scripts/scripts.js') }}"></script>
+
+
+<div class="app-main">
+    <div class="app-main__inner">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="mb-3 profile-responsive card">
+
+                    <div class="card-header" id="current_ticket_id">
+                        <h4>
+                            What is this page?
+                        </h4>
+                    </div>
+
+                    <div class="card-body">
+                        <p>A list of upcoming features and their status!</p>
+                        <p>Not every feature is ready to use, but since the ticket system is functional, Engineering
+                            wanted to roll it out and get started.</p>
+                        <p> If you notice a bug or issue in the website, or if you want a feature added, and it's not
+                            already listed here, submit a new ticket! Use the "Ticket System" category and this page
+                            will be updated to show it's status.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div id="ticket_status_lists" class="mb-3 card">
+                    <div class="card-header-tab card-header">
+                        <div class="card-header-title">
+                            <i class="header-icon lnr-bicycle icon-gradient bg-love-kiss"> </i>
+                            <h4>Upcoming Features</h4>
+                        </div>
+
+                    </div>
+                    <div class="card-body">
+
+
+
+
+
+
+                        
+                    </div>
+                    
+                </div>
+
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+{% endblock %}

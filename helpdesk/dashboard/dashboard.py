@@ -57,3 +57,8 @@ def dashboard():
 @dashboard_bp.route("/upcoming")
 def upcoming():
     return render_template('dashboard/upcoming.html')
+
+
+@dashboard_bp.route("/dailyIDS")
+def dailyIDS():
+    return render_template('dashboard/dailyIDS.html')
