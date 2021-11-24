@@ -3,6 +3,7 @@ from flask import Flask
 from flask.helpers import url_for
 from config import Config
 
+from database import mail, db
 from database import mysql, db, login, mail
 from helpdesk.tickets.tickets import tickets_bp
 from helpdesk.users.users import users_bp
@@ -54,8 +55,8 @@ def home():
 
 if __name__ == "__main__":
     # app.run()
-    app.run(port=5000)
-
+    app.run(port=5050)
+# 
 
 # from flask import Flask
 # from waitress import serve
