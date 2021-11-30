@@ -18,13 +18,13 @@ function onPageLoad(data)
     var total_tickets = data[6]
     var closed_last = data[7]
     var opened_last = data[8]
-
+    
     //Set header
     $('#total_tickets').text(total_tickets[0]['count']);
     $('#closed_last').text(closed_last[0]['count']);
     $('#opened_last').text(opened_last[0]['count']);
-   
-
+    
+    
     // Ticket By Category
     displayData = []
     displayLabel = []
@@ -33,8 +33,8 @@ function onPageLoad(data)
     chartCol = '#0A579E';
     var ctx = document.getElementById('tickets_by_category');
     makeChart(displayData, displayLabel, ctx, 'By Category', chartCol);
-
-
+    
+    
     // Ticket by SubCat
     displayData = []
     displayLabel = []
@@ -43,8 +43,8 @@ function onPageLoad(data)
     chartCol = '#4bd62f';
     var subcat = document.getElementById('tickets_by_subcategory');
     makeChart(displayData, displayLabel, subcat, 'By Subcategory', chartCol);
-
-
+    
+    
     //Ticket by created
     displayData = []
     displayLabel = []
@@ -53,8 +53,8 @@ function onPageLoad(data)
     chartCol = '#0A579E';
     var created = document.getElementById('tickets_by_created');
     makeChart(displayData, displayLabel, created, 'By Created', chartCol);
-
-
+    
+    
     // Ticket by assigned
     displayData = []
     displayLabel = []
@@ -72,9 +72,9 @@ function onPageLoad(data)
     chartCol = '#4bd62f';
     var closed = document.getElementById('tickets_by_closed');
     makeChart(displayData, displayLabel, closed, 'By Closed', chartCol);
-
-
-            
+    
+    
+    
 }
 
 var dynamicColors = function () {
@@ -86,7 +86,7 @@ var dynamicColors = function () {
 
 var getChartData =  function(array, keyword) {
     console.log(array);
-
+    
     chartData = []
     for (let i = 0; i < array.length; i++) {
         chartData[i] = array[i][keyword];
@@ -101,7 +101,7 @@ var getChartLabel = function(array) {
     for (let i = 0; i < array.length; i++) {
         chartLabel[i] = array[i]['category'];
     }
-
+    
     return chartLabel
 }
 
@@ -122,4 +122,143 @@ var makeChart = function(makeData, makeLabel, name, title, chartCol) {
                 maintainAspectRatio: true,
             }
         });
-}
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    ///////////////////////////// DAILY IDS //////////////////////////////////////
+
+
+$(document).ready(function () {
+
+
+    const $tableID = $('#table'); const $BTN = $('#export-btn'); const $EXPORT = $('#export');
+    
+const newTr = `
+    <tr class="">
+    <td class="pt-3-half" contenteditable="true"> </td>
+    <td class="pt-3-half" contenteditable="true"> </td>
+    <td class="pt-3-half" contenteditable="true"> </td>
+    <td class="pt-3-half" contenteditable="true"> </td>
+    <td class="pt-3-half" contenteditable="true"> </td>
+    <td class="pt-3-half" contenteditable="true"> </td>
+    <td class="pt-3-half" contenteditable="true"> </td>
+    
+    </tr>`;
+    
+
+$('.table-add').on('click', 'i', () => {
+    console.log("ADD");
+    
+    if ($tableID.find('tbody tr').length
+    === 0) {
+        $('tbody').append(newTr);
+    } 
+    
+    const $clone = $tableID.find('tbody tr').last().clone(true).removeClass('hide table - line');
+    
+    $tableID.find('table').append(newTr).removeClass('hide table - line');
+
+});
+
+
+
+
+
+
+
+
+    
+    
+//     
+    
+    
+  
+// $tableID.on('click', '.table-remove', function () { $(this).parents('tr').detach();
+
+// });
+// $tableID.on('click', '.table-up', function () {
+//     const $row = $(this).parents('tr');
+    
+//     if
+//     ($row.index() === 0) { return;
+        
+//     } $row.prev().before($row.get(0));
+// });
+
+// $tableID.on('click',
+// '.table-down', function () {
+//     const $row = $(this).parents('tr');
+//     $row.next().after($row.get(0));
+// });
+
+// // A few jQuery helpers for exporting only jQuery.fn.pop
+// =[].pop;
+
+// jQuery.fn.shift = [].shift;
+
+// $BTN.on('click', () => {
+//     const $rows =
+//     $tableID.find('tr:not(:hidden)');
+    
+//     const headers = [];
+    
+//     const data = [];
+    
+//     // Get the headers
+//     (add special header logic here) $($rows.shift()).find('th:not(:empty)').each(function () {
+//         headers.push($(this).text().toLowerCase());
+//     });
+    
+//     // Turn all existing rows into a loopable
+//     array $rows.each(function () {
+//         const $td = $(this).find('td');
+        
+//         const h = {};
+        
+//         // Use the
+//         headers from earlier to name our hash keys headers.forEach((header, i) => {
+//             h[header] =
+//             $td.eq(i).text();
+//         });
+        
+//         data.push(h);
+//     });
+    
+//     // Output the result
+//     $EXPORT.text(JSON.stringify(data));
+    
+// });
+
+});

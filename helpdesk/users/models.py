@@ -43,11 +43,22 @@ def load_user(user_id):
     return Users.query.get(int(user_id))
 
 
+# Custom file size validator
+def FileSizeLimit(max_size_in_mb):
+    max_bytes = max_size_in_mb*1024*1024
+
+    def file_length_check(form, field):
+        if len(field.data.read()) > max_bytes:
+            raise ValidationError(
+                f"File size must be less than {max_size_in_mb}MB")
+
+    return file_length_check
+
 class UpdateProfileForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     fname = StringField('First Name', validators=[DataRequired()])
     lname = StringField('Last Name', validators=[DataRequired()])
-    user_img = FileField('')
+    user_img = FileField('',[FileSizeLimit(max_size_in_mb=1)])
     email_created = BooleanField('Tickets I created')
     email_assigned = BooleanField('Tickets I am assigned to')
     email_watched = BooleanField('Tickets I am watching')
@@ -61,6 +72,7 @@ class UpdateProfileForm(FlaskForm):
 class LoginForm(FlaskForm):
     username = StringField('Employee ID', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
+    passwordMatch = PasswordField('Re-Enter Password')
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
 

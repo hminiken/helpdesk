@@ -18,6 +18,11 @@
 }
  */
 
+
+.accordion-wrapper > .card .collapse {
+	border-bottom: transparent solid 0px;
+}
+
 .ticket-detail-card {
      overflow-y: scroll;
     max-height: 85vh;

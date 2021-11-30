@@ -597,7 +597,7 @@ def get_existing_tickets(cust):
     sql_qry = '''
             SELECT *
             FROM tickets
-            WHERE customer LIKE %s;
+            WHERE customer LIKE concat('%%', %s, '%%') AND closed_by IS NULL;
             '''
 
     cursor.execute(sql_qry, (cust + "%"))

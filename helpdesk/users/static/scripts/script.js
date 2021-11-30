@@ -145,10 +145,6 @@ $(document).ready(function () {
                 
                 var self = window.location.href;
                 $('#ticket_status_lists').load(self + ' #ticket_status_lists>*', '')
-                // $('#ticket_updates_badge').load(self + ' #ticket_updates_badge', function () {
-                //     // $('#ticket_updates_badge').trigger("refresh");
-
-                // });
             },
             error: function (error) {
                 console.log("ERROR");

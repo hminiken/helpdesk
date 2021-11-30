@@ -10,23 +10,7 @@
     <div class="app-main__outer">
         <div class="app-main__inner">
             <div class="row">
-                <!-- <div class="col-lg-3">
-                    <div class="mb-3 card">
-                        
-                        <div>
-                            <ul class="list-group">
-                                <button class="active list-group-item-action list-group-item"> 
-                                    <i class="nav-link-icon far fa-edit "> </i> Information
-                                </button>
-                                <button class="list-group-item-action list-group-item"> 
-                                    <i class="nav-link-icon fas fa-envelope-open-text"> </i> Email Preferences
-                                </button>
-                                
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                 -->
+                
                 
                 <div class="col-lg-12">
                     <div class="mb-3 card">
@@ -62,6 +46,15 @@
                                                 {{ form.user_img.label }}
                                                 {{ form.user_img(size=32) }}<br>
                                                 <small class="form-text text-muted">Image must be less than 1Mb</small>
+                                                <small>
+                                                    {% with messages = get_flashed_messages() %}
+                                                    {% if messages %}
+                                                    {% for message in messages %}
+                                                    <p style="color: red;">{{ message }}</p>
+                                                    {% endfor %}
+                                                    {% endif %}
+                                                    {% endwith %}
+                                                </small>
                                             </div>
                                             <br>
                                             <div class="form-row">
@@ -133,7 +126,9 @@
                                          
                                     </fieldset>
                                     {% if form.errors %}
-                                    {{ form.errors }}
+                                    {% for error in form.errors.values() %}
+                                        <p style="color: red; font-weight: bolder;">{{ error[0] }}</p>
+                                        {% endfor %}
                                     {% endif %}
                                     
                                     <div class="input-block black-submit">

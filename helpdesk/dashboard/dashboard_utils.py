@@ -170,7 +170,7 @@ def get_closed_last_x_days():
     qry = '''SELECT 
     count(*)  as count
     FROM tickets      
-    Where closed_by IS NOT NULL and date_closed BETWEEN CURDATE() - INTERVAL 5 DAY AND CURDATE()
+    Where closed_by IS NOT NULL and date_closed BETWEEN CURDATE() - INTERVAL 5 DAY AND NOW()
     
     '''
     cursor.execute(qry)
@@ -193,7 +193,30 @@ def get_opened_last_x_days():
     qry = '''SELECT 
     count(*) as count
     FROM tickets      
-    Where date_created BETWEEN CURDATE() - INTERVAL 5 DAY AND CURDATE();
+    Where date_created BETWEEN CURDATE() - INTERVAL 5 DAY AND NOW();
+    
+    '''
+    cursor.execute(qry)
+    data = cursor.fetchall()
+
+    ticket_list = []
+
+    columns = [column[0] for column in cursor.description]
+
+    for row in data:
+        ticket_list.append(dict(zip(columns, row)))
+
+    return ticket_list
+
+
+
+################################# DAILY IDS ###############################
+
+def getIDS():
+    conn = mysql.connect()
+    cursor = conn.cursor()
+
+    qry = '''SELECT * FROM  helpdesk.dailyids;
     
     '''
     cursor.execute(qry)

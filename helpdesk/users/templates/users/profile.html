@@ -61,7 +61,7 @@
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="p-1 button-link-profile">
-                                                <button
+                                                <button id="showtoast"
                                                     class="btn-icon-vertical btn-transition-text btn-transition btn-transition-alt pt-2 pb-2 btn btn-outline-danger profile-grid-menu">
                                                     <i class="far fa-calendar-alt fa-2x lnr-construction  opacity-7 btn-icon-wrapper mb-2"></i> Calendar
                                                 </button>
@@ -69,10 +69,12 @@
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="p-1 button-link-profile">
+                                                <a href="{{ url_for('users_bp.reset_password') }}" class="nav-item ">
                                                 <button
                                                     class="btn-icon-vertical btn-transition-text btn-transition btn-transition-alt pt-2 pb-2 btn btn-outline-success profile-grid-menu">
                                                     <i class="fas fa-unlock-alt fa-2x  opacity-7 btn-icon-wrapper mb-2"></i> Reset Password
                                                 </button>
+                                                </a>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
@@ -258,10 +260,19 @@
 
 
 
-
                 </div>
             </div>
         </div>
+
+        <div id="toast-container" class="toast-bottom-center">
+            <div class="toast toast-info" aria-live="polite" style="opacity: 0.00649977;">
+                <button type="button" class="toast-close-button" role="button">×
+                </button>
+                <div class="toast-title">Coming Soon!</div>
+            </div>
+        </div>
+
+     
 </div>
 
 

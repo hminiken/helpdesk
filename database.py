@@ -3,13 +3,14 @@ from flaskext.mysql import MySQL
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 import pyodbc
-
+from flask_wtf.csrf import CSRFProtect
 
 
 mysql = MySQL()
 db = SQLAlchemy()
 login = LoginManager()
 mail = Mail()
+csrf = CSRFProtect()
 
 def conn_database(conn_str):
     conn = pyodbc.connect(conn_str)
