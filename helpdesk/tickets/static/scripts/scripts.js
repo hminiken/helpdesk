@@ -10,6 +10,7 @@
 
 
 $(document).ready(function () {    
+    console.log("LOADED");
     // ======
     // Define a function to only show the open tickets, which we use on page load
     function getOnlyOpen() {

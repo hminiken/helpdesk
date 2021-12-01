@@ -21,20 +21,13 @@ def conn_database(conn_str):
 
 def conn_erp():
 
-    # erp_conn_str = (
-    #     r'Driver=/opt/microsoft/msodbcsql17/lib64/libmsodbcsql-17.8.so.1.1;'
-    #     # r'Driver={ODBC Driver 17 for SQL Server};'
-
-    #     r'Server=QEA-ERP805.QEA.local\iERP90,1436;'
-    #     r'Database=iERP807;'
-    #     r'Trusted_Connection=no;'
-    #     r'UID=engineeringtickets;PWD=2aVtqkk9jfHLkUus'
-    # )
-
-    erp_conn_str = 'Driver={ODBC Driver 17 for SQL Server}; Server=10.1.10.124,1436; Database=iERP807; UID=engineeringtickets;PWD=2aVtqkk9jfHLkUus;'
-    # erp_conn_str = 'Driver=/opt/microsoft/msodbcsql17/lib64/libmsodbcsql-17.8.so.1.1; Server=QEA-ERP805.QEA.local\iERP90,1436; Database=iERP807; UID=engineeringtickets;PWD=2aVtqkk9jfHLkUus;'
-
-
+    # TO DO: Update so password isn't hardcoded
+    erp_conn_str = (r'Driver={ODBC Driver 17 for SQL Server}; '
+                    r'Server=10.1.10.124,1436; '
+                    r'Database=iERP807; '
+                    r'UID=engineeringtickets;'
+                    r'PWD=2aVtqkk9jfHLkUus;'
+                    )
 
     cursorERP = conn_database(erp_conn_str)
 

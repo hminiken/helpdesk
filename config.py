@@ -4,6 +4,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config(object):
   
+    # TO DO: Update to not hardcode in the secret key
     # SECRET_KEY = os.environ.get('SECRET_KEY') or 'QualitelHelpDesk'
     SECRET_KEY = 'MYNEWSECRETKEY'
     WTF_CSRF_SECRET_KEY = 'MYNEWSECRETKEY'
@@ -15,7 +16,6 @@ class Config(object):
     #                     }
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    # MAX_CONTENT_LENGTH = 1 * 1024 * 1024  # 1MB max-limit.
 
     MAIL_SERVER = '10.1.10.120'
     MAIL_PORT=25
