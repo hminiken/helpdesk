@@ -1,6 +1,6 @@
 import os
 import random
-from flask import Flask, Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for
 from flask.helpers import flash
 from flask_login import current_user, login_user, logout_user
 from flask_login.utils import login_required
@@ -8,7 +8,6 @@ from helpdesk.users.models import LoginForm, RegistrationForm, UpdateProfileForm
 from werkzeug.urls import url_parse
 from database import db
 from datetime import datetime
-# from flask_uploads import UploadSet, configure_uploads, IMAGES
 
 from helpdesk.users.users_utils import  get_my_assigned_tickets, get_my_permissions, get_my_watched_tickets, get_my_watched_tickets_updates
 
@@ -16,11 +15,16 @@ users_bp = Blueprint('users_bp', __name__,
                         template_folder='templates', 
                         static_folder='static')
 
+
+# Reroute all unless already trying to log in
 @users_bp.before_request
 def before_request():
     if current_user.is_authenticated == False and request.endpoint != 'users_bp.login' and '/static/' not in request.path:
         return redirect(url_for('users_bp.login'))
 
+
+'''
+'''
 @login_required
 @users_bp.route("/")
 def user():
@@ -33,22 +37,24 @@ def user():
     # Get user ticket data
     return render_template('users/profile.html', watched=watched, updates=updates, assigned=assigned, permission=permission)
 
-
+'''
+'''
 @users_bp.route("/login",  methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     
     if form.validate_on_submit():
+
+        # Get user and validate their password
         user = Users.query.filter_by(user_id=form.username.data).first()
         if user is None:
             flash('Invalid username')
-            print('Invalid username')
             return redirect(url_for('users_bp.login'))
         elif not user.check_password(form.password.data):
             flash('Invalid password')
-            print('Invalid password')
             return redirect(url_for('users_bp.login'))
         
+        # Log user with succesful
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
@@ -58,6 +64,8 @@ def login():
     return render_template('users/login.html', form=form)
 
 
+'''
+'''
 @users_bp.route("/reset_password",  methods=['GET', 'POST'])
 def reset_password():
     form = LoginForm()
@@ -82,11 +90,10 @@ def reset_password():
 
 
 
-
+'''
+'''
 @users_bp.route("/add_user",  methods=['GET', 'POST'])
 def add_user():
-    # if current_user.is_authenticated:
-    #     return redirect(url_for('users_bp.user'))
 
     default_imgs = ['default1.png', 'default2.png',
                     'default3.png', 'default4.png', 'default5.png']
@@ -106,7 +113,8 @@ def add_user():
     return render_template('users/admin_add_user.html', title='Register', form=form)
 
 
-
+'''
+'''
 @users_bp.route('/logout')
 def logout():
     current_user.last_login = datetime.now()
@@ -115,13 +123,14 @@ def logout():
     return redirect(url_for('users_bp.login'))
 
 
-# photos = UploadSet('photos', IMAGES)
-
+'''
+'''
 @users_bp.route("/edit_profile",  methods=['GET', 'POST'])
 def edit_profile():
 
     form = UpdateProfileForm()
 
+    # When loading page, fetch current user information and load into the fields
     if request.method == 'GET':
         form.email.data=current_user.email
         form.fname.data=current_user.fname
@@ -130,11 +139,12 @@ def edit_profile():
         form.email_assigned.data=current_user.ticket_assigned_updates
         form.email_watched.data=current_user.ticket_watched_updates 
     
+    # Update user on submit
     if form.validate_on_submit():
-
         user = Users.query.filter_by(email=current_user.email).first()
         assets_dir = '/static/images/avatars'
 
+        # Update profile pic only if user uploaded a new profile image
         if form.user_img.data.filename != '':
             filename = 'profileImg' + str(current_user.user_id) + '.jpg'
             img = form.user_img.data
@@ -143,6 +153,7 @@ def edit_profile():
             img.close()  
             user.user_img = filename
 
+        # Update user in database with new info
         user.email=form.email.data
         user.fname=form.fname.data
         user.lname=form.lname.data
@@ -155,7 +166,8 @@ def edit_profile():
 
     return render_template('users/edit_profile.html', form=form)
 
-
+'''
+'''
 @users_bp.route("/admin_edit_user",  methods=['GET', 'POST'])
 def admin_edit_user():
 
@@ -194,7 +206,8 @@ def admin_edit_user():
 
 
 
-
+'''
+'''
 @users_bp.route('/clear_ticket_updates', methods=['POST'])
 def clear_ticket_updates():
     current_user.last_login = datetime.now()

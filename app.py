@@ -1,4 +1,3 @@
-import os
 from flask import Flask
 from flask.helpers import url_for
 from config import Config
@@ -26,8 +25,6 @@ with app.app_context():
 login.init_app(app)
 
 mail.init_app(app)
-# csrf.init_app(app)
-# csrf.init_app(app)
 
 
 app.config['MYSQL_DATABASE_USER'] = 'localadmin'
@@ -48,17 +45,14 @@ from config import Config
 
 
 
-
+# Home route, redirects to ticket list
 @app.route("/")
 def home():
     return redirect(url_for('tickets_bp.show_tickets'))
 
 
 if __name__ == "__main__":
-    app.run()
-    # app.run(port=5050)
-    # app.run(host='0.0.0.0', debug=True)
-# 
+    app.run(port=5050)
 
 
 

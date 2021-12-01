@@ -1,21 +1,15 @@
-#  https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-v-user-logins
 
 from datetime import datetime
-from flask import app
-from wtforms.fields.simple import FileField
-from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
-from database import db
-from database import login
+from database import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from wtforms_sqlalchemy.fields import QuerySelectField
-
-from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms.fields.simple import FileField
+from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
+from wtforms_sqlalchemy.fields import QuerySelectField
+from flask_wtf import FlaskForm
 
 class Users(UserMixin, db.Model):
-    # primary keys are required by SQLAlchemy
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer)
     FK_role_id = db.Column(db.Integer)
@@ -53,6 +47,7 @@ def FileSizeLimit(max_size_in_mb):
                 f"File size must be less than {max_size_in_mb}MB")
 
     return file_length_check
+
 
 class UpdateProfileForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])

@@ -6,31 +6,22 @@
     <title>Engineering Tickets</title>
     <meta name="description" content="">
     <meta name="keywords" content="">
-    <!--[if lte IE 8]><script src="js/html5shiv.js"></script><![endif]-->
 
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
-
-
+    
+    
+    
+    
     <script src="https://kit.fontawesome.com/5f4d9b05df.js" crossorigin="anonymous"></script>
-
-
-    <link rel="icon" href="/static/images/iconLogo.ico">
-
-    <!-- <link rel="shortcut icon" href="{{ url_for('static', filename='images/iconLogo.ico') }}"> -->
-
     <script type="text/javascript" src="{{ url_for('static',filename='scripts/jquery.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static',filename='scripts/ArchitectUISMTDash.js') }}"></script>
-    <!-- <script type="text/javascript" src="{{ url_for('static',filename='scripts/main.js') }}"></script> -->
     <script type="text/javascript" src="{{ url_for('static',filename='scripts/init.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
-
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style.css') }}">
-    </link>
+    
+    
+    
+    <link rel="icon" href="/static/images/iconLogo.ico">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style.css') }}"></link>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/skel.css') }}"></link>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/style-xlarge.css') }}"></link>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/font-awesome.min.css') }}"></link>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/icons.css') }}"></link>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/ArchitectUI.css') }}"> </link>
@@ -41,7 +32,6 @@
 <div class="app-header header-shadow">
     <div class="app-header__logo">
         <img class="logo-rc" height="42" src="/static/images/QualitelLogo.png">
-
     </div>
 
 
@@ -77,15 +67,12 @@
         </div>
         <div class="app-header-right">
 
-
             <div class="header-btn-lg pr-0">
                 <div class="widget-content p-0">
-
 
                     <div class="widget-content-wrapper">
 
                         <div class="widget-content-left">
-
 
                             {% if current_user.is_anonymous %}
                             <a href="{{ url_for('users_bp.login') }}" class="nav-link">Login</a>
@@ -102,10 +89,6 @@
                                 <div tabindex="-1" role="menu" aria-hidden="true"
                                     class="dropdown-menu dropdown-menu-right scroller " x-placement="bottom-end"
                                     style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-805px, 44px, 0px);">
-                                    <!-- <h6 tabindex="-1" class="dropdown-header">Activity</h6>
-                                    <button type="button" tabindex="0" class="dropdown-item">Actions</button>
-                                    <div tabindex="-1" class="dropdown-divider"></div>
-                                    <h6 tabindex="-1" class="dropdown-header">My Account</h6> -->
                                     <a href="{{ url_for('users_bp.user') }}" class="">
                                         <button type="button" tabindex="0" class="dropdown-item">User Account</button>
                                     </a>

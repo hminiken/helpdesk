@@ -8,17 +8,14 @@
                forms that allow the database to be updated
 '''
 
-from wtforms_sqlalchemy.fields import QuerySelectField
 from flask_login.mixins import UserMixin
-from wtforms import StringField, BooleanField, SubmitField, IntegerField, SelectField
 from flask_wtf import FlaskForm
 from datetime import datetime
-# from wtforms.fields.core import IntegerField, SelectField
+from wtforms import StringField, BooleanField, SubmitField, IntegerField, SelectField
 from wtforms.fields.simple import TextAreaField
 from wtforms.validators import DataRequired, Length, Optional
-import wtforms_sqlalchemy
-from database import db
-from database import conn_erp
+from wtforms_sqlalchemy.fields import QuerySelectField
+from database import db, conn_erp
 
 
 class TicketUpdates(db.Model):
