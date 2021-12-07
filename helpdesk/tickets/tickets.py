@@ -11,7 +11,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, jsonify
 from flask_login.utils import login_required
 from globals import TICKET_CLOSED
-from helpdesk.tickets.models import NewTicketForm, Subcategory, TicketCommentForm,  TicketUpdates
+from helpdesk.tickets.models import NewTicketForm, Subcategory, TicketCommentForm,  TicketUpdates, Tickets
 from database import  db
 from flask_login import current_user
 from helpdesk.tickets.ticket_utils import add_ticket_watcher, close_ticket, create_new_ticket, email_ticket_update, \
@@ -78,10 +78,13 @@ def ticket_details():
     ticket_status = get_ticket_status(ticket_id)
     ticket_watchers = get_ticket_watchers(ticket_id)
 
+    new_ticket_form = NewTicketForm()
+
 
     return render_template('tickets/ticket_details.html', 
                             details=details,
                             users=users,
+                           new_ticket_form=new_ticket_form,
                            updates=updates, form=form, 
                            status_options=status_options,
                            ticket_status=ticket_status,
@@ -219,7 +222,7 @@ def new_ticket_subcatgory(category):
 '''
 Route to create the new ticket in the database and reroute home
 '''
-@tickets_bp.route("/create_ticket", methods=['POST'])
+@tickets_bp.route("/create_ticket", methods=['GET', 'POST'])
 def create_ticket():
 
     # Get the data input from the form
@@ -253,3 +256,44 @@ def created_ticket_list():
 
     return render_template('tickets/create.html',
                            ticket_list=ticket_list)
+
+
+@tickets_bp.route("/edit_ticket", methods=['GET', 'POST'])
+def edit_ticket():
+
+    #instantiate the form, and get the initial choices for the subcategory, where category is 1
+    form = NewTicketForm()
+
+    ticket_id = request.args.get('ticket_id')
+    ticket_data = Tickets.query.filter_by(ticket_id=ticket_id).first()
+
+ 
+    if request.method == 'GET':
+        form.assembly.data = ticket_data.assembly
+        form.priority.data = ticket_data.priority
+        form.workorder.data = ticket_data.work_order
+        form.description.data = ticket_data.description
+        form.partnumber.data = ticket_data.part_number
+        form.customer.data = ticket_data.customer
+        form.category.data = ticket_data.category
+        form.subcat.data = ticket_data.subcategory
+
+   
+        form.subcat.choices = [(int(subcategory.id), subcategory.subcategory_name)
+                           for subcategory in Subcategory.query.filter_by(FK_category_id='1').all()]
+
+    if request.method == 'POST' and form.validate_on_submit():
+        ticket_data.assembly = form.assembly.data 
+        ticket_data.priority = form.priority.data 
+        ticket_data.work_order = form.workorder.data 
+        ticket_data.description = form.description.data 
+        ticket_data.part_number = form.partnumber.data 
+        ticket_data.customer = form.customer.data 
+        ticket_data.category = form.category.data 
+        ticket_data.subcategory = form.subcat.data 
+
+        db.session.commit()
+        return redirect(url_for('tickets_bp.show_tickets'))
+
+
+    return render_template('tickets/create_ticket.html', form=form)

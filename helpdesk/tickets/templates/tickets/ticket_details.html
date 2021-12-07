@@ -208,7 +208,19 @@
                         <div class="widget-content-ticketinfo">{{item['description']}}</div>
                     </div>
                 </div>
-            </li>            
+            </li>  
+            <!-- {% if current_user.user_id == item['created_by'] %}
+            <li class="p-0 list-group-item">
+                <div class="no-gutters row">
+                    <div class="col-sm-12">
+                        <div class="widget-content-ticketinfo">
+                            <button id="edit_ticket_button" class="mt-1 btn btn-alternate btn-sm">Edit Ticket</button>
+                        </div>
+                        
+                    </div>
+                </li>
+                {% endif %} -->
+   
         </ul>
 
         <!-- Submit a comment, have to reroute and load this section again -->

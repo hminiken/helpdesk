@@ -304,5 +304,22 @@ $(document).ready(function () {
         getOnlyOpen();
     });
 
+
+
+    // Upon assigning a watcher, update the db and then refresh the ticket details
+    $("div.ticket-details-div").on("click", "#edit_ticket_button", function () {
+        var id = $(this).attr('id');
+        var current_ticket = $("#current_ticket_id").attr('ticket_id');
+        $.ajax({
+            url: "/tickets/edit_ticket",
+            type: "get",
+            data: { ticket_id: current_ticket },
+            success: function (response) {
+                window.location.href = "/tickets/new_ticket"
+            }
+        });
+    });
+    
+
 }); //End on document load
 
