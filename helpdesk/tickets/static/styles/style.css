@@ -1,4 +1,18 @@
 
+
+#all_ticket_updates {
+margin-top: 3%
+}
+#assign_user_button {
+  padding: 0;
+}
+.no-gutters {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.dropdown-menu  {
+  max-height: 350px;
+}
 .collapse.show {
   margin-left: 5%;
 }
@@ -68,5 +82,5 @@ table tbody tr:nth-child(2n+1) {
   scrollbar-color: light;
 }
 .scroll-color-colors {
-  scrollbar-color: orange lightyellow;
+  scrollbar-color: rgb(150, 143, 209) rgb(126, 116, 173);
 }

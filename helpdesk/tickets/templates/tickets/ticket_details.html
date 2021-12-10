@@ -46,6 +46,7 @@
             <li class="list-group-item "  style=" z-index: 4000;">
                 <div class="widget-content p-0 ">
                     <div class="widget-content-wrapper ">
+
                         <div class="widget-content-left">
                             <div class="widget-content-wrapper">
                                 
@@ -63,7 +64,7 @@
                                             class="mb-2 mr-2 dropdown-toggle btn btn-outline-link">
                                                 {{item['assigned']}}
                                             </button>
-                                            <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu hide section"
+                                            <div id="assing-user-dropdown" tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu hide section"
                                                 x-placement="bottom-start" >
                                                 <!-- Engineers -->
                                                 <h6 tabindex="-1" class="dropdown-header">Engineering</h6>
@@ -108,6 +109,27 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="widget-content-left">
+                            <p></p>
+                            <p></p>
+                            <p></p>
+                            <p></p>
+                            <p></p>
+                            <p></p>
+                            <div class="widget-content-wrapper">
+                                                         
+                                <div class="widget-content-right">
+                                    <!-- <div class="widget-subheading">Commit Date:</div> -->
+                                {% if item['date_commit'] != None %}
+                                 <input type="date" id="commit-date-select" value="{{ item['date_commit'].strftime('%Y-%m-%d')}}">
+
+                                {% else %}
+                                    <input type="date" id="commit-date-select" >
+
+                                {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -209,7 +231,7 @@
                     </div>
                 </div>
             </li>  
-            <!-- {% if current_user.user_id == item['created_by'] %}
+            {% if current_user.user_id == item['created_by'] %}
             <li class="p-0 list-group-item">
                 <div class="no-gutters row">
                     <div class="col-sm-12">
@@ -219,7 +241,7 @@
                         
                     </div>
                 </li>
-                {% endif %} -->
+                {% endif %}
    
         </ul>
 
@@ -246,12 +268,69 @@
         
         <!-- TICKET COMMENT HISTORY -->
         <div class="">
-            <div class="container " id="all_ticket_updates">                
+            <div class="card-header-tab card-header">
+                <div class="card-header-title">
+                    <i class="header-icon lnr-bicycle icon-gradient bg-love-kiss"> </i>
+                    Ticket History
+                </div>
+                <ul class="nav">
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-comments" class="nav-link active">Comments</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-status-updates" class="nav-link">Status Updates</a></li>
+                </ul>
+            </div>
+            <div class="container " id="all_ticket_updates">       
                 
-                <div class="rightbox">
-                    <div class="rb-container">
-                        <ul class="rb">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab-comments" role="tabpanel">
+                        <div class="rb-container">
+                            <ul  class="rb tab-pane">
+                                {% for update in updates %}
+                                {% if update['is_comment'] == 1 %}
+                                <li class="rb-item" ng-repeat="itembx">
+                                    <div class="timestamp">
+                                        {{update['update_date'].strftime('%m/%d/%Y')}}
+                                        {{update['update_date'].strftime('%I:%M')}}
+                                        <br>
+                                        {{update['user']}}
+                                    </div>
+                                    <div class="item-title">{{update['update_description']}}</div>
+                            
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+                            
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tab-status-updates" role="tabpanel">
+                        <div class="rb-container">
+                            <ul class="rb tab-pane">
+                                {% for update in updates %}
+                                {% if update['is_comment'] == 0 %}
+                                <li class="rb-item" ng-repeat="itembx">
+                                    <div class="timestamp">
+                                        {{update['update_date'].strftime('%m/%d/%Y')}}
+                                        {{update['update_date'].strftime('%I:%M')}}
+                                        <br>
+                                        {{update['user']}}
+                                    </div>
+                                    <div class="item-title">{{update['update_description']}}</div>
+                        
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+                        
+                            </ul>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <!-- <div class="rightbox">
+                    <div class="rb-container tab-content">
+                        <ul id="tab-comments" class="rb tab-pane">
                             {% for update in updates %}
+                            {% if update['is_comment'] == 1 %}
                             <li class="rb-item" ng-repeat="itembx">
                                 <div class="timestamp">
                                     {{update['update_date'].strftime('%m/%d/%Y')}}
@@ -262,13 +341,31 @@
                                 <div class="item-title">{{update['update_description']}}</div>
                                 
                             </li>
+                            {% endif %}                      
+                            {% endfor %}                      
+                            
+                        </ul>
+
+                        <ul id="tab-status-updates" class="rb tab-pane">
+                            {% for update in updates %}
+                            {% if update['is_comment'] == 0 %}
+                            <li class="rb-item" ng-repeat="itembx">
+                                <div class="timestamp">
+                                    {{update['update_date'].strftime('%m/%d/%Y')}}
+                                    {{update['update_date'].strftime('%I:%M')}}
+                                    <br>
+                                    {{update['user']}}
+                                </div>
+                                <div class="item-title">{{update['update_description']}}</div>
+                        
+                            </li>
+                            {% endif %}
                             {% endfor %}
-                            
-                            
+                        
                         </ul>
                         
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>             
     </div>

@@ -321,5 +321,51 @@ $(document).ready(function () {
     });
     
 
+
+    // $("#commit-date-select").datepicker();
+    $("div.ticket-details-div").on("change", "#commit-date-select", function () {
+        var selected = $(this).val();
+        var current_ticket = $("#current_ticket_id").attr('ticket_id');
+
+        console.log(selected);
+
+        $.ajax({
+            url: "/tickets/update_commit",
+            type: "get",
+            data: { commit_date: selected, ticket_id: current_ticket },
+            success: function (response) {
+                    $.ajax({
+                        url: "/tickets/ticket_details",
+                        type: "get",
+                        data: { ticket_id: current_ticket },
+                        success: function (response) {
+                            $("#ticket_detailed_info").html(response);
+                            // $('#ticket_table_all').load(self + ' #ticket_table_all');
+
+                            //Refresh the ticket table
+                            var self = window.location.href;
+                            // $('#ticket_table_all').load(self + ' #ticket_table_all>*', '');
+
+                            $('#ticket_table_body').load(self + ' #ticket_table_body>*', function () {
+                                $('#show_open_tickets').prop('checked', true).trigger("click");
+                                var val = "closed";
+                                $("#ticket_table_body tr").filter(function () {
+                                    $(this).toggle(
+                                        $(this).text().toLowerCase().indexOf(val) <= -1
+                                    )
+                                });
+
+                            });
+
+                        },
+                        error: function (xhr) {
+                            //Do Something to handle error
+                        }
+                    });
+               
+            }
+        });
+    });
+
 }); //End on document load
 

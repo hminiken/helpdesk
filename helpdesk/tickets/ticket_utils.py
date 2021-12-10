@@ -40,7 +40,8 @@ def get_tickets():
     (SELECT 
 	(SELECT status_badge FROM status_list WHERE status_id = FK_status_id) as status_name 
 	FROM ticket_status 
-	WHERE FK_ticket_id=ticket_id ORDER BY FK_status_id ASC LIMIT 1) as ticket_badge
+	WHERE FK_ticket_id=ticket_id ORDER BY FK_status_id ASC LIMIT 1) as ticket_badge,
+   CAST( 5 * (DATEDIFF(CURDATE(), date_created) DIV 7) + MID('0123444401233334012222340111123400012345001234550', 7 * WEEKDAY(date_created) + WEEKDAY(CURDATE()) + 1, 1)  - 1 AS DECIMAL(10, 0)) as days_open
     FROM tickets 
     ORDER BY ticket_id DESC
 
@@ -148,7 +149,7 @@ def get_ticket_updates(ticket_id):
     cursor = conn.cursor()
 
     cursor.execute(
-        "SELECT * ROM ticket_updates WHERE FK_ticket_id=" + ticket_id)
+        "SELECT * FROM ticket_updates WHERE FK_ticket_id=" + ticket_id)
     data = cursor.fetchone()
 
     ticket_list = []
@@ -252,7 +253,7 @@ def get_ticket_updates(ticket_id):
     conn = mysql.connect()
     cursor = conn.cursor()
 
-    sql_qry = '''SELECT update_description, update_date, CONCAT(users.fname, ' ' , users.lname) as user
+    sql_qry = '''SELECT update_description, update_date, is_comment, CONCAT(users.fname, ' ' , users.lname) as user
                 FROM helpdesk.ticket_updates 
                 JOIN users ON users.user_id = ticket_updates.update_user 
                 WHERE FK_ticket_id = %s ORDER BY update_date DESC;'''
@@ -294,14 +295,14 @@ def update_assigned_user(uid, ticket_id):
     # Add to status update
     update_qry = '''
         INSERT INTO ticket_updates 
-        (update_user, update_description, FK_ticket_id, update_date)
+        (update_user, update_description, FK_ticket_id, update_date, is_comment)
         VALUES (%s,  CONCAT('Assigned to ', 
         (SELECT fname FROM users WHERE user_id = %s),  ' ', 
         (SELECT lname FROM users WHERE user_id = %s), ' by ',
         
         CONCAT( (SELECT fname FROM users WHERE user_id = %s),  ' ', 
         (SELECT lname FROM users WHERE user_id = %s)))        
-        , %s, NOW())
+        , %s, NOW(), 0)
     '''
 
     cursor.execute(update_qry, (current_user.user_id, uid,
@@ -316,6 +317,8 @@ def update_assigned_user(uid, ticket_id):
 
     cursor.execute(update_qry, (int(ticket_id), 4))
     conn.commit()
+
+    #Blank out commit date when new user is assigned.
 
     return
 
@@ -332,10 +335,10 @@ def update_ticket_status(status_id, ticket_id):
        # Add to status update
     update_qry = '''
         INSERT INTO ticket_updates 
-        (update_user, update_description, FK_ticket_id, update_date)
+        (update_user, update_description, FK_ticket_id, update_date, is_comment)
         VALUES (%s, CONCAT(%s, 
         (SELECT status_name FROM status_list WHERE status_id = %s)),
-        %s, NOW())
+        %s, NOW(), 0)
         '''
 
     cursor.execute(update_qry, (current_user.user_id, update_desc, status_id, ticket_id))
@@ -374,10 +377,10 @@ def remove_status(status_id, ticket_id):
     # Add to status update
     update_qry = '''
         INSERT INTO ticket_updates 
-        (update_user, update_description, FK_ticket_id, update_date)
+        (update_user, update_description, FK_ticket_id, update_date, is_comment)
         VALUES (%s, CONCAT(%s, 
         (SELECT status_name FROM status_list WHERE status_id = %s)),
-        %s, NOW())
+        %s, NOW(), 0)
         '''
 
     cursor.execute(update_qry, (current_user.user_id,
@@ -512,6 +515,50 @@ def create_email(t_id, update_msg):
         workorder=ticket.work_order, partnumber=ticket.part_number)
 
     return email_msg
+
+
+def update_commit_date(commit_date, ticket_id):
+    conn = mysql.connect()
+    cursor = conn.cursor()
+
+    update_qry = '''
+        UPDATE tickets 
+        SET date_commit = %s
+        WHERE ticket_id = %s
+    '''
+
+    cursor.execute(update_qry, (commit_date, int(ticket_id)))
+    conn.commit()
+
+    update_qry = '''
+        INSERT INTO ticket_updates 
+        (update_user, update_description, FK_ticket_id, update_date, is_comment)
+        VALUES (%s, %s, %s, NOW(), 0)
+        '''
+    
+    update_desc = current_user.fname + " " + current_user.lname + " set the commit date to: " + commit_date
+
+    cursor.execute(update_qry, (current_user.user_id,
+                   update_desc,  ticket_id))
+    conn.commit()
+
+
+    # Add to status update
+    # update_qry = '''
+    #     INSERT INTO ticket_updates 
+    #     (update_user, update_description, FK_ticket_id, update_date)
+    #     VALUES (%s,  CONCAT('Assigned to ', 
+    #     (SELECT fname FROM users WHERE user_id = %s),  ' ', 
+    #     (SELECT lname FROM users WHERE user_id = %s), ' by ',
+        
+    #     CONCAT( (SELECT fname FROM users WHERE user_id = %s),  ' ', 
+    #     (SELECT lname FROM users WHERE user_id = %s)))        
+    #     , %s, NOW())
+    # '''
+
+    # cursor.execute(update_qry, (current_user.user_id, uid,
+    #                uid,  current_user.user_id,  current_user.user_id, int(ticket_id)))
+    # conn.commit()
 
 
 #  -----------------------------------------------------------

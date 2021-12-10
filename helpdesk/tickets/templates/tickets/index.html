@@ -82,8 +82,10 @@
                                             <th>Cat</th>
                                             <th>Description</th>
                                             <th>Created</th>
-                                            <th>Assigned To</th>
+                                            <th>Assigned</th>
+                                            <th>Commit</th>
                                             <th>Status</th>
+                                            <th>Age</th>
                                         </tr>
                                     </thead>
                                     <tbody id="ticket_table_body">
@@ -101,7 +103,13 @@
                                             <td class="text-truncate" style="max-width: 150px;">{{ item['description']}}</td>
                                             <td>{{ item['date_created'].strftime('%m/%d/%Y')}}</td>
                                             <td>{{ item['assigned']}}</td>
+                                            {% if item['date_commit'] != None %}
+                                                <td>{{ item['date_commit'].strftime('%m/%d/%Y')}}</td>
+                                            {% else %}
+                                                <td></td>
+                                            {% endif %}
                                             <td > <div class="badge badge-{{item['ticket_badge']}}"> {{item['ticket_status']}}</div></td>
+                                            <td ><b  class="{{ 'text-danger' if item['days_open'] > 9 else 'text-warning' if item['days_open'] > 4}} ">{{item['days_open']}}</b></td>
 
                                             <!-- Table hidden rows for search capability -->
                                             <td style="display: none;">{{ item['customer']}}</td>

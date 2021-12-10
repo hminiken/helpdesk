@@ -18,7 +18,7 @@ from helpdesk.tickets.ticket_utils import add_ticket_watcher, close_ticket, crea
                                           get_existing_tickets, get_open_tickets, get_status_options, get_ticket_details, \
                                           get_ticket_status, get_ticket_updates, get_ticket_watchers, get_tickets, \
                                           get_user_data, insert_ticket_data, remove_status, \
-                                          remove_ticket_watcher, update_assigned_user, update_ticket_status
+                                          remove_ticket_watcher, update_assigned_user, update_commit_date, update_ticket_status
 
 tickets_bp = Blueprint('tickets_bp', __name__, 
                         template_folder='templates', 
@@ -54,7 +54,7 @@ def ticket_details():
     form = TicketCommentForm()
     if form.validate_on_submit():
         user = TicketUpdates(FK_ticket_id=int(ticket_id), update_user=int(current_user.user_id),
-                             update_description=form.comment.data)
+                             update_description=form.comment.data, is_comment=1)
         db.session.add(user)
         db.session.commit()
 
@@ -104,6 +104,25 @@ def user_details():
 
     # Update the assigned user in the database
     update_assigned_user(user_id, ticket_id)
+
+    #remove assigned status
+    for i in (2,5): #for every status but closed, reset status
+        remove_status(i, ticket_id)
+
+
+    # Return the ticket id, used to update the ticket details html
+    return ticket_id
+
+
+@tickets_bp.route('/update_commit', methods=['GET'])
+def update_commit():
+
+    # Get User Name from DB to update page
+    commit_date = request.args.get('commit_date')
+    ticket_id = request.args.get('ticket_id')
+
+    # Update the assigned user in the database
+    update_commit_date(commit_date, ticket_id)
 
     # Return the ticket id, used to update the ticket details html
     return ticket_id
