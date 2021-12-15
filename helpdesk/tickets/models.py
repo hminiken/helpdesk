@@ -25,6 +25,8 @@ class TicketUpdates(db.Model):
     update_description = db.Column(db.String(1000))
     update_date = db.Column(db.DateTime(
         1000), nullable=False, default=datetime.now)
+    is_comment = db.Column(db.Integer)
+
     id = ticket_update_id
 
 
