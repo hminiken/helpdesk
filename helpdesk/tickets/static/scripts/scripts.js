@@ -199,7 +199,7 @@ $(document).ready(function () {
                         //Refresh the ticket table
                         var self = window.location.href;
                         getOnlyOpen();
-                        // $('#ticket_table_all').load(self + ' #ticket_table_all>*', '');
+                        // $('#ticket_table_all').load(self + ' #ticket-left-sidebar');
                         $('#ticket_table_body').load(self + ' #ticket_table_body>*', function() {
                             $('#show_open_tickets').prop('checked', true).trigger("click");
                             var val = "closed";
@@ -284,7 +284,7 @@ $(document).ready(function () {
 
                         //Refresh the ticket table
                         var self = window.location.href;
-                        // $('#ticket_table_all').load(self + ' #ticket_table_all>*', '');
+                        // $('#ticket_table_all').load(self + ' #ticket-left-sidebar>*', '');
 
                         $('#ticket_table_body').load(self + ' #ticket_table_body>*', function () {
                             $('#show_open_tickets').prop('checked', true).trigger("click");
@@ -350,7 +350,7 @@ $(document).ready(function () {
 
                             //Refresh the ticket table
                             var self = window.location.href;
-                            // $('#ticket_table_all').load(self + ' #ticket_table_all>*', '');
+                            // $('#ticket_table_all').load(self + ' #ticket-left-sidebar>*', '');
 
                             $('#ticket_table_body').load(self + ' #ticket_table_body>*', function () {
                                 $('#show_open_tickets').prop('checked', true).trigger("click");

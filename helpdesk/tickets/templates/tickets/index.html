@@ -8,12 +8,17 @@
 
 <link rel="stylesheet" href="{{ url_for('static',filename='table-sortable.css') }}">
 <link rel="stylesheet" href="{{ url_for('static',filename='sort-table.css') }}"> -->
-<!-- <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
--->
+<!-- <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script> -->
+<script type="text/javascript" src="{{ url_for('static',filename='scripts/sorttable.js') }}"></script>
+
+
+
+
+<!-- 
 <link rel="stylesheet" href="{{ url_for('static',filename='styles/theme.blue.css') }}">
 
 <script type="text/javascript" src="{{ url_for('static',filename='scripts/jquery.tablesorter.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static',filename='scripts/jquery.tablesorter.widgets.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='scripts/jquery.tablesorter.widgets.js') }}"></script> -->
 
 
 <!-- <script src="sort-table.js"></script>
@@ -87,7 +92,7 @@
                         <!-- Ticket Table  -->
                         <div  class="scroll-area-lg">
                             <div class="scrollbar-container ps--active-y ps">
-                                <table class="mb-0 table table-hover  tablesorter" id="ticket_table_all">
+                                <table class="mb-0 table table-hover sortable tablesorter" id="ticket_table_all">
                                     <thead>
                                         <tr class="tablesorter-headerRow">
                                             <th class="tablesorter-header"><i class="fa fa-fire"></i></th>
@@ -119,7 +124,7 @@
                                             {% if item['date_commit'] != None %}
                                                 <td>{{ item['date_commit'].strftime('%m/%d/%Y')}}</td>
                                             {% else %}
-                                                <td></td>
+                                                <td style="color: white;">0</td>
                                             {% endif %}
                                             <td > <div class="badge badge-{{item['ticket_badge']}}"> {{item['ticket_status']}}</div></td>
                                             <td ><b  class="{{ 'text-danger' if item['days_open'] > 9 else 'text-warning' if item['days_open'] > 4}} ">{{item['days_open']}}</b></td>
