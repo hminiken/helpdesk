@@ -359,7 +359,7 @@ def update_ticket_status(status_id, ticket_id):
     return
 
 
-def remove_status(status_id, ticket_id):
+def remove_status(status_id, ticket_id, is_new_user):
     conn = mysql.connect()
     cursor = conn.cursor()
 
@@ -374,18 +374,19 @@ def remove_status(status_id, ticket_id):
     update_desc = current_user.fname + " " + \
         current_user.lname + " removed the status "
 
-    # Add to status update
-    update_qry = '''
-        INSERT INTO ticket_updates 
-        (update_user, update_description, FK_ticket_id, update_date, is_comment)
-        VALUES (%s, CONCAT(%s, 
-        (SELECT status_name FROM status_list WHERE status_id = %s)),
-        %s, NOW(), 0)
-        '''
+    if is_new_user == False:
+        # Add to status update
+        update_qry = '''
+            INSERT INTO ticket_updates 
+            (update_user, update_description, FK_ticket_id, update_date, is_comment)
+            VALUES (%s, CONCAT(%s, 
+            (SELECT status_name FROM status_list WHERE status_id = %s)),
+            %s, NOW(), 0)
+            '''
 
-    cursor.execute(update_qry, (current_user.user_id,
-                   update_desc, status_id, ticket_id))
-    conn.commit()
+        cursor.execute(update_qry, (current_user.user_id,
+                    update_desc, status_id, ticket_id))
+        conn.commit()
 
     if int(status_id) == TICKET_CLOSED:
         update_qry = '''
