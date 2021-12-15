@@ -3,7 +3,7 @@ from flask import Flask, Blueprint, render_template, request, redirect, url_for
 import json
 from flask_login import current_user
 
-from helpdesk.dashboard.dashboard_utils import get_closed_last_x_days, get_dashboard_tickets, get_dashboard_tickets_by_assigned, get_dashboard_tickets_by_category, get_dashboard_tickets_by_closed, get_dashboard_tickets_by_created, get_dashboard_tickets_by_subcategory, get_dashboard_total, get_opened_last_x_days, getIDS
+from helpdesk.dashboard.dashboard_utils import get_average_close_time, get_closed_last_x_days, get_dashboard_tickets, get_dashboard_tickets_by_assigned, get_dashboard_tickets_by_category, get_dashboard_tickets_by_closed, get_dashboard_tickets_by_created, get_dashboard_tickets_by_subcategory, get_dashboard_total, get_opened_last_x_days, getIDS
 from helpdesk.dashboard.models import IDSRowForm
 
 dashboard_bp = Blueprint('dashboard_bp', __name__, 
@@ -48,9 +48,11 @@ def dashboard():
     jsonData.append(opened_last)
     # jsonData = [tickets, cat_tickets, subcat_tickets, assigned_tickets, created_tickets, closed_tickets]
 
+    close_time = get_average_close_time()
+
     data = map(json.dumps, jsonData)
 
-    return render_template('dashboard/index.html', data=jsonData)
+    return render_template('dashboard/index.html', data=jsonData,close_time=close_time)
     # return render_template('EngineeringMetrics.html',
     #                        data=jsonData)
 

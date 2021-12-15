@@ -41,7 +41,7 @@ def get_tickets():
 	(SELECT status_badge FROM status_list WHERE status_id = FK_status_id) as status_name 
 	FROM ticket_status 
 	WHERE FK_ticket_id=ticket_id ORDER BY FK_status_id ASC LIMIT 1) as ticket_badge,
-   CAST( 5 * (DATEDIFF(CURDATE(), date_created) DIV 7) + MID('0123444401233334012222340111123400012345001234550', 7 * WEEKDAY(date_created) + WEEKDAY(CURDATE()) + 1, 1)  - 1 AS DECIMAL(10, 0)) as days_open
+   CAST( 5 * (DATEDIFF(CURDATE(), date_created) DIV 7) + MID('0123444401233334012222340111123400012345001234550', 7 * WEEKDAY(date_created) + WEEKDAY(CURDATE()) + 1, 1)  AS DECIMAL(10, 0)) as days_open
     FROM tickets 
     ORDER BY ticket_id DESC
 
@@ -253,7 +253,7 @@ def get_ticket_updates(ticket_id):
     conn = mysql.connect()
     cursor = conn.cursor()
 
-    sql_qry = '''SELECT update_description, update_date, is_comment, CONCAT(users.fname, ' ' , users.lname) as user
+    sql_qry = '''SELECT update_description, CONVERT_TZ(update_date, '+00:00','-08:00') as update_date, is_comment, CONCAT(users.fname, ' ' , users.lname) as user, users.user_img
                 FROM helpdesk.ticket_updates 
                 JOIN users ON users.user_id = ticket_updates.update_user 
                 WHERE FK_ticket_id = %s ORDER BY update_date DESC;'''

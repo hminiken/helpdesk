@@ -282,11 +282,12 @@
                 
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab-comments" role="tabpanel">
-                        <div class="rb-container">
+                        <!-- <div class="rb-container">
                             <ul  class="rb tab-pane">
                                 {% for update in updates %}
                                 {% if update['is_comment'] == 1 %}
-                                <li class="rb-item" ng-repeat="itembx">
+                                <li class="rb-item sml-img" ng-repeat="itembx" style="background-image:url('https://images.pexels.com/photos/210012/pexels-photo-210012.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=100')">
+                                   
                                     <div class="timestamp">
                                         {{update['update_date'].strftime('%m/%d/%Y')}}
                                         {{update['update_date'].strftime('%I:%M')}}
@@ -300,14 +301,40 @@
                                 {% endfor %}
                             
                             </ul>
-                        </div>
+                        </div> -->
+
+
+                        <div class="timeline">
+                            {% for update in updates %}
+                            {% if update['is_comment'] == 1 %}
+                            <div class="container container-right">
+                                <div class="image"
+                                    style="background-image:url({{ url_for('users_bp.static',filename='images/avatars/')}}{{update['user_img']}})">
+                                </div>
+                                <div class="content">
+                                    <span>{{update['user']}}, {{update['update_date'].strftime('%m/%d/%Y')}} {{update['update_date'].strftime('%I:%M %p')}}</span>
+                                    <p>
+                                        {{update['update_description']}}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {% endif %}
+                            {% endfor %}
+                            </div>
+
+
+
+
+
                     </div>
                     <div class="tab-pane" id="tab-status-updates" role="tabpanel">
-                        <div class="rb-container">
+                        <!-- <div class="rb-container">
                             <ul class="rb tab-pane">
                                 {% for update in updates %}
                                 {% if update['is_comment'] == 0 %}
                                 <li class="rb-item" ng-repeat="itembx">
+                                    
                                     <div class="timestamp">
                                         {{update['update_date'].strftime('%m/%d/%Y')}}
                                         {{update['update_date'].strftime('%I:%M')}}
@@ -321,7 +348,28 @@
                                 {% endfor %}
                         
                             </ul>
+                        </div> -->
+
+                        <div class="timeline">
+                            {% for update in updates %}
+                            {% if update['is_comment'] == 0 %}
+                            <div class="container container-right">
+                                <div class="image"
+                                    style="background-image:url({{ url_for('users_bp.static',filename='images/avatars/')}}{{update['user_img']}})">
+                                </div>
+                                <div class="content">
+                                    <span>{{update['user']}}, {{update['update_date'].strftime('%m/%d/%Y')}}
+                                        {{update['update_date'].strftime('%I:%M %p')}}</span>
+                                    <p>
+                                        {{update['update_description']}}
+                                    </p>
+                                </div>
+                            </div>
+                        
+                            {% endif %}
+                            {% endfor %}
                         </div>
+
                     </div>
                     
                 </div>

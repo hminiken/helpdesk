@@ -209,6 +209,31 @@ def get_opened_last_x_days():
     return ticket_list
 
 
+def get_average_close_time():
+
+
+    conn = mysql.connect()
+    cursor = conn.cursor()
+
+    qry = '''
+            SELECT 
+            AVG( 5 * (DATEDIFF(date_closed, date_created) DIV 7) + MID('0123444401233334012222340111123400012345001234550', 
+            7 * WEEKDAY(date_created) + WEEKDAY(date_closed) + 1, 1) ) as close_time  FROM tickets where tickets.closed_by is not null and ticket_id > 10003
+            '''
+
+
+    cursor.execute(qry)
+    data = cursor.fetchall()
+    
+    ticket_list = []
+
+    columns = [column[0] for column in cursor.description]
+
+    for row in data:
+        ticket_list.append(dict(zip(columns, row)))
+
+    return ticket_list
+
 
 ################################# DAILY IDS ###############################
 
@@ -230,3 +255,4 @@ def getIDS():
         ticket_list.append(dict(zip(columns, row)))
 
     return ticket_list
+

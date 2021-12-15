@@ -3,8 +3,21 @@
 {% block content %}
 
 <script type="text/javascript" src="{{ url_for('.static',filename='scripts/scripts.js') }}"></script>
-<script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+<!-- <script type="text/javascript" src="{{ url_for('static',filename='sort-table.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='table-sortable.js') }}"></script>
 
+<link rel="stylesheet" href="{{ url_for('static',filename='table-sortable.css') }}">
+<link rel="stylesheet" href="{{ url_for('static',filename='sort-table.css') }}"> -->
+<!-- <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+-->
+<link rel="stylesheet" href="{{ url_for('static',filename='styles/theme.blue.css') }}">
+
+<script type="text/javascript" src="{{ url_for('static',filename='scripts/jquery.tablesorter.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='scripts/jquery.tablesorter.widgets.js') }}"></script>
+
+
+<!-- <script src="sort-table.js"></script>
+<link rel="stylesheet" href="sort-table.css"> -->
 
 <div class="app-main" >   
     <div class="app-main__outer">
@@ -74,18 +87,18 @@
                         <!-- Ticket Table  -->
                         <div  class="scroll-area-lg">
                             <div class="scrollbar-container ps--active-y ps">
-                                <table class="mb-0 table table-hover sortable" id="ticket_table_all">
+                                <table class="mb-0 table table-hover  tablesorter" id="ticket_table_all">
                                     <thead>
-                                        <tr>
-                                            <th><i class="fa fa-fire"></i></th>
-                                            <th>Ticket ID</th>
-                                            <th>Cat</th>
-                                            <th>Description</th>
-                                            <th>Created</th>
-                                            <th>Assigned</th>
-                                            <th>Commit</th>
-                                            <th>Status</th>
-                                            <th>Age</th>
+                                        <tr class="tablesorter-headerRow">
+                                            <th class="tablesorter-header"><i class="fa fa-fire"></i></th>
+                                            <th class="tablesorter-header">Ticket ID</th>
+                                            <th class="tablesorter-header">Cat</th>
+                                            <th class="tablesorter-header">Description</th>
+                                            <th class="tablesorter-header">Created</th>
+                                            <th class="tablesorter-header">Assigned</th>
+                                            <th class="tablesorter-header">Commit</th>
+                                            <th class="tablesorter-header">Status</th>
+                                            <th class="tablesorter-header">Age</th>
                                         </tr>
                                     </thead>
                                     <tbody id="ticket_table_body">

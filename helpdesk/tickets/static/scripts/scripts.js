@@ -28,6 +28,12 @@ $(document).ready(function () {
     getOnlyOpen();
 
 
+
+
+    $(function () {
+        $("#ticket_table_all").tablesorter();
+    });
+
     // ======
     // Get the ticket details and display in the sidebar div "ticket_detailed_info"
     $(document).on('click', 'tr.ticket_table', function () {
