@@ -106,8 +106,9 @@ def user_details():
     update_assigned_user(user_id, ticket_id)
 
     #remove assigned status
+    is_new_user = True
     for i in (2,5): #for every status but closed, reset status
-        remove_status(i, ticket_id)
+        remove_status(i, ticket_id, is_new_user)
 
 
     # Return the ticket id, used to update the ticket details html
@@ -188,7 +189,8 @@ def assign_statu():
             " has updated the status to: " + status_name
     else:
         #remove that status
-        remove_status(status_id, ticket_id)
+        is_new_user = False
+        remove_status(status_id, ticket_id, is_new_user)
         update_msg = current_user.fname + " " + current_user.lname + \
             " has removed the status: " + status_name
 

@@ -227,11 +227,11 @@
                         <div class="widget-content-ticketinfo">Details: </div>
                     </div>
                     <div class="col-sm-9">
-                        <div class="widget-content-ticketinfo">{{item['description']}}</div>
+                        <div class="widget-content-ticketinfo" style="white-space: pre-line;">{{item['description']}}</div>
                     </div>
                 </div>
             </li>  
-            {% if current_user.user_id == item['created_by'] %}
+            <!-- {% if current_user.user_id == item['created_by'] %}
             <li class="p-0 list-group-item">
                 <div class="no-gutters row">
                     <div class="col-sm-12">
@@ -241,7 +241,7 @@
                         
                     </div>
                 </li>
-                {% endif %}
+                {% endif %} -->
    
         </ul>
 
