@@ -8,7 +8,7 @@
                loads the routes for the ticket pages
 '''
 
-from flask import Blueprint, render_template, request, redirect, url_for, jsonify
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify, Markup
 from flask_login.utils import login_required
 from globals import TICKET_CLOSED
 from helpdesk.tickets.models import NewTicketForm, Subcategory, TicketCommentForm,  TicketUpdates, Tickets
@@ -39,6 +39,61 @@ def show_tickets():
 
     return render_template('tickets/index.html', tickets=tickets,
                            open_count=open_count)
+
+
+@tickets_bp.route("/<t_id>", methods=['GET', 'POST'])
+def show_linked_tickets(t_id):
+    tickets = get_tickets()
+    open_count = get_open_tickets()
+
+    ticket_details = redirect(url_for('tickets_bp.ticket_details'))
+
+    ticket_id = t_id
+
+    form = TicketCommentForm()
+    if form.validate_on_submit():
+        user = TicketUpdates(FK_ticket_id=int(ticket_id), update_user=int(current_user.user_id),
+                             update_description=form.comment.data, is_comment=1)
+        db.session.add(user)
+        db.session.commit()
+
+        # Send the emails:
+        update_msg = current_user.fname + " " + \
+            current_user.lname + " has added a new comment: \n\n     " + form.comment.data
+
+        form.comment.data = ""
+
+        email_ticket_update(ticket_id, update_msg)
+
+    # Get data about specific ticket by id
+    details = get_ticket_details(ticket_id)
+
+    # Get a list of users for the assign user drop down
+    users = get_user_data()
+
+    # Get the update history for this ticket
+    updates = get_ticket_updates(ticket_id)
+    status_options = get_status_options()
+    ticket_status = get_ticket_status(ticket_id)
+    ticket_watchers = get_ticket_watchers(ticket_id)
+
+    new_ticket_form = NewTicketForm()
+
+    ticket_details = Markup( render_template('tickets/ticket_details.html',
+                           details=details,
+                           users=users,
+                           new_ticket_form=new_ticket_form,
+                           updates=updates, form=form,
+                           status_options=status_options,
+                           ticket_status=ticket_status,
+                           ticket_watchers=ticket_watchers))
+
+
+
+
+    return render_template('tickets/index.html', tickets=tickets,
+                           open_count=open_count, ticket_details=ticket_details)
+
 
 
 '''

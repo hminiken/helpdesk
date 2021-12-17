@@ -1,0 +1,249 @@
+{% for item in details %}
+
+
+
+<div class="mb-3 card ticket-detail-card scroller">
+    <div class="card-header">
+        <div class="card-header-title" id="current_ticket_id" ticket_id="{{item['ticket_id']}}">
+            <h4><i class="fa fa-server">  </i> 
+                <i style="color:crimson;" class="{{ 'fa fa-fire' if item['priority'] == 1 else ''}}"></i>
+                Ticket #{{item['ticket_id']}}</h4>
+        </div>
+        
+    </div>
+    <div class="card-body" >
+        <div class="widget-content p-0 ">
+            <div class="widget-content-wrapper "  style=" z-index: 5000;">
+                <div class="widget-content-left">
+                    {% for status in ticket_status %}
+                    <div class="badge badge-{{status['status_badge']}}">{{status['status_name']}}</div>
+                    {% endfor %}
+                    </div>
+                                      
+                    
+                    <div class="widget-content-right ">
+                      <button ticket_id="{{ticket_id}}" id="view_ticket_button" class="button button-primary">VIEW TICKET</button>
+                </div>
+            </div>
+        </div>
+        
+        
+        <ul class="rm-list-borders rm-list-borders-scroll list-group list-group-flush  ">
+            <li class="list-group-item "  style=" z-index: 4000;">
+                <div class="widget-content p-0 ">
+                    <div class="widget-content-wrapper ">
+
+                        <div class="widget-content-left">
+                            <div class="widget-content-wrapper">
+                                
+                                <div class="widget-content-left mr-3">
+                                    <img width="42" height="42" class="rounded-circle"
+                                    src="{{ url_for('users_bp.static',filename='images/avatars/') }}{{ item['user_assigned_img']}}" alt="">
+                                </div>
+                                <div class="widget-content-left">
+                                    <div class="widget-heading">
+                                        Assigned To:
+                                    </div>
+                                    <div class="widget-subheading opacity-9">                                          
+                                                {{item['assigned']}}                                          
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="widget-content-left">
+                            <p></p>
+                            <p></p>
+                            <p></p>
+                            <p></p>
+                            <p></p>
+                            <p></p>
+                            <!-- <div class="widget-content-wrapper">
+                                                         
+                                <div class="widget-content-right">
+                                <div class="widget-heading">
+                                 {{ item['date_commit'].strftime('%Y-%m-%d')}}
+                                </div>
+
+                                </div>
+                            </div> -->
+                        </div>
+                    
+                        <div class="widget-content-right">
+                            <div class="widget-content-wrapper">
+                                
+                                <div class="widget-content-left mr-3">
+                                    <img width="42" height="42" class="rounded-circle"
+                                    src="{{ url_for('users_bp.static',filename='images/avatars/')}}{{item['user_created_img']}}" alt="">
+                                    
+                                </div>
+                                <div class="widget-content-left">
+                                    <div class="widget-heading">Created By:</div>
+                                    <div class="widget-subheading opacity-9">{{item['created']}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+        <!-- TICKET INFO -->
+        <ul class="list-group list-group-flush">
+            <li class="p-0 list-group-item">
+                <div class="grid-menu grid-menu-2col">
+                    
+                    <div class="no-gutters row">
+                        <div class="col-sm-3">
+                            <div class="widget-content-ticketinfo">Category</div>
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="widget-content-ticketinfo">{{item['category']}} :: {{item['subcategory']}}</div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="p-0 list-group-item">
+                <div class="grid-menu grid-menu-2col">
+                    
+                    <div class="no-gutters row">
+                        <div class="col-sm-3">
+                            <div class="widget-content-ticketinfo">Customer</div>
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="widget-content-ticketinfo">{{item['customer']}}</div>
+                        </div>
+                    </div>
+                </div>
+            </li>            
+            <li class="p-0 list-group-item">
+                <div class="no-gutters row">
+                    <div class="col-sm-3">
+                        <div class="widget-content-ticketinfo">Assembly: </div>
+                    </div>
+                    <div class="col-sm-9">
+                        <div class="widget-content-ticketinfo">{{item['assembly']}}</div>
+                    </div>
+                </div>
+            </li>
+            <li class="p-0 list-group-item">
+                <div class="no-gutters row">
+                    <div class="col-sm-3">
+                        <div class="widget-content-ticketinfo">Part Number: </div>
+                    </div>
+                    <div class="col-sm-9">
+                        <div class="widget-content-ticketinfo">{{item['part_number']}}</div>
+                    </div>
+                </div>
+            </li>
+            <li class="p-0 list-group-item">
+                <div class="no-gutters row">
+                    <div class="col-sm-3">
+                        <div class="widget-content-ticketinfo">Work Order: </div>
+                    </div>
+                    <div class="col-sm-9">
+                        <div class="widget-content-ticketinfo">{{item['work_order']}}</div>
+                    </div>
+                </div>
+            </li>
+            <li class="p-0 list-group-item">
+                <div class="no-gutters row">
+                    <div class="col-sm-3">
+                        <div class="widget-content-ticketinfo">Attachments:</div>
+                    </div>
+                    <div class="col-sm-9">
+                        <div class="widget-content-ticketinfo">{{item['attachments']}}</div>
+                    </div>
+                </div>
+            </li>
+            <li class="p-0 list-group-item">
+                <div class="no-gutters row">
+                    <div class="col-sm-3">
+                        <div class="widget-content-ticketinfo">Details: </div>
+                    </div>
+                    <div class="col-sm-9">
+                        <div class="widget-content-ticketinfo" style="white-space: pre-line;">{{item['description']}}</div>
+                    </div>
+                </div>
+            </li>  
+
+        </ul>
+
+    
+        
+        <!-- TICKET COMMENT HISTORY -->
+        <div class="">
+            <div class="card-header-tab card-header">
+                <div class="card-header-title">
+                    <i class="header-icon lnr-bicycle icon-gradient bg-love-kiss"> </i>
+                    Ticket History
+                </div>
+                <ul class="nav">
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-comments" class="nav-link active">Comments</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-status-updates" class="nav-link">Status Updates</a></li>
+                </ul>
+            </div>
+            <div class="container " id="all_ticket_updates">       
+                
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab-comments" role="tabpanel">
+                        
+
+
+                        <div class="timeline">
+                            {% for update in updates %}
+                            {% if update['is_comment'] == 1 %}
+                            <div class="container container-right">
+                                <div class="image"
+                                    style="background-image:url({{ url_for('users_bp.static',filename='images/avatars/')}}{{update['user_img']}})">
+                                </div>
+                                <div class="content">
+                                    <span>{{update['user']}}, {{update['update_date'].strftime('%m/%d/%Y')}} {{update['update_date'].strftime('%I:%M %p')}}</span>
+                                    <p>
+                                        {{update['update_description']}}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {% endif %}
+                            {% endfor %}
+                            </div>
+
+
+
+
+
+                    </div>
+                    <div class="tab-pane" id="tab-status-updates" role="tabpanel">
+        
+
+                        <div class="timeline">
+                            {% for update in updates %}
+                            {% if update['is_comment'] == 0 %}
+                            <div class="container container-right">
+                                <div class="image"
+                                    style="background-image:url({{ url_for('users_bp.static',filename='images/avatars/')}}{{update['user_img']}})">
+                                </div>
+                                <div class="content">
+                                    <span>{{update['user']}}, {{update['update_date'].strftime('%m/%d/%Y')}}
+                                        {{update['update_date'].strftime('%I:%M %p')}}</span>
+                                    <p>
+                                        {{update['update_description']}}
+                                    </p>
+                                </div>
+                            </div>
+                        
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+
+                    </div>
+                    
+                </div>
+           
+            </div>
+        </div>             
+    </div>
+
+
+</div>
+{% endfor %}

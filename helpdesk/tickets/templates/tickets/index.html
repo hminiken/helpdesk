@@ -3,26 +3,12 @@
 {% block content %}
 
 <script type="text/javascript" src="{{ url_for('.static',filename='scripts/scripts.js') }}"></script>
-<!-- <script type="text/javascript" src="{{ url_for('static',filename='sort-table.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static',filename='table-sortable.js') }}"></script>
 
-<link rel="stylesheet" href="{{ url_for('static',filename='table-sortable.css') }}">
-<link rel="stylesheet" href="{{ url_for('static',filename='sort-table.css') }}"> -->
-<!-- <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script> -->
 <script type="text/javascript" src="{{ url_for('static',filename='scripts/sorttable.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='scripts/jquery-3.5.1.js') }}"></script>
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 
 
-
-
-<!-- 
-<link rel="stylesheet" href="{{ url_for('static',filename='styles/theme.blue.css') }}">
-
-<script type="text/javascript" src="{{ url_for('static',filename='scripts/jquery.tablesorter.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static',filename='scripts/jquery.tablesorter.widgets.js') }}"></script> -->
-
-
-<!-- <script src="sort-table.js"></script>
-<link rel="stylesheet" href="sort-table.css"> -->
 
 <div class="app-main" >   
     <div class="app-main__outer">
@@ -104,6 +90,14 @@
                                             <th class="tablesorter-header">Commit</th>
                                             <th class="tablesorter-header">Status</th>
                                             <th class="tablesorter-header">Age</th>
+                                            <th style="display: none;"></th>
+                                            <th style="display: none;"></th>
+                                            <th style="display: none;"></th>
+                                            <th style="display: none;"></th>
+                                            <th style="display: none;"></th>
+                                            <th style="display: none;"></th>
+                                            <th style="display: none;"></th>
+                                            <th style="display: none;" class="is_open"></th>
                                         </tr>
                                     </thead>
                                     <tbody id="ticket_table_body">
@@ -120,11 +114,14 @@
                                             <td>{{ item['category']}}</td>
                                             <td class="text-truncate" style="max-width: 150px;">{{ item['description']}}</td>
                                             <td>{{ item['date_created'].strftime('%m/%d/%Y')}}</td>
-                                            <td>{{ item['assigned']}}</td>
+                                            <td>
+                                                <img class="sml-img" src="{{ url_for('users_bp.static',filename='images/avatars/')}}{{item['user_img']}}" alt="">
+                                                {{ item['assigned']}}
+                                            </td>
                                             {% if item['date_commit'] != None %}
                                                 <td>{{ item['date_commit'].strftime('%m/%d/%Y')}}</td>
                                             {% else %}
-                                                <td style="color: white;">0</td>
+                                                <td style="color: white;"><span style="display: none;"> 01/01/0001</span></td>
                                             {% endif %}
                                             <td > <div class="badge badge-{{item['ticket_badge']}}"> {{item['ticket_status']}}</div></td>
                                             <td ><b  class="{{ 'text-danger' if item['days_open'] > 9 else 'text-warning' if item['days_open'] > 4}} ">{{item['days_open']}}</b></td>
@@ -139,7 +136,28 @@
                                             <td style="display: none;">{{ item['work_order']}}</td>
                                             <td style="display: none;" class="is_open">{{ item['ticket_status']}}</td>
                                         </tr>                                        
-                                        {% endfor %}                                
+                                        {% endfor %}   
+                                        <tfoot>
+                                            <tr class="search-box-table">
+                                                <td></td>
+                                                <th>Ticket ID</th>
+                                                <th>Cat</th>
+                                                <th>Description</th>
+                                                <th>Created</th>
+                                                <th>Assigned</th>
+                                                <th>Commit</th>
+                                                <th>Status</th>
+                                                <td></td>
+                                                <td style="display: none;"></td>
+                                                <td style="display: none;"></td>
+                                                <td style="display: none;"></td>
+                                                <td style="display: none;"></td>
+                                                <td style="display: none;"></td>
+                                                <td style="display: none;"></td>
+                                                <td style="display: none;"></td>
+                                                <td style="display: none;" class="is_open"></td>
+                                            </tr>
+                                        </tfoot>
                                     </tbody>
                                 </table>
                             </div>
@@ -150,6 +168,7 @@
                     
                 <div id="ticket_detailed_info" class="col-lg-5 ticket-details-div">
                     <!-- Load the ticket data here -->
+                        {{ticket_details}}
                 </div>
             </div>
         </div>        

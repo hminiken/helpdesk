@@ -8,6 +8,7 @@ from helpdesk.users.models import LoginForm, RegistrationForm, UpdateProfileForm
 from werkzeug.urls import url_parse
 from database import db
 from datetime import datetime
+from helpdesk.tickets import ticket_utils
 
 from helpdesk.users.users_utils import  get_my_assigned_tickets, get_my_permissions, get_my_watched_tickets, get_my_watched_tickets_updates
 
@@ -215,3 +216,33 @@ def clear_ticket_updates():
 
     return ""
 
+
+@users_bp.route('/limited_ticket_details', methods=['GET', 'POST'])
+def limited_ticket_details():
+
+    ticket_id = request.args.get('ticket_id')
+    if ticket_id is None:
+        ticket_id = request.form.get('ticket_id')
+
+
+    # Get data about specific ticket by id
+    details = ticket_utils.get_ticket_details(ticket_id)
+
+    # Get a list of users for the assign user drop down
+    users = ticket_utils.get_user_data()
+
+    # Get the update history for this ticket
+    updates = ticket_utils.get_ticket_updates(ticket_id)
+    status_options = ticket_utils.get_status_options()
+    ticket_status = ticket_utils.get_ticket_status(ticket_id)
+    ticket_watchers = ticket_utils.get_ticket_watchers(ticket_id)
+
+
+    return render_template('users/limited_ticket_details.html',
+                           ticket_id=ticket_id,
+                           details=details,
+                           users=users,
+                           updates=updates,
+                           status_options=status_options,
+                           ticket_status=ticket_status,
+                           ticket_watchers=ticket_watchers)

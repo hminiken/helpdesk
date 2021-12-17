@@ -373,5 +373,53 @@ $(document).ready(function () {
         });
     });
 
+
+
+
+
+    //individual column search : https://datatables.net/examples/api/multi_filter.html
+        // Setup - add a text input to each footer cell
+        $('#ticket_table_all tfoot th').each(function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" placeholder="Search " /> ');
+        });
+
+        
+        // DataTable
+        var table = $('#ticket_table_all').DataTable({
+            "paging": false,
+            "info": false,
+            "dom": 'p',
+            // "autoWidth": true,
+            initComplete: function () {
+                console.log("CHANGE!");
+                var r = $('#ticket_table_all tfoot tr');
+                r.find('th').each(function () {
+                    // $(this).css('padding', 8);
+                });
+                $('#ticket_table_all thead').append(r);
+                $('#search_0').css('text-align', 'center');
+
+
+                // Apply the search
+                this.api().columns().every(function () {
+                    var that = this;
+
+                    $('input', this.footer()).on('keyup change clear', function () {
+                        console.log("CHANGE!");
+                        if (that.search() !== this.value) {
+                            that
+                                .search(this.value)
+                                .draw();
+                        }
+                    });
+                });
+            }
+        });
+
+
+        
+
+
 }); //End on document load
 

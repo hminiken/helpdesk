@@ -23,7 +23,7 @@ $(document).ready(function () {
 
         if ($("#ticket_detailed_info_" + id).text() == "") {
             $.ajax({
-                url: "/tickets/ticket_details",
+                url: "/user/limited_ticket_details",
                 type: "get",
                 data: { ticket_id: id },
                 // dataType: 'json',
@@ -39,6 +39,34 @@ $(document).ready(function () {
             $("#ticket_detailed_info_" + id).html("");
             $("#ticket_assigned_detailed_info_" + id).html("");
         }
+    });
+
+
+
+    //view ticket
+    $(document).on('click', '#view_ticket_button', function () {
+        var current_ticket = $("#current_ticket_id").attr('ticket_id');
+        $.ajax({
+            type: 'GET',
+            url: "/tickets/",
+            data: {},
+            success: function (data) {
+                window.location.href = '/tickets/' + current_ticket;
+                console.log("FETCHING");
+                $.ajax({
+                    url: "/tickets/ticket_details",
+                    type: "get",
+                    data: { ticket_id: current_ticket },
+                    success: function (response) {
+                        $("#ticket_detailed_info").html(response);
+                    },
+                    error: function (xhr) {
+                        //Do Something to handle error
+                    }
+                });
+            }
+        });
+
     });
 
 
@@ -73,7 +101,7 @@ $(document).ready(function () {
             data: { user_id: id, ticket_id: current_ticket },
             success: function (response) {
                 $.ajax({
-                    url: "/tickets/ticket_details",
+                    url: "/user/limited_ticket_details",
                     type: "get",
                     data: { ticket_id: current_ticket },
                     success: function (response) {

@@ -33,6 +33,7 @@ def get_tickets():
     qry = '''SELECT *, 
     (SELECT CONCAT(fname, ' ', lname) FROM users WHERE user_id=created_by ) AS created, 
     (SELECT CONCAT(fname, ' ', lname) FROM users WHERE user_id=assigned_to ) AS assigned  ,
+    (SELECT user_img FROM users WHERE user_id=assigned_to ) AS user_img, 
     (SELECT 
 	(SELECT status_name FROM status_list WHERE status_id = FK_status_id) as status_name 
 	FROM ticket_status 
