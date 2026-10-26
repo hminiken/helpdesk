@@ -48,6 +48,11 @@ def get_tickets():
 
     '''
 
+    qry = qry.strip('\n')
+    qry = qry.strip('\t')
+
+    print(qry)
+
     # WHERE closed_by IS NULL
 
     cursor.execute(qry)

@@ -100,3 +100,9 @@ helpdesk/users/__pycache__/users_utils.cpython-38.pyc
 helpdesk/users/__pycache__/users.cpython-38.pyc
 myprojectenv/lib64
 helpdesk/users/__pycache__/users_utils.cpython-38.pyc
+
+# Local secrets, environments and data dumps
+.env
+helpdesk_env/
+myprojectenv/
+*.sql

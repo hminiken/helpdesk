@@ -1,6 +1,16 @@
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+# Load local secrets (database password etc.) from .env, which git ignores
+_env_path = os.path.join(basedir, '.env')
+if os.path.exists(_env_path):
+    with open(_env_path) as _f:
+        for _line in _f:
+            _line = _line.strip()
+            if _line and not _line.startswith('#') and '=' in _line:
+                _key, _value = _line.split('=', 1)
+                os.environ.setdefault(_key.strip(), _value.strip())
+
 
 class Config(object):
   
@@ -10,9 +20,9 @@ class Config(object):
     WTF_CSRF_SECRET_KEY = 'MYNEWSECRETKEY'
     SESSION_COOKIE_SECURE = False
 
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://localadmin:um8%JKid#G6N8ep2@localhost/helpdesk'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
     # SQLALCHEMY_BINDS = {
-    #                     'db3': 'mysql+pymysql://localadmin:um8%JKid#G6N8ep2@localhost/dailyids'
+    #                     'db3': 'mysql+pymysql://<user>:<password>@localhost/dailyids'
     #                     }
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
